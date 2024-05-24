@@ -16,7 +16,7 @@ class VideoGalleryResources extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'title' => $this->title,
-            'video' => asset('storage/') . '/' . $this->video,
+            'video' => $this->video,
         ];
     }
 }
