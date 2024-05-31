@@ -31,8 +31,10 @@ class VideoGalleryResource extends Resource
                 Forms\Components\Textarea   ::make('title')
                     ->label('Описание')
                     ->required(),
-                Forms\Components\TextInput::make('video')
-                    ->label('Ссылка на видео'),
+                Forms\Components\FileUpload::make('video')
+                    ->directory('abubakirov/video')
+                    ->label('Видео')
+                    ->acceptedFileTypes(['video/mp4', 'video/quicktime']),
             ]);
     }
 
