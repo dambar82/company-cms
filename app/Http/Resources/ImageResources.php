@@ -15,7 +15,7 @@ class ImageResources extends JsonResource
         return [
             'id' => $this->id,
             'description' => $this->description,
-            'image' => $this->image != null ? asset('storage/') . '/abubakirov/img/' . $this->image : null
+            'image' => $this->image != null ? asset('storage/') . '/' . $this->image : null
         ];
     }
 }
