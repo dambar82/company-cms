@@ -10,7 +10,6 @@ class ImageGalleryController extends Controller
 {
     public function index()
     {
-        $num = 123;
         return ['imgGallery' => ImageGalleryResources::collection(ImageGallery::all())];
     }
 
