@@ -3,12 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VideoGalleryResource\Pages;
-use App\Filament\Resources\VideoGalleryResource\RelationManagers;
 use App\Models\VideoGallery;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,6 +31,8 @@ class VideoGalleryResource extends Resource
                 Forms\Components\Textarea   ::make('title')
                     ->label('Описание')
                     ->required(),
+                Forms\Components\FileUpload::make('preview')
+                    ->directory('abubakirov/preview'),
                 Forms\Components\FileUpload::make('video')
                     ->directory('abubakirov/video')
                     ->label('Видео')
@@ -48,6 +50,8 @@ class VideoGalleryResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->label('Описание')
                     ->searchable(),
+                ImageColumn::make('preview')
+                ->square(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Создано')
                     ->dateTime()
