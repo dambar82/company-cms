@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AminaController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ImageGalleryController;
 use App\Http\Controllers\VideoGalleryController;
@@ -20,3 +21,12 @@ Route::apiResources([
     'imgGallery' => ImageGalleryController::class,
     'videoGallery' => VideoGalleryController::class
 ]);
+
+Route::prefix('amina')->group( function () {
+    Route::get('audio', [AminaController::class, 'getAudios']);
+    Route::get('audio/{id}', [AminaController::class, 'getAudio']);
+    Route::get('news', [AminaController::class, 'getAllNews']);
+    Route::get('news/{id}', [AminaController::class, 'getNews']);
+    Route::get('video', [AminaController::class, 'getVideos']);
+    Route::get('video/{id}', [AminaController::class, 'getVideo']);
+});
