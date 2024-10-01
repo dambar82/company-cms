@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AminaNewsResource\Pages;
 use App\Models\AminaNews;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
@@ -51,6 +52,8 @@ class AminaNewsResource extends Resource
                     ])
                     ->label('Текст новости')
                     ->columnSpanFull(),
+                DatePicker::make('date')
+                ->label('Дата')
             ]);
     }
 
@@ -63,6 +66,8 @@ class AminaNewsResource extends Resource
                 ImageColumn::make('images')
                     ->label('Фотографии')
                     ->square(),
+                TextColumn::make('date')
+                ->label('Дата')
             ])
             ->filters([
                 //

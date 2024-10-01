@@ -14,7 +14,8 @@ class AminaNews extends Model
     protected $fillable = [
         'title',
         'content',
-        'images'
+        'images',
+        'date'
     ];
 
     protected $casts = [

@@ -22,11 +22,14 @@ class AminaNewsResource extends JsonResource
             }
         }
 
+        $date = date('d-m-Y', strtotime($this->date));
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'images' => $images
+            'images' => $images,
+            'date' => $date
         ];
     }
 }
