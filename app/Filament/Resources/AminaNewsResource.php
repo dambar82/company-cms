@@ -52,8 +52,8 @@ class AminaNewsResource extends Resource
                     ])
                     ->label('Текст новости')
                     ->columnSpanFull(),
-                DatePicker::make('date')
-                ->label('Дата')
+//                DatePicker::make('date')
+//                ->label('Дата')
             ]);
     }
 
@@ -66,8 +66,8 @@ class AminaNewsResource extends Resource
                 ImageColumn::make('images')
                     ->label('Фотографии')
                     ->square(),
-                TextColumn::make('date')
-                ->label('Дата')
+//                TextColumn::make('date')
+//                ->label('Дата')
             ])
             ->filters([
                 //

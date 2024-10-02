@@ -26,7 +26,15 @@ class AminaController extends Controller
 
     public function getAllNews()
     {
-        return AminaNewsResource::collection(AminaNews::all());
+        $newsWithImages = AminaNews::where('images', '!=', '[]')->orderBy('created_at', 'desc')->get();
+        $newsWithoutImages = AminaNews::where('images', '=', '[]')->orderBy('created_at', 'desc')->get();
+        $allNews = $newsWithImages;
+
+        foreach ($newsWithoutImages as $news) {
+            $allNews[] = $news;
+        }
+
+        return AminaNewsResource::collection($allNews);
     }
 
     public function getNews(int $id)
