@@ -1,0 +1,375 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Amina project",
+        "description": "Документация для проекта Амина.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/amina/audios": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Все аудио записи",
+                "description": "Returns a collection of audio resources belonging to the project with ID 1.",
+                "operationId": "7c8432b7765eaa211275684ffbaf0d2c",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No audios found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/amina/audios/{id}": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Аудио запись по ID",
+                "description": "Returns an audio resource for the specified ID.",
+                "operationId": "fb982dea21c6fcfb970e6177de3be2fa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the audio record",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Audio record not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/amina/news": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Все новости",
+                "description": "Returns a collection of news articles filtered by project ID 1, including articles with and without images.",
+                "operationId": "1f654b123bb56d589d789c1b4b248ae6",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No news found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/amina/news/{id}": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Новость по ID",
+                "description": "Returns a news article for the specified ID.",
+                "operationId": "0e8023c9c7b05c7e1f4810abc4abb190",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the news article",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "News record not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/amina/videos": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Все видео",
+                "description": "Returns a collection of video resources filtered by project ID 1.",
+                "operationId": "f2345ac6a5be1f6efa51120134ffbe2b",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No videos found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/amona/videos/{id}": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Видео по ID",
+                "description": "Returns a video resource for the specified ID.",
+                "operationId": "4c124cfc51ca31f9725ed24274f47063",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the video record",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Video record not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/imgGallery": {
+            "get": {
+                "tags": [
+                    "Abubakirov"
+                ],
+                "summary": "Get all images in the gallery",
+                "description": "Returns a collection of image resources filtered by project ID 2.",
+                "operationId": "23285a80947b8332728f91c296496452",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No images found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/imgGallery/{id}": {
+            "get": {
+                "tags": [
+                    "Abubakirov"
+                ],
+                "summary": "Get a specific image from the gallery",
+                "description": "Returns an image resource for the specified ID.",
+                "operationId": "b9249b45e9026c1b9b04eb9132f49be8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the image",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Image not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoGallery": {
+            "get": {
+                "tags": [
+                    "Abubakirov"
+                ],
+                "summary": "Get all videos in the gallery",
+                "description": "Returns a collection of video resources filtered by project ID 2.",
+                "operationId": "8ebe1f5a120deee6f85baa13fd157f1a",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No videos found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoGallery/{id}": {
+            "get": {
+                "tags": [
+                    "Abubakirov"
+                ],
+                "summary": "Get a specific video from the gallery",
+                "description": "Returns a video resource for the specified ID.",
+                "operationId": "7e5b49de34f264442f37c5ef31a9e364",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the video",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Video not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Amina",
+            "description": "Amina"
+        },
+        {
+            "name": "Abubakirov",
+            "description": "Abubakirov"
+        }
+    ]
+}
