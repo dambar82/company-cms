@@ -10,7 +10,7 @@ class VideoGalleryController extends Controller
 {
     public function index()
     {
-        return ['videoGallery' => VideoGalleryResources::collection(VideoGallery::all())];
+        return ['videoGallery' => VideoGalleryResources::collection(VideoGallery::all()->where('project_id', '=', 2))];
     }
 
     public function show(int $id)

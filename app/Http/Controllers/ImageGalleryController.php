@@ -10,7 +10,7 @@ class ImageGalleryController extends Controller
 {
     public function index()
     {
-        return ['imgGallery' => ImageGalleryResources::collection(ImageGallery::all())];
+        return ['imgGallery' => ImageGalleryResources::collection(ImageGallery::all()->where('project_id', '=', 2))];
     }
 
     public function show(int $id)
