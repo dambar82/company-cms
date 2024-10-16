@@ -3,9 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VideoGalleryResource\Pages;
+use App\Models\Project;
 use App\Models\VideoGallery;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -14,8 +16,6 @@ use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class VideoGalleryResource extends Resource
 {
@@ -29,9 +29,10 @@ class VideoGalleryResource extends Resource
     {
         return $form
             ->schema([
-                TextColumn::make('project.name')
+                Select::make('project_id')
                     ->label('Проект')
-                    ->searchable(),
+                    ->options(Project::all()->pluck('name', 'id')->toArray())
+                    ->required(),
                 TextInput::make('name')
                     ->label('Название')
                     ->required(),

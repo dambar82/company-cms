@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class VideoGallery extends Model
 {
@@ -23,5 +24,10 @@ class VideoGallery extends Model
     public function videos()
     {
         return $this->hasMany(Video::class);
+    }
+
+    public function project(): HasOne
+    {
+        return $this->hasOne(Project::class, 'id', 'project_id');
     }
 }
