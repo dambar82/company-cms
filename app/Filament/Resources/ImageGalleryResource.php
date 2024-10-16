@@ -4,10 +4,15 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ImageGalleryResource\Pages;
 use App\Models\ImageGallery;
-use Filament\Forms;
+use App\Models\Project;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use App\Filament\Resources\ImageGalleryResource\RelationManagers\ImagesRelationManager;
 
@@ -24,14 +29,18 @@ class ImageGalleryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Select::make('project_id')
+                    ->label('Проект')
+                    ->options(Project::all()->pluck('name', 'id')->toArray())
+                    ->required(),
+                TextInput::make('name')
                     ->label('Название')
                     ->required(),
-                Forms\Components\Textarea   ::make('title')
+                Textarea   ::make('title')
                     ->label('Описание')
                     ->required(),
-                Forms\Components\FileUpload::make('caption')
-                    ->directory('abubakirov/gallery')
+                FileUpload::make('caption')
+                    ->directory('image_gallery')
                     ->label('Изображение')
                     ->imageEditor()
                     ->image(),
@@ -42,7 +51,10 @@ class ImageGalleryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('project.name')
+                    ->label('Проект')
+                    ->searchable(),
+                TextColumn::make('name')
                     ->label('Название')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')

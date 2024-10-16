@@ -5,10 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\VideoGalleryResource\Pages;
 use App\Models\VideoGallery;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -25,16 +29,19 @@ class VideoGalleryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextColumn::make('project.name')
+                    ->label('Проект')
+                    ->searchable(),
+                TextInput::make('name')
                     ->label('Название')
                     ->required(),
-                Forms\Components\Textarea   ::make('title')
+                Textarea::make('title')
                     ->label('Описание')
                     ->required(),
-                Forms\Components\FileUpload::make('preview')
-                    ->directory('abubakirov/preview'),
+                FileUpload::make('preview')
+                    ->directory('previews'),
                 Forms\Components\FileUpload::make('video')
-                    ->directory('abubakirov/video')
+                    ->directory('video_gallery')
                     ->label('Видео')
                     ->acceptedFileTypes(['video/mp4', 'video/quicktime']),
             ]);
@@ -44,10 +51,13 @@ class VideoGalleryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('project.name')
+                    ->label('Проект')
+                    ->searchable(),
+                TextColumn::make('name')
                     ->label('Название')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->label('Описание')
                     ->searchable(),
                 ImageColumn::make('preview')

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class VideoGallery extends Model
@@ -12,6 +11,7 @@ class VideoGallery extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'project_id',
         'name',
         'title',
         'preview',
@@ -19,4 +19,9 @@ class VideoGallery extends Model
     ];
 
     protected $guarded = array();
+
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
 }
