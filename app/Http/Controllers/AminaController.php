@@ -8,25 +8,44 @@ use App\Http\Resources\AminaNewsResource;
 use App\Http\Resources\AminaVideoResource;
 use App\Models\Audio;
 use App\Models\News;
-use App\Models\Video;
+use App\Models\VideoGallery;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 
 class AminaController extends Controller
 {
-    public function getAudios()
+    /**
+     * @return AnonymousResourceCollection
+     */
+    public function getAudios(): AnonymousResourceCollection
     {
-        return AminaAudioResource::collection(Audio::all());
+        return AminaAudioResource::collection(Audio::all()->where('project_id', '=', 1));
     }
 
-    public function getAudio(int $id)
+    /**
+     * @param int $id
+     * @return AminaAudioResource
+     */
+    public function getAudio(int $id): AminaAudioResource
     {
-        return new AminaAudioResource(Audio::find($id));
+        return new AminaAudioResource(Audio::query()->find($id));
     }
 
-    public function getAllNews()
+    /**
+     * @return AnonymousResourceCollection
+     */
+    public function getAllNews(): AnonymousResourceCollection
     {
-        $newsWithImages = News::where('images', '!=', '[]')->orderBy('created_at', 'desc')->get();
-        $newsWithoutImages = News::where('images', '=', '[]')->orderBy('created_at', 'desc')->get();
+        $newsWithImages = News::query()
+            ->where('images', '!=', '[]')
+            ->where('project_id', '=', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $newsWithoutImages = News::query()
+            ->where('images', '=', '[]')
+            ->where('project_id', '=', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
         $allNews = $newsWithImages;
 
         foreach ($newsWithoutImages as $news) {
@@ -36,18 +55,29 @@ class AminaController extends Controller
         return AminaNewsResource::collection($allNews);
     }
 
-    public function getNews(int $id)
+    /**
+     * @param int $id
+     * @return AminaNewsResource
+     */
+    public function getNews(int $id): AminaNewsResource
     {
-        return new AminaNewsResource(News::find($id));
+        return new AminaNewsResource(News::query()->find($id));
     }
 
-    public function getVideos()
+    /**
+     * @return AnonymousResourceCollection
+     */
+    public function getVideos(): AnonymousResourceCollection
     {
-        return AminaVideoResource::collection(Video::all());
+        return AminaVideoResource::collection(VideoGallery::all()->where('project_id', '=', 1));
     }
 
-    public function getVideo(int $id)
+    /**
+     * @param int $id
+     * @return AminaVideoResource
+     */
+    public function getVideo(int $id): AminaVideoResource
     {
-        return new AminaVideoResource(Video::find($id));
+        return new AminaVideoResource(VideoGallery::query()->find($id));
     }
 }

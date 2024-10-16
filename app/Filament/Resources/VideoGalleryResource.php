@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class VideoGalleryResource extends Resource
@@ -73,6 +74,11 @@ class VideoGalleryResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                SelectFilter::make('project_id')
+                    ->options(Project::all()->pluck('name', 'id')->toArray())
+                    ->label('Выберете проект')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

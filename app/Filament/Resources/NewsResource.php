@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class NewsResource extends Resource
@@ -77,7 +78,9 @@ class NewsResource extends Resource
                 ->label('Дата')
             ])
             ->filters([
-                //
+                SelectFilter::make('project_id')
+                    ->options(Project::all()->pluck('name', 'id')->toArray())
+                ->label('Выберете проект')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
