@@ -13,9 +13,8 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * @OA\Info(
- *     title="Amina project",
+ *     title="COMPANY-CMS",
  *     version="1.0.0",
- *     description="Документация для проекта Амина."
  * )
  */
 class AminaController extends Controller

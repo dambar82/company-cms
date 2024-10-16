@@ -1,8 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Amina project",
-        "description": "Документация для проекта Амина.",
+        "title": "COMPANY-CMS",
         "version": "1.0.0"
     },
     "paths": {
