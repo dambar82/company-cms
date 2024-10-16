@@ -22,7 +22,7 @@ class VideoGalleryResource extends Resource
     protected static ?string $model = VideoGallery::class;
     protected static ?string $navigationLabel = 'Видео';
     protected static ?string $pluralLabel = 'Видео';
-    protected static ?string $navigationGroup = 'Абубакиров';
+
     protected static ?string $navigationIcon = 'heroicon-o-video-camera';
 
     public static function form(Form $form): Form

@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\AminaAudioResource\Pages;
 
-use App\Filament\Resources\AminaAudioResource;
+use App\Filament\Resources\AudioResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditAminaAudio extends EditRecord
 {
-    protected static string $resource = AminaAudioResource::class;
+    protected static string $resource = AudioResource::class;
 
     protected function getHeaderActions(): array
     {

@@ -3,8 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AminaNewsResource\Pages;
-use App\Models\AminaNews;
-use Filament\Forms\Components\DatePicker;
+use App\Models\News;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
@@ -17,9 +16,8 @@ use Filament\Tables\Table;
 
 class NewsResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Амина';
     protected static ?string $pluralLabel = 'Новости';
-    protected static ?string $model = AminaNews::class;
+    protected static ?string $model = News::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -27,12 +25,15 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
+                TextColumn::make('project.name')
+                    ->label('Проект')
+                    ->searchable(),
                 TextInput::make('title')
                     ->label('Название'),
                 FileUpload::make('images')
                     ->label('Фотографии')
                     ->multiple()
-                    ->directory('amina/news'),
+                    ->directory('news'),
                 RichEditor::make('content')
                     ->toolbarButtons([
                         'attachFiles',
@@ -61,13 +62,16 @@ class NewsResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('project.name')
+                    ->label('Проект')
+                    ->searchable(),
                 TextColumn::make('title')
                     ->label('Название'),
                 ImageColumn::make('images')
                     ->label('Фотографии')
                     ->square(),
-//                TextColumn::make('date')
-//                ->label('Дата')
+                TextColumn::make('date')
+                ->label('Дата')
             ])
             ->filters([
                 //

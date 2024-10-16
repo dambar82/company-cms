@@ -20,7 +20,6 @@ class ImageGalleryResource extends Resource
 {
     protected static ?string $model = ImageGallery::class;
     protected static ?string $navigationLabel = 'Изображения';
-    protected static ?string $navigationGroup = 'Абубакиров';
     protected static ?string $pluralLabel = 'Изображения';
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';

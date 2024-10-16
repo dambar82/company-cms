@@ -5,20 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AminaNews extends Model
+class Audio extends Model
 {
     use HasFactory;
 
-    protected $table = 'amina_news';
+    protected $table = 'amina_audios';
 
     protected $fillable = [
         'title',
-        'content',
-        'images',
-        'date'
-    ];
-
-    protected $casts = [
-        'images' => 'array'
+        'path'
     ];
 }

@@ -2,22 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AminaVideoResource\Pages;
-use App\Models\AminaVideo;
+use App\Filament\Resources\AminaAudioResource\Pages;
+use App\Models\Audio;
+use App\Models\Project;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class AminaVideoResource extends Resource
+class AudioResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Амина';
-    protected static ?string $pluralLabel = 'Видео';
-    protected static ?string $model = AminaVideo::class;
+    protected static ?string $pluralLabel = 'Аудио';
+    protected static ?string $model = Audio::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -25,14 +25,15 @@ class AminaVideoResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('project_id')
+                    ->label('Проект')
+                    ->options(Project::all()->pluck('name', 'id')->toArray())
+                    ->required(),
                 TextInput::make('title')
-                    ->label('Название'),
+                ->label('Название'),
                 FileUpload::make('path')
-                    ->label('Видео')
-                    ->directory('amina/videos/video'),
-                FileUpload::make('preview')
-                    ->label('Превью')
-                    ->directory('amina/videos/preview')
+                ->label('Аудио')
+                ->directory('audio')
             ]);
     }
 
@@ -40,11 +41,11 @@ class AminaVideoResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('project.name')
+                    ->label('Проект')
+                    ->searchable(),
                 TextColumn::make('title')
-                    ->label('Название'),
-                ImageColumn::make('preview')
-                    ->label('Превью')
-                    ->square(),
+                    ->label('Название')
             ])
             ->filters([
                 //
@@ -69,9 +70,9 @@ class AminaVideoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAminaVideos::route('/'),
-            'create' => Pages\CreateAminaVideo::route('/create'),
-            'edit' => Pages\EditAminaVideo::route('/{record}/edit'),
+            'index' => Pages\ListAminaAudio::route('/'),
+            'create' => Pages\CreateAminaAudio::route('/create'),
+            'edit' => Pages\EditAminaAudio::route('/{record}/edit'),
         ];
     }
 }
