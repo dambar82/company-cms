@@ -4,8 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AminaNewsResource\Pages;
 use App\Models\News;
+use App\Models\Project;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -25,9 +27,10 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
-                TextColumn::make('project.name')
+                Select::make('project_id')
                     ->label('Проект')
-                    ->searchable(),
+                    ->options(Project::all()->pluck('name', 'id')->toArray())
+                    ->required(),
                 TextInput::make('title')
                     ->label('Название'),
                 FileUpload::make('images')
