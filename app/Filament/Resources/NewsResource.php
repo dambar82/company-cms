@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AminaNewsResource\Pages;
 use App\Models\News;
 use App\Models\Project;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -12,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -57,8 +60,10 @@ class NewsResource extends Resource
                     ])
                     ->label('Текст новости')
                     ->columnSpanFull(),
-//                DatePicker::make('date')
-//                ->label('Дата')
+                DatePicker::make('date')
+                ->label('Дата'),
+                Checkbox::make('active')
+                ->label('Новость активна')
             ]);
     }
 
@@ -75,7 +80,10 @@ class NewsResource extends Resource
                     ->label('Фотографии')
                     ->square(),
                 TextColumn::make('date')
-                ->label('Дата')
+                ->label('Дата'),
+                IconColumn::make('active')
+                    ->boolean()
+                    ->label('Новость активна')
             ])
             ->filters([
                 SelectFilter::make('project_id')

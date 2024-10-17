@@ -22,7 +22,7 @@ class AminaNewsResource extends JsonResource
             }
         }
 
-        $date = date('d-m-Y  H:i', strtotime($this->created_at));
+        $date = date('d-m-Y', strtotime($this->date));
 
         return [
             'id' => $this->id,

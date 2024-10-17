@@ -15,7 +15,8 @@ class News extends Model
         'title',
         'content',
         'images',
-        'date'
+        'date',
+        'active'
     ];
 
     protected $casts = [
