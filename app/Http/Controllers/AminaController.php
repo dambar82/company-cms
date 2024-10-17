@@ -95,11 +95,13 @@ class AminaController extends Controller
         $newsWithImages = News::query()
             ->where('images', '!=', '[]')
             ->where('project_id', '=', 1)
+            ->where('active', '=', true)
             ->orderBy('created_at', 'desc')
             ->get();
         $newsWithoutImages = News::query()
             ->where('images', '=', '[]')
             ->where('project_id', '=', 1)
+            ->where('active', '=', true)
             ->orderBy('created_at', 'desc')
             ->get();
         $allNews = $newsWithImages;
