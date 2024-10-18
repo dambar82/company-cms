@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VideoGalleryResource\Pages;
+use App\Filament\Resources\VideoGalleryResource\RelationManagers\VideosRelationManager;
 use App\Models\Project;
 use App\Models\VideoGallery;
 use Filament\Forms;
@@ -94,7 +95,7 @@ class VideoGalleryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            VideosRelationManager::class
         ];
     }
 
