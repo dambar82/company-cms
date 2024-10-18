@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 
 class ProjectResource extends Resource
 {
+    protected static ?string $navigationGroup = 'Проекты';
+
     protected static ?string $model = Project::class;
     protected static ?string $pluralLabel = 'Проекты';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

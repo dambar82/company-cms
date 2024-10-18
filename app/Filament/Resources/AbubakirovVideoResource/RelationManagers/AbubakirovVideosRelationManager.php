@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\ImageGalleryResource\RelationManagers;
+namespace App\Filament\Resources\AbubakirovVideoResource\RelationManagers;
 
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -10,20 +12,18 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ImagesRelationManager extends RelationManager
+class AbubakirovVideosRelationManager extends RelationManager
 {
-    protected static string $relationship = 'images';
+    protected static string $relationship = 'videos';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\FileUpload::make('image')
-                    ->directory('abubakirov/img')
-                    ->label('Изображение')
-                    ->imageEditor()
-                    ->image(),
-                Forms\Components\TextInput::make('description')
+                FileUpload::make('video')
+                    ->directory('abubakirov/video')
+                    ->label('Видео'),
+                TextInput::make('description')
                     ->label('Описание')
                     ->required(),
             ]);
@@ -37,8 +37,6 @@ class ImagesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('description')
                     ->label('Описание')
                     ->limit(),
-                Tables\Columns\ImageColumn::make('image')
-                    ->label('Изображение'),
             ])
             ->filters([
                 //

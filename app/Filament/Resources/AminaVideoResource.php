@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\VideoGalleryResource\Pages;
-use App\Filament\Resources\VideoGalleryResource\RelationManagers\VideosRelationManager;
+use App\Filament\Resources\AminaVideoResource\Pages;
+use App\Filament\Resources\AminaVideoResource\RelationManagers\VideoRelationManager;
 use App\Models\Project;
 use App\Models\VideoGallery;
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -16,16 +15,17 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class VideoGalleryResource extends Resource
+class AminaVideoResource extends Resource
 {
-    protected static ?string $model = VideoGallery::class;
-    protected static ?string $navigationLabel = 'Видео';
-    protected static ?string $pluralLabel = 'Видео';
+    protected static ?string $navigationGroup = 'Amina';
 
-    protected static ?string $navigationIcon = 'heroicon-o-video-camera';
+    protected static ?string $navigationLabel = 'Видео';
+
+    protected static ?string $model = VideoGallery::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -42,9 +42,9 @@ class VideoGalleryResource extends Resource
                     ->label('Описание')
                     ->required(),
                 FileUpload::make('preview')
-                    ->directory('previews'),
-                Forms\Components\FileUpload::make('video')
-                    ->directory('video_gallery')
+                    ->directory('amina/preview'),
+                FileUpload::make('video')
+                    ->directory('amina/video')
                     ->label('Видео')
                     ->acceptedFileTypes(['video/mp4', 'video/quicktime']),
             ]);
@@ -64,7 +64,7 @@ class VideoGalleryResource extends Resource
                     ->label('Описание')
                     ->searchable(),
                 ImageColumn::make('preview')
-                ->square(),
+                    ->square(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Создано')
                     ->dateTime()
@@ -77,13 +77,10 @@ class VideoGalleryResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('project_id')
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
-                    ->label('Выберете проект')
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -95,16 +92,16 @@ class VideoGalleryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            VideosRelationManager::class
+            VideoRelationManager::class
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListVideoGalleries::route('/'),
-            'create' => Pages\CreateVideoGallery::route('/create'),
-            'edit' => Pages\EditVideoGallery::route('/{record}/edit'),
+            'index' => Pages\ListAminaVideos::route('/'),
+            'create' => Pages\CreateAminaVideo::route('/create'),
+            'edit' => Pages\EditAminaVideo::route('/{record}/edit'),
         ];
     }
 }

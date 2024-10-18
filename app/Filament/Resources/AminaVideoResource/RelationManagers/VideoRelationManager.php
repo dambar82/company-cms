@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\VideoGalleryResource\RelationManagers;
+namespace App\Filament\Resources\AminaVideoResource\RelationManagers;
 
-use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class VideosRelationManager extends RelationManager
+class VideoRelationManager extends RelationManager
 {
     protected static string $relationship = 'videos';
 
@@ -21,10 +18,8 @@ class VideosRelationManager extends RelationManager
         return $form
             ->schema([
                 FileUpload::make('video')
-                    ->directory('abubakirov/img')
-                    ->label('Изображение')
-                    ->imageEditor()
-                    ->image(),
+                    ->directory('amina/video')
+                    ->label('Видео'),
                 TextInput::make('description')
                     ->label('Описание')
                     ->required(),
@@ -34,9 +29,11 @@ class VideosRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('title')
+            ->recordTitleAttribute('description')
             ->columns([
-                Tables\Columns\TextColumn::make('title'),
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Описание')
+                    ->limit(),
             ])
             ->filters([
                 //

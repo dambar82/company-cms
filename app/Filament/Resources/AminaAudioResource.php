@@ -9,15 +9,19 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class AudioResource extends Resource
+class AminaAudioResource extends Resource
 {
-    protected static ?string $pluralLabel = 'Аудио';
+    protected static ?string $navigationGroup = 'Amina';
+
+    protected static ?string $navigationLabel = 'Аудио';
+
     protected static ?string $model = Audio::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -31,10 +35,10 @@ class AudioResource extends Resource
                     ->options(Project::all()->pluck('name', 'id')->toArray())
                     ->required(),
                 TextInput::make('title')
-                ->label('Название'),
+                    ->label('Название'),
                 FileUpload::make('path')
-                ->label('Аудио')
-                ->directory('audio')
+                    ->label('Аудио')
+                    ->directory('amina/audio')
             ]);
     }
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\VideoGalleryResource\Pages;
+namespace App\Filament\Resources\AbubakirovVideoResource\Pages;
 
-use App\Filament\Resources\VideoGalleryResource;
+use App\Filament\Resources\AbubakirovVideoResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListVideoGalleries extends ListRecords
 {
-    protected static string $resource = VideoGalleryResource::class;
+    protected static string $resource = AbubakirovVideoResource::class;
 
     protected function getHeaderActions(): array
     {
