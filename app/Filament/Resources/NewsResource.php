@@ -22,7 +22,7 @@ use Filament\Tables\Table;
 class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
-
+    protected static ?string $pluralLabel = 'Новости';
     protected static ?string $navigationLabel = 'Новости';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

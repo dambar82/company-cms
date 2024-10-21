@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 class AminaNewsResource extends Resource
 {
     protected static ?string $navigationGroup = 'Amina';
-
+    protected static ?string $pluralLabel = 'Новости';
     protected static ?string $navigationLabel = 'Новости';
 
     protected static ?string $model = News::class;

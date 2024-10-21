@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 class AminaAudioResource extends Resource
 {
     protected static ?string $navigationGroup = 'Amina';
-
+    protected static ?string $pluralLabel = 'Аудио';
     protected static ?string $navigationLabel = 'Аудио';
 
     protected static ?string $model = Audio::class;

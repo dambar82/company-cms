@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 class AminaVideoResource extends Resource
 {
     protected static ?string $navigationGroup = 'Amina';
-
+    protected static ?string $pluralLabel = 'Видео';
     protected static ?string $navigationLabel = 'Видео';
 
     protected static ?string $model = VideoGallery::class;
