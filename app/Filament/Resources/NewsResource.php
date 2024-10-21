@@ -72,8 +72,7 @@ class NewsResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('project.name')
-                    ->label('Проект')
-                    ->searchable(),
+                    ->label('Проект'),
                 TextColumn::make('title')
                     ->label('Название'),
                 ImageColumn::make('images')

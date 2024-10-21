@@ -63,7 +63,8 @@ class AbubakirovVideoResource extends Resource
                     {
                         return $query
                             ->where('project_id', '=', 2);
-                    }),
+                    })
+                    ->label('Проект'),
                 TextColumn::make('name')
                     ->label('Название')
                     ->searchable()

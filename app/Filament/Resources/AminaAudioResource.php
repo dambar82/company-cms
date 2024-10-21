@@ -52,7 +52,8 @@ class AminaAudioResource extends Resource
                     {
                         return $query
                             ->where('project_id', '=', 1);
-                    }),
+                    })
+                    ->label('Проект'),
                 TextColumn::make('title')
                     ->label('Название')
             ])
