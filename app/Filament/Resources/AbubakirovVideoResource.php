@@ -19,6 +19,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class AbubakirovVideoResource extends Resource
 {
@@ -58,11 +59,15 @@ class AbubakirovVideoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('project.name')
-                    ->label('Проект')
-                    ->searchable(),
+                    ->sortable(query: function (Builder $query): Builder
+                    {
+                        return $query
+                            ->where('project_id', '=', 2);
+                    }),
                 TextColumn::make('name')
                     ->label('Название')
-                    ->searchable(),
+                    ->searchable()
+                ,
                 TextColumn::make('title')
                     ->label('Описание')
                     ->searchable(),
@@ -79,6 +84,7 @@ class AbubakirovVideoResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->persistSortInSession()
             ->filters([
                 //
             ])

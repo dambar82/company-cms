@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class AminaVideoResource extends Resource
 {
@@ -55,8 +56,11 @@ class AminaVideoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('project.name')
-                    ->label('Проект')
-                    ->searchable(),
+                    ->sortable(query: function (Builder $query): Builder
+                    {
+                        return $query
+                            ->where('project_id', '=', 1);
+                    }),
                 TextColumn::make('name')
                     ->label('Название')
                     ->searchable(),
@@ -76,6 +80,7 @@ class AminaVideoResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->persistSortInSession()
             ->filters([
                 //
             ])

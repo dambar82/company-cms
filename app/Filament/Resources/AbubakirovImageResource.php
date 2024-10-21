@@ -17,6 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class AbubakirovImageResource extends Resource
@@ -55,8 +56,11 @@ class AbubakirovImageResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('project.name')
-                    ->label('Проект')
-                    ->searchable(),
+                    ->sortable(query: function (Builder $query): Builder
+                    {
+                        return $query
+                            ->where('project_id', '=', 2);
+                    }),
                 TextColumn::make('name')
                     ->label('Название')
                     ->searchable(),
@@ -76,6 +80,7 @@ class AbubakirovImageResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->persistSortInSession()
             ->filters([
                 //
             ])

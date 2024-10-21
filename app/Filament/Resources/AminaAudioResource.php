@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class AminaAudioResource extends Resource
 {
@@ -47,11 +48,15 @@ class AminaAudioResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('project.name')
-                    ->label('Проект')
-                    ->searchable(),
+                    ->sortable(query: function (Builder $query): Builder
+                    {
+                        return $query
+                            ->where('project_id', '=', 1);
+                    }),
                 TextColumn::make('title')
                     ->label('Название')
             ])
+            ->persistSortInSession()
             ->filters([
                 SelectFilter::make('project_id')
                     ->options(Project::all()->pluck('name', 'id')->toArray())

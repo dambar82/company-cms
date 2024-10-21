@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AminaNewsResource\Pages;
+use App\Filament\Resources\NewsResource\Pages;
 use App\Models\News;
 use App\Models\Project;
 use Filament\Forms\Components\Checkbox;
@@ -17,13 +17,13 @@ use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class NewsResource extends Resource
 {
-    protected static ?string $pluralLabel = 'Новости';
     protected static ?string $model = News::class;
+
+    protected static ?string $navigationLabel = 'Новости';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -61,9 +61,9 @@ class NewsResource extends Resource
                     ->label('Текст новости')
                     ->columnSpanFull(),
                 DatePicker::make('date')
-                ->label('Дата'),
+                    ->label('Дата'),
                 Checkbox::make('active')
-                ->label('Новость активна')
+                    ->label('Новость активна')
             ]);
     }
 
@@ -80,15 +80,13 @@ class NewsResource extends Resource
                     ->label('Фотографии')
                     ->square(),
                 TextColumn::make('date')
-                ->label('Дата'),
+                    ->label('Дата'),
                 IconColumn::make('active')
                     ->boolean()
                     ->label('Новость активна')
             ])
             ->filters([
-                SelectFilter::make('project_id')
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
-                ->label('Выберете проект')
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -110,9 +108,9 @@ class NewsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAminaNews::route('/'),
-            'create' => Pages\CreateAminaNews::route('/create'),
-            'edit' => Pages\EditAminaNews::route('/{record}/edit'),
+            'index' => Pages\ListNews::route('/'),
+            'create' => Pages\CreateNews::route('/create'),
+            'edit' => Pages\EditNews::route('/{record}/edit'),
         ];
     }
 }

@@ -18,6 +18,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class AminaNewsResource extends Resource
 {
@@ -74,8 +75,11 @@ class AminaNewsResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('project.name')
-                    ->label('Проект')
-                    ->searchable(),
+                    ->sortable(query: function (Builder $query): Builder
+                    {
+                        return $query
+                            ->where('project_id', '=', 1);
+                    }),
                 TextColumn::make('title')
                     ->label('Название'),
                 ImageColumn::make('images')
@@ -87,6 +91,7 @@ class AminaNewsResource extends Resource
                     ->boolean()
                     ->label('Новость активна')
             ])
+            ->persistSortInSession()
             ->filters([
                 //
             ])
