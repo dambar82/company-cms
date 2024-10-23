@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -30,4 +31,19 @@ class Project extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function news(): BelongsToMany
+    {
+        return $this->belongsToMany(News::class, 'news_project');
+    }
+
+    public function video_galleries(): BelongsToMany
+    {
+        return $this->belongsToMany(VideoGallery::class, 'video_gallery_project');
+    }
+
+    public function image_galleries(): BelongsToMany
+    {
+        return $this->belongsToMany(ImageGallery::class, 'image_gallery_project');
+    }
 }

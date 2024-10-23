@@ -32,10 +32,10 @@ class AminaVideoResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('project_id')
-                    ->label('Проект')
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
-                    ->required(),
+//                Select::make('project_id')
+//                    ->label('Проект')
+//                    ->options(Project::all()->pluck('name', 'id')->toArray())
+//                    ->required(),
                 TextInput::make('name')
                     ->label('Название')
                     ->required(),

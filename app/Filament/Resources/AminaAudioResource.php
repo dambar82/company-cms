@@ -31,10 +31,10 @@ class AminaAudioResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('project_id')
-                    ->label('Проект')
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
-                    ->required(),
+//                Select::make('project_id')
+//                    ->label('Проект')
+//                    ->options(Project::all()->pluck('name', 'id')->toArray())
+//                    ->required(),
                 TextInput::make('title')
                     ->label('Название'),
                 FileUpload::make('path')
@@ -47,13 +47,13 @@ class AminaAudioResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('project.name')
-                    ->sortable(query: function (Builder $query): Builder
-                    {
-                        return $query
-                            ->where('project_id', '=', 1);
-                    })
-                    ->label('Проект'),
+//                TextColumn::make('project.name')
+//                    ->sortable(query: function (Builder $query): Builder
+//                    {
+//                        return $query
+//                            ->where('project_id', '=', 1);
+//                    })
+//                    ->label('Проект'),
                 TextColumn::make('title')
                     ->label('Название')
             ])

@@ -5,6 +5,83 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/abubakirov/image-gallery": {
+            "get": {
+                "tags": [
+                    "Abubakirov"
+                ],
+                "summary": "Get all images in the gallery",
+                "description": "Returns a collection of image resources filtered by project ID 2.",
+                "operationId": "9225c16e5f29a7b9d54eaf364d03c560",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No images found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/abubakirov/image-gallery/{id}": {
+            "get": {
+                "tags": [
+                    "Abubakirov"
+                ],
+                "summary": "Get a specific image from the gallery",
+                "description": "Returns an image resource for the specified ID.",
+                "operationId": "1cb6b6c4e754dd2e49f90fff04dfa664",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the image",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Image not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/amina/audios": {
             "get": {
                 "tags": [
@@ -206,83 +283,6 @@
                 }
             }
         },
-        "/api/imgGallery": {
-            "get": {
-                "tags": [
-                    "Abubakirov"
-                ],
-                "summary": "Get all images in the gallery",
-                "description": "Returns a collection of image resources filtered by project ID 2.",
-                "operationId": "23285a80947b8332728f91c296496452",
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "": {}
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "No images found for the specified project",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/imgGallery/{id}": {
-            "get": {
-                "tags": [
-                    "Abubakirov"
-                ],
-                "summary": "Get a specific image from the gallery",
-                "description": "Returns an image resource for the specified ID.",
-                "operationId": "b9249b45e9026c1b9b04eb9132f49be8",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the image",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "": {}
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Image not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/videoGallery": {
             "get": {
                 "tags": [
@@ -363,12 +363,12 @@
     },
     "tags": [
         {
-            "name": "Amina",
-            "description": "Amina"
-        },
-        {
             "name": "Abubakirov",
             "description": "Abubakirov"
+        },
+        {
+            "name": "Amina",
+            "description": "Amina"
         }
     ]
 }

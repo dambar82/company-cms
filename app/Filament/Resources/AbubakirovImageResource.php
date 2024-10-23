@@ -33,10 +33,10 @@ class AbubakirovImageResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('project_id')
-                    ->label('Проект')
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
-                    ->required(),
+//                Select::make('project_id')
+//                    ->label('Проект')
+//                    ->options(Project::all()->pluck('name', 'id')->toArray())
+//                    ->required(),
                 TextInput::make('name')
                     ->label('Название')
                     ->required(),
@@ -55,12 +55,7 @@ class AbubakirovImageResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('project.name')
-                    ->sortable(query: function (Builder $query): Builder
-                    {
-                        return $query
-                            ->where('project_id', '=', 2);
-                    })
+                TextColumn::make('projects.name')
                     ->label('Проект'),
                 TextColumn::make('name')
                     ->label('Название')

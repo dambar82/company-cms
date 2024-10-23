@@ -34,39 +34,39 @@ class AminaNewsResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('project_id')
-                    ->label('Проект')
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
-                    ->required(),
-                TextInput::make('title')
-                    ->label('Название'),
-                FileUpload::make('images')
-                    ->label('Фотографии')
-                    ->multiple()
-                    ->directory('amina/news'),
-                RichEditor::make('content')
-                    ->toolbarButtons([
-                        'attachFiles',
-                        'blockquote',
-                        'bold',
-                        'bulletList',
-                        'codeBlock',
-                        'h2',
-                        'h3',
-                        'italic',
-                        'link',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
-                    ])
-                    ->label('Текст новости')
-                    ->columnSpanFull(),
-                DatePicker::make('date')
-                    ->label('Дата'),
-                Checkbox::make('active')
-                    ->label('Новость активна')
+//                Select::make('project_id')
+//                    ->label('Проект')
+//                    ->options(Project::all()->pluck('name', 'id')->toArray())
+//                    ->required(),
+//                TextInput::make('title')
+//                    ->label('Название'),
+//                FileUpload::make('images')
+//                    ->label('Фотографии')
+//                    ->multiple()
+//                    ->directory('amina/news'),
+//                RichEditor::make('content')
+//                    ->toolbarButtons([
+//                        'attachFiles',
+//                        'blockquote',
+//                        'bold',
+//                        'bulletList',
+//                        'codeBlock',
+//                        'h2',
+//                        'h3',
+//                        'italic',
+//                        'link',
+//                        'orderedList',
+//                        'redo',
+//                        'strike',
+//                        'underline',
+//                        'undo',
+//                    ])
+//                    ->label('Текст новости')
+//                    ->columnSpanFull(),
+//                DatePicker::make('date')
+//                    ->label('Дата'),
+//                Checkbox::make('active')
+//                    ->label('Новость активна')
             ]);
     }
 
@@ -74,7 +74,7 @@ class AminaNewsResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('project.name')
+                TextColumn::make('projects.name')
                     ->sortable(query: function (Builder $query): Builder
                     {
                         return $query
@@ -97,7 +97,7 @@ class AminaNewsResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+              //  Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

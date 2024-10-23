@@ -6,9 +6,11 @@ use App\Filament\Resources\NewsResource\Pages;
 use App\Models\News;
 use App\Models\Project;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -18,6 +20,8 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class NewsResource extends Resource
 {
@@ -27,14 +31,23 @@ class NewsResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public ?Model $record = null;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Select::make('project_id')
-                    ->label('Проект')
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
-                    ->required(),
+                Section::make('Для проектов:')
+                    ->schema([
+                    CheckBoxList::make('projects')
+                    ->relationship('projects', 'name')
+                ]),
+
+
+//                Select::make('project_id')
+//                    ->label('Проект')
+//                    ->options(Project::all()->pluck('name', 'id')->toArray())
+//                    ->required(),
                 TextInput::make('title')
                     ->label('Название'),
                 FileUpload::make('images')
@@ -71,7 +84,12 @@ class NewsResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('project.name')
+                TextColumn::make('projects.name')
+                    ->sortable(query: function (Builder $query): Builder
+                    {
+                        return $query
+                            ->where('news_id', '=', $this->record->id);
+                    })
                     ->label('Проект'),
                 TextColumn::make('title')
                     ->label('Название'),

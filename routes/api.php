@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbubakirovController;
 use App\Http\Controllers\AminaController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ImageGalleryController;
@@ -29,4 +30,11 @@ Route::prefix('amina')->group( function () {
     Route::get('news/{id}', [AminaController::class, 'getNews']);
     Route::get('video', [AminaController::class, 'getVideos']);
     Route::get('video/{id}', [AminaController::class, 'getVideo']);
+});
+
+Route::prefix('abubakirov')->group( function () {
+    Route::get('image-gallery', [AbubakirovController::class, 'getAllImageGallery']);
+    Route::get('image-gallery/{id}', [AbubakirovController::class, 'getImageGallery']);
+    Route::get('video-gallery', [AminaController::class, 'getVideos']);
+    Route::get('video-gallery/{id}', [AminaController::class, 'getVideo']);
 });

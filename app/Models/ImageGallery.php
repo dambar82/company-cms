@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ImageGallery extends Model
@@ -29,5 +30,8 @@ class ImageGallery extends Model
         return $this->hasOne(Project::class, 'id', 'project_id');
     }
 
-    protected $guarded = array();
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'image_gallery_project');
+    }
 }
