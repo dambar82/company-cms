@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AbubakirovImageResource\Pages\CreateAbubakirovImage;
-use App\Filament\Resources\AbubakirovImageResource\Pages\EditAbubakirovImage;
-use App\Filament\Resources\AbubakirovImageResource\Pages\ListAbubakirovImage;
-use App\Filament\Resources\AbubakirovImageResource\RelationManagers\AbubakirovImagesRelationManager;
+use App\Filament\Resources\ImageResource\Pages;
+use App\Models\Image;
 use App\Models\ImageGallery;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -17,14 +17,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class AbubakirovImageResource extends Resource
+class ImageResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Abubakirov';
     protected static ?string $model = ImageGallery::class;
-    protected static ?string $navigationLabel = 'Изображения';
-    protected static ?string $pluralLabel = 'Изображения';
 
-    protected static ?string $navigationIcon = 'heroicon-o-photo';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationLabel = 'Все изображения';
+    protected static ?string $pluralLabel = 'Изображения';
 
     public ?Model $record = null;
 
@@ -32,10 +32,11 @@ class AbubakirovImageResource extends Resource
     {
         return $form
             ->schema([
-//                Select::make('project_id')
-//                    ->label('Проект')
-//                    ->options(Project::all()->pluck('name', 'id')->toArray())
-//                    ->required(),
+                Section::make('Для проектов:')
+                    ->schema([
+                        CheckBoxList::make('projects')
+                            ->relationship('projects', 'name')
+                    ]),
                 TextInput::make('name')
                     ->label('Название')
                     ->required(),
@@ -43,7 +44,7 @@ class AbubakirovImageResource extends Resource
                     ->label('Описание')
                     ->required(),
                 FileUpload::make('caption')
-                    ->directory('abubakirov/gallery')
+                    ->directory('images')
                     ->label('Изображение')
                     ->imageEditor()
                     ->image(),
@@ -93,16 +94,16 @@ class AbubakirovImageResource extends Resource
     public static function getRelations(): array
     {
         return [
-            AbubakirovImagesRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListAbubakirovImage::route('/'),
-            'create' => CreateAbubakirovImage::route('/create'),
-            'edit' => EditAbubakirovImage::route('/{record}/edit'),
+            'index' => Pages\ListImages::route('/'),
+            'create' => Pages\CreateImage::route('/create'),
+            'edit' => Pages\EditImage::route('/{record}/edit'),
         ];
     }
 }

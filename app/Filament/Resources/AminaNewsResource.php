@@ -2,15 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AminaNewsResource\Pages;
+
+use App\Filament\Resources\AminaNewsResource\Pages\CreateAminaNews;
+use App\Filament\Resources\AminaNewsResource\Pages\EditAminaNews;
+use App\Filament\Resources\AminaNewsResource\Pages\ListAminaNews;
 use App\Models\News;
-use App\Models\Project;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -74,12 +70,7 @@ class AminaNewsResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('projects.name')
-                    ->sortable(query: function (Builder $query): Builder
-                    {
-                        return $query
-                            ->where('project_id', '=', 1);
-                    })
+                TextColumn::make('projects.0.name')
                     ->label('Проект'),
                 TextColumn::make('title')
                     ->label('Название'),
@@ -116,9 +107,9 @@ class AminaNewsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAminaNews::route('/'),
-            'create' => Pages\CreateAminaNews::route('/create'),
-            'edit' => Pages\EditAminaNews::route('/{record}/edit'),
+            'index' => ListAminaNews::route('/'),
+            'create' => CreateAminaNews::route('/create'),
+            'edit' => EditAminaNews::route('/{record}/edit'),
         ];
     }
 }

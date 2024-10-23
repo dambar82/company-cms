@@ -11,7 +11,6 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -19,15 +18,15 @@ use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
     protected static ?string $pluralLabel = 'Новости';
-    protected static ?string $navigationLabel = 'Новости';
+    protected static ?string $navigationLabel = 'Все новости';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -42,12 +41,6 @@ class NewsResource extends Resource
                     CheckBoxList::make('projects')
                     ->relationship('projects', 'name')
                 ]),
-
-
-//                Select::make('project_id')
-//                    ->label('Проект')
-//                    ->options(Project::all()->pluck('name', 'id')->toArray())
-//                    ->required(),
                 TextInput::make('title')
                     ->label('Название'),
                 FileUpload::make('images')
@@ -84,12 +77,7 @@ class NewsResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('projects.name')
-                    ->sortable(query: function (Builder $query): Builder
-                    {
-                        return $query
-                            ->where('news_id', '=', $this->record->id);
-                    })
+                TextColumn::make('projects.0.name')
                     ->label('Проект'),
                 TextColumn::make('title')
                     ->label('Название'),
@@ -103,7 +91,10 @@ class NewsResource extends Resource
                     ->label('Новость активна')
             ])
             ->filters([
-                //
+                SelectFilter::make('projects.0.name')
+                ->multiple()
+                ->options(Project::all()->pluck('name', 'id')->toArray())
+                    ->label('Поиск по проекту'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
