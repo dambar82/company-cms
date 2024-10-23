@@ -35,6 +35,6 @@ Route::prefix('amina')->group( function () {
 Route::prefix('abubakirov')->group( function () {
     Route::get('image-gallery', [AbubakirovController::class, 'getAllImageGallery']);
     Route::get('image-gallery/{id}', [AbubakirovController::class, 'getImageGallery']);
-    Route::get('video-gallery', [AminaController::class, 'getVideos']);
-    Route::get('video-gallery/{id}', [AminaController::class, 'getVideo']);
+    Route::get('video-gallery', [AbubakirovController::class, 'getVideos']);
+    Route::get('video-gallery/{id}', [AbubakirovController::class, 'getVideo']);
 });

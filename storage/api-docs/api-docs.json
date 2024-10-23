@@ -82,6 +82,83 @@
                 }
             }
         },
+        "/api/abubakirov/video-gallery": {
+            "get": {
+                "tags": [
+                    "Abubakirov"
+                ],
+                "summary": "Get all videos in the gallery",
+                "description": "Returns a collection of video resources filtered by project ID 2.",
+                "operationId": "c20f6ee1e3a7572f2071264dbdff8d2a",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No videos found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/abubakirov/video-gallery/{id}": {
+            "get": {
+                "tags": [
+                    "Abubakirov"
+                ],
+                "summary": "Get a specific video from the gallery",
+                "description": "Returns a video resource for the specified ID.",
+                "operationId": "d26b0228325b3f816da80bca23cd81c2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the video",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "": {}
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Video not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/amina/audios": {
             "get": {
                 "tags": [
@@ -274,83 +351,6 @@
                     },
                     "404": {
                         "description": "Video record not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/videoGallery": {
-            "get": {
-                "tags": [
-                    "Abubakirov"
-                ],
-                "summary": "Get all videos in the gallery",
-                "description": "Returns a collection of video resources filtered by project ID 2.",
-                "operationId": "8ebe1f5a120deee6f85baa13fd157f1a",
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "": {}
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "No videos found for the specified project",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/videoGallery/{id}": {
-            "get": {
-                "tags": [
-                    "Abubakirov"
-                ],
-                "summary": "Get a specific video from the gallery",
-                "description": "Returns a video resource for the specified ID.",
-                "operationId": "7e5b49de34f264442f37c5ef31a9e364",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the video",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "": {}
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Video not found",
                         "content": {
                             "application/json": {
                                 "schema": {}

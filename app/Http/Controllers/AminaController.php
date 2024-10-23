@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Resources\AminaAudioResource;
-use App\Http\Resources\AminaNewsResource;
-use App\Http\Resources\AminaVideoResource;
+use App\Http\Resources\AudioResource;
+use App\Http\Resources\NewsResource;
+use App\Http\Resources\VideoGalleryResources;
 use App\Models\Audio;
 use App\Models\News;
 use App\Models\VideoGallery;
@@ -39,7 +39,11 @@ class AminaController extends Controller
      */
     public function getAudios(): AnonymousResourceCollection
     {
-        return AminaAudioResource::collection(Audio::all()->where('project_id', '=', 1));
+        return AudioResource::collection(
+        Audio::whereHas('projects', function ($query) {
+            $query->where('project_id', 1);
+        })->get()
+    );
     }
 
     /**
@@ -67,9 +71,13 @@ class AminaController extends Controller
      *     ),
      * )
      */
-    public function getAudio(int $id): AminaAudioResource
+    public function getAudio(int $id): AudioResource
     {
-        return new AminaAudioResource(Audio::query()->find($id));
+        $audio = Audio::whereHas('projects', function ($query) {
+            $query->where('project_id', 1);
+        })->findOrFail($id);
+
+        return new AudioResource($audio);
     }
 
     /**
@@ -92,25 +100,15 @@ class AminaController extends Controller
      */
     public function getAllNews(): AnonymousResourceCollection
     {
-        $newsWithImages = News::query()
-            ->where('images', '!=', '[]')
-            ->where('project_id', '=', 1)
-            ->where('active', '=', true)
+        $allNews = News::query()
+            ->whereHas('projects', function ($query) {
+                $query->where('project_id', 1);
+            })
+            ->where('active', true)
             ->orderBy('created_at', 'desc')
             ->get();
-        $newsWithoutImages = News::query()
-            ->where('images', '=', '[]')
-            ->where('project_id', '=', 1)
-            ->where('active', '=', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $allNews = $newsWithImages;
 
-        foreach ($newsWithoutImages as $news) {
-            $allNews[] = $news;
-        }
-
-        return AminaNewsResource::collection($allNews);
+        return NewsResource::collection($allNews);
     }
 
     /**
@@ -138,9 +136,13 @@ class AminaController extends Controller
      *     )
      * )
      */
-    public function getNews(int $id): AminaNewsResource
+    public function getNews(int $id): NewsResource
     {
-        return new AminaNewsResource(News::query()->find($id));
+        $news = News::whereHas('projects', function ($query) {
+            $query->where('project_id', 1);
+        })->findOrFail($id);
+
+        return new NewsResource($news);
     }
 
     /**
@@ -163,7 +165,11 @@ class AminaController extends Controller
      */
     public function getVideos(): AnonymousResourceCollection
     {
-        return AminaVideoResource::collection(VideoGallery::all()->where('project_id', '=', 1));
+        return VideoGalleryResources::collection(
+            VideoGallery::whereHas('projects', function ($query) {
+                $query->where('project_id', 1);
+            })->get()
+        );
     }
 
     /**
@@ -191,8 +197,12 @@ class AminaController extends Controller
      *     )
      * )
      */
-    public function getVideo(int $id): AminaVideoResource
+    public function getVideo(int $id): VideoGalleryResources
     {
-        return new AminaVideoResource(VideoGallery::query()->find($id));
+        $videoGallery = VideoGallery::whereHas('projects', function ($query) {
+            $query->where('project_id', 1);
+        })->findOrFail($id);
+
+        return new VideoGalleryResources($videoGallery);
     }
 }
