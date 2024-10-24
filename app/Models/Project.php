@@ -51,4 +51,9 @@ class Project extends Model
     {
         return $this->belongsToMany(Banner::class, 'banner_project');
     }
+
+    public function quizzes(): BelongsToMany
+    {
+        return $this->belongsToMany(Quiz::class, 'quiz_project');
+    }
 }

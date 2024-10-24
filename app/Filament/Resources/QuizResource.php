@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BannerResource\Pages;
-use App\Models\Banner;
+use App\Filament\Resources\QuizResource\Pages;
+use App\Models\Quiz;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -16,15 +15,15 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class BannerResource extends Resource
+class QuizResource extends Resource
 {
-    protected static ?string $model = Banner::class;
+    protected static ?string $model = Quiz::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Баннеры';
+    protected static ?string $navigationLabel = 'Викторины';
 
-    protected static ?string $pluralLabel = 'Баннеры';
+    protected static ?string $pluralLabel = 'Викторины';
 
     public static function form(Form $form): Form
     {
@@ -35,30 +34,11 @@ class BannerResource extends Resource
                         CheckBoxList::make('projects')
                             ->relationship('projects', 'name')
                     ]),
-                TextInput::make('title')
-                    ->label('Заголовок')
+                TextInput::make('name')
+                    ->label('Название')
                     ->required(),
-                RichEditor::make('content')
-                    ->toolbarButtons([
-                        'attachFiles',
-                        'blockquote',
-                        'bold',
-                        'bulletList',
-                        'codeBlock',
-                        'h2',
-                        'h3',
-                        'italic',
-                        'link',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
-                    ])
-                    ->label('Содержимое')
-                    ->columnSpanFull(),
                 FileUpload::make('image')
-                    ->directory('banners')
+                    ->directory('quiz')
                     ->label('Изображение')
                     ->imageEditor()
                     ->image(),
@@ -71,11 +51,10 @@ class BannerResource extends Resource
             ->columns([
                 TextColumn::make('projects.name')
                     ->label('Проект'),
-                TextColumn::make('content')
-                    ->label('Содержимое')
-                    ->limit(10),
+                TextColumn::make('name')
+                    ->label('Название'),
                 ImageColumn::make('image')
-                ->label('Изображение')
+                    ->label('Изображение')
             ])
             ->filters([
                 //
@@ -100,9 +79,9 @@ class BannerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBanners::route('/'),
-            'create' => Pages\CreateBanner::route('/create'),
-            'edit' => Pages\EditBanner::route('/{record}/edit'),
+            'index' => Pages\ListQuizzes::route('/'),
+            'create' => Pages\CreateQuiz::route('/create'),
+            'edit' => Pages\EditQuiz::route('/{record}/edit'),
         ];
     }
 }
