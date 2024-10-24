@@ -21,6 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 
 class NewsResource extends Resource
 {
@@ -36,6 +37,7 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
+             //   Group::
                 Section::make('Для проектов:')
                     ->schema([
                     CheckBoxList::make('projects')
@@ -77,7 +79,7 @@ class NewsResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('projects.0.name')
+                TextColumn::make('projects.name')
                     ->label('Проект'),
                 TextColumn::make('title')
                     ->label('Название'),
