@@ -10,6 +10,8 @@ class EditImage extends EditRecord
 {
     protected static string $resource = ImageResource::class;
 
+    protected static ?string $title = 'Изменить фотогалерею';
+
     protected function getHeaderActions(): array
     {
         return [

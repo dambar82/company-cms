@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 class AminaAudioResource extends Resource
 {
     protected static ?string $navigationGroup = 'Amina';
-    protected static ?string $navigationLabel = 'Аудио';
+    protected static ?string $navigationLabel = 'Аудио Амина';
     protected static ?string $pluralLabel = 'Аудио Амина';
 
     protected static ?string $model = Audio::class;

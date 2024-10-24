@@ -23,8 +23,8 @@ class VideoResource extends Resource
     protected static ?string $model = VideoGallery::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $pluralLabel = 'Видео';
-    protected static ?string $navigationLabel = 'Все видео';
+    protected static ?string $pluralLabel = 'Видеогалереи';
+    protected static ?string $navigationLabel = 'Видеогалереи';
 
     public ?Model $record = null;
 

@@ -25,7 +25,7 @@ class AminaNewsResource extends Resource
 {
     protected static ?string $navigationGroup = 'Amina';
     protected static ?string $pluralLabel = 'Новости Амина';
-    protected static ?string $navigationLabel = 'Новости';
+    protected static ?string $navigationLabel = 'Новости Амина';
 
     protected static ?string $model = News::class;
 

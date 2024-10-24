@@ -23,8 +23,8 @@ class ImageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Все изображения';
-    protected static ?string $pluralLabel = 'Изображения';
+    protected static ?string $navigationLabel = 'Фотогалереи';
+    protected static ?string $pluralLabel = 'Фотогалереи';
 
     public ?Model $record = null;
 

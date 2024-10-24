@@ -24,8 +24,9 @@ class AbubakirovVideoResource extends Resource
     protected static ?string $navigationGroup = 'Abubakirov';
 
     protected static ?string $model = VideoGallery::class;
-    protected static ?string $navigationLabel = 'Видео';
-    protected static ?string $pluralLabel = 'Видео Абубакиров';
+    protected static ?string $navigationLabel = 'Видеогалереи Абубакиров';
+
+    protected static ?string $pluralLabel = 'Видеогалереи Абубакиров';
 
     protected static ?string $navigationIcon = 'heroicon-o-video-camera';
 

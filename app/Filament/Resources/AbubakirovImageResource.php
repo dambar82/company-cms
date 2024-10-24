@@ -21,9 +21,11 @@ use Illuminate\Database\Eloquent\Model;
 class AbubakirovImageResource extends Resource
 {
     protected static ?string $navigationGroup = 'Abubakirov';
+
     protected static ?string $model = ImageGallery::class;
-    protected static ?string $navigationLabel = 'Изображения';
-    protected static ?string $pluralLabel = 'Изображения Абубакиров';
+    protected static ?string $navigationLabel = 'Фотогалереи Абубакиров';
+
+    protected static ?string $pluralLabel = 'Фотогалереи Абубакиров';
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';
 
