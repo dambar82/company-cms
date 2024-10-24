@@ -16,11 +16,12 @@ use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class AminaVideoResource extends Resource
 {
     protected static ?string $navigationGroup = 'Amina';
-    protected static ?string $pluralLabel = 'Видео';
+    protected static ?string $pluralLabel = 'Видео Амина';
     protected static ?string $navigationLabel = 'Видео';
 
     protected static ?string $model = VideoGallery::class;
@@ -31,10 +32,6 @@ class AminaVideoResource extends Resource
     {
         return $form
             ->schema([
-//                Select::make('project_id')
-//                    ->label('Проект')
-//                    ->options(Project::all()->pluck('name', 'id')->toArray())
-//                    ->required(),
                 TextInput::make('name')
                     ->label('Название')
                     ->required(),
@@ -54,8 +51,16 @@ class AminaVideoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('projects.0.name')
-                    ->label('Проект'),
+                TextColumn::make('projects.name')
+                    ->label('Проект')
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query
+                            ->join('video_gallery_project AS np', 'np.video_gallery_id', '=', 'video_galleries.id') // Присоединяем сводную таблицу по id видео
+                            ->join('projects', 'projects.id', '=', 'np.project_id') // Присоединяем таблицу проектов по project_id
+                            ->where('np.project_id', 1) // Фильтруем по id проекта
+                            ->orderBy('projects.name', $direction) // Сортируем по имени проекта
+                            ->select('video_galleries.*'); // Выбираем все поля из таблицы видео
+                    }),
                 TextColumn::make('name')
                     ->label('Название')
                     ->searchable(),

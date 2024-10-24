@@ -10,10 +10,12 @@ class ListAminaAudio extends ListRecords
 {
     protected static string $resource = AminaAudioResource::class;
 
+
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            // Actions\CreateAction::make(),
         ];
     }
 }

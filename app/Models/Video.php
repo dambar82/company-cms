@@ -12,6 +12,6 @@ class Video extends Model
     protected $fillable = [
         'video_galleries_id',
         'description',
-        'image'
+        'video'
     ];
 }

@@ -4,24 +4,20 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AminaAudioResource\Pages;
 use App\Models\Audio;
-use App\Models\Project;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 class AminaAudioResource extends Resource
 {
     protected static ?string $navigationGroup = 'Amina';
-    protected static ?string $pluralLabel = 'Аудио';
     protected static ?string $navigationLabel = 'Аудио';
+    protected static ?string $pluralLabel = 'Аудио Амина';
 
     protected static ?string $model = Audio::class;
 
@@ -31,10 +27,6 @@ class AminaAudioResource extends Resource
     {
         return $form
             ->schema([
-//                Select::make('project_id')
-//                    ->label('Проект')
-//                    ->options(Project::all()->pluck('name', 'id')->toArray())
-//                    ->required(),
                 TextInput::make('title')
                     ->label('Название'),
                 FileUpload::make('path')
@@ -47,16 +39,22 @@ class AminaAudioResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('projects.0.name')
-                    ->label('Проект'),
+                TextColumn::make('projects.name')
+                    ->label('Проект')
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query
+                            ->join('audio_project AS np', 'np.audio_id', '=', 'audios.id') // Присоединяем сводную таблицу по id аудио
+                            ->join('projects', 'projects.id', '=', 'np.project_id') // Присоединяем таблицу проектов по project_id
+                            ->where('np.project_id', 1) // Фильтруем по id проекта
+                            ->orderBy('projects.name', $direction) // Сортируем по имени проекта
+                            ->select('audios.*'); // Выбираем все поля из таблицы аудио
+                    }),
                 TextColumn::make('title')
                     ->label('Название')
             ])
             ->persistSortInSession()
             ->filters([
-                SelectFilter::make('project_id')
-                    ->options(Project::all()->pluck('name', 'id')->toArray())
-                    ->label('Выберете проект')
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

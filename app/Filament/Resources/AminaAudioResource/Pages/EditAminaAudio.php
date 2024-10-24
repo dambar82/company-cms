@@ -10,6 +10,8 @@ class EditAminaAudio extends EditRecord
 {
     protected static string $resource = AminaAudioResource::class;
 
+    protected static ?string $title = 'Изменить аудио';
+
     protected function getHeaderActions(): array
     {
         return [

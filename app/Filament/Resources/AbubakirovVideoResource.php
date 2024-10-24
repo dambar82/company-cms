@@ -2,15 +2,13 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AbubakirovVideoResource\Pages\CreateVideoGallery;
-use App\Filament\Resources\AbubakirovVideoResource\Pages\EditVideoGallery;
-use App\Filament\Resources\AbubakirovVideoResource\Pages\ListVideoGalleries;
+use App\Filament\Resources\AbubakirovVideoResource\Pages\CreateAbubakirovVideoGallery;
+use App\Filament\Resources\AbubakirovVideoResource\Pages\EditAbubakirovVideoGallery;
+use App\Filament\Resources\AbubakirovVideoResource\Pages\ListAbubakirovVideoGalleries;
 use App\Filament\Resources\AbubakirovVideoResource\RelationManagers\AbubakirovVideosRelationManager;
-use App\Models\Project;
 use App\Models\VideoGallery;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -27,7 +25,7 @@ class AbubakirovVideoResource extends Resource
 
     protected static ?string $model = VideoGallery::class;
     protected static ?string $navigationLabel = 'Видео';
-    protected static ?string $pluralLabel = 'Видео';
+    protected static ?string $pluralLabel = 'Видео Абубакиров';
 
     protected static ?string $navigationIcon = 'heroicon-o-video-camera';
 
@@ -35,10 +33,6 @@ class AbubakirovVideoResource extends Resource
     {
         return $form
             ->schema([
-//                Select::make('project_id')
-//                    ->label('Проект')
-//                    ->options(Project::all()->pluck('name', 'id')->toArray())
-//                    ->required(),
                 TextInput::make('name')
                     ->label('Название')
                     ->required(),
@@ -58,13 +52,16 @@ class AbubakirovVideoResource extends Resource
     {
         return $table
             ->columns([
-//                TextColumn::make('project.name')
-//                    ->sortable(query: function (Builder $query): Builder
-//                    {
-//                        return $query
-//                            ->where('project_id', '=', 2);
-//                    })
-//                    ->label('Проект'),
+                TextColumn::make('projects.name')
+                    ->label('Проект')
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query
+                            ->join('video_gallery_project AS np', 'np.video_gallery_id', '=', 'video_galleries.id') // Присоединяем сводную таблицу по id видео
+                            ->join('projects', 'projects.id', '=', 'np.project_id') // Присоединяем таблицу проектов по project_id
+                            ->where('np.project_id', 2) // Фильтруем по id проекта
+                            ->orderBy('projects.name', $direction) // Сортируем по имени проекта
+                            ->select('video_galleries.*'); // Выбираем все поля из таблицы видео
+                    }),
                 TextColumn::make('name')
                     ->label('Название')
                     ->searchable()
@@ -110,9 +107,9 @@ class AbubakirovVideoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListVideoGalleries::route('/'),
-            'create' => CreateVideoGallery::route('/create'),
-            'edit' => EditVideoGallery::route('/{record}/edit'),
+            'index' => ListAbubakirovVideoGalleries::route('/'),
+            'create' => CreateAbubakirovVideoGallery::route('/create'),
+            'edit' => EditAbubakirovVideoGallery::route('/{record}/edit'),
         ];
     }
 }

@@ -13,6 +13,8 @@ class VideoRelationManager extends RelationManager
 {
     protected static string $relationship = 'videos';
 
+    protected static ?string $title = 'Видео';
+
     public function form(Form $form): Form
     {
         return $form

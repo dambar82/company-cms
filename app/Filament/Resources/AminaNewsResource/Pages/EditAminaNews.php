@@ -10,6 +10,8 @@ class EditAminaNews extends EditRecord
 {
     protected static string $resource = AminaNewsResource::class;
 
+    protected static ?string $title = 'Изменить новость';
+
     protected function getHeaderActions(): array
     {
         return [

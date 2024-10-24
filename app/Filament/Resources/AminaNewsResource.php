@@ -7,6 +7,11 @@ use App\Filament\Resources\AminaNewsResource\Pages\CreateAminaNews;
 use App\Filament\Resources\AminaNewsResource\Pages\EditAminaNews;
 use App\Filament\Resources\AminaNewsResource\Pages\ListAminaNews;
 use App\Models\News;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -19,7 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 class AminaNewsResource extends Resource
 {
     protected static ?string $navigationGroup = 'Amina';
-    protected static ?string $pluralLabel = 'Новости';
+    protected static ?string $pluralLabel = 'Новости Амина';
     protected static ?string $navigationLabel = 'Новости';
 
     protected static ?string $model = News::class;
@@ -30,39 +35,35 @@ class AminaNewsResource extends Resource
     {
         return $form
             ->schema([
-//                Select::make('project_id')
-//                    ->label('Проект')
-//                    ->options(Project::all()->pluck('name', 'id')->toArray())
-//                    ->required(),
-//                TextInput::make('title')
-//                    ->label('Название'),
-//                FileUpload::make('images')
-//                    ->label('Фотографии')
-//                    ->multiple()
-//                    ->directory('amina/news'),
-//                RichEditor::make('content')
-//                    ->toolbarButtons([
-//                        'attachFiles',
-//                        'blockquote',
-//                        'bold',
-//                        'bulletList',
-//                        'codeBlock',
-//                        'h2',
-//                        'h3',
-//                        'italic',
-//                        'link',
-//                        'orderedList',
-//                        'redo',
-//                        'strike',
-//                        'underline',
-//                        'undo',
-//                    ])
-//                    ->label('Текст новости')
-//                    ->columnSpanFull(),
-//                DatePicker::make('date')
-//                    ->label('Дата'),
-//                Checkbox::make('active')
-//                    ->label('Новость активна')
+                TextInput::make('title')
+                    ->label('Название'),
+                FileUpload::make('images')
+                    ->label('Фотографии')
+                    ->multiple()
+                    ->directory('amina/news'),
+                RichEditor::make('content')
+                    ->toolbarButtons([
+                        'attachFiles',
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'underline',
+                        'undo',
+                    ])
+                    ->label('Текст новости')
+                    ->columnSpanFull(),
+                DatePicker::make('date')
+                    ->label('Дата'),
+                Checkbox::make('active')
+                    ->label('Новость активна')
             ]);
     }
 
@@ -70,8 +71,16 @@ class AminaNewsResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('projects.0.name')
-                    ->label('Проект'),
+                TextColumn::make('projects.name')
+                    ->label('Проект')
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query
+                            ->join('news_project AS np', 'np.news_id', '=', 'news.id')
+                            ->join('projects', 'projects.id', '=', 'np.project_id')
+                            ->where('np.project_id', 1)
+                            ->orderBy('projects.name', $direction)
+                            ->select('news.*');
+                    }),
                 TextColumn::make('title')
                     ->label('Название'),
                 ImageColumn::make('images')
@@ -85,7 +94,7 @@ class AminaNewsResource extends Resource
             ])
             ->persistSortInSession()
             ->filters([
-                //
+                    //
             ])
             ->actions([
               //  Tables\Actions\EditAction::make(),

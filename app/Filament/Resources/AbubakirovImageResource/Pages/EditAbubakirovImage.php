@@ -10,6 +10,8 @@ class EditAbubakirovImage extends EditRecord
 {
     protected static string $resource = AbubakirovImageResource::class;
 
+    protected static ?string $title = 'Изменить фотогалерею';
+
     protected function getHeaderActions(): array
     {
         return [

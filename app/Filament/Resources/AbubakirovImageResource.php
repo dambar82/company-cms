@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AbubakirovImageResource extends Resource
@@ -22,7 +23,7 @@ class AbubakirovImageResource extends Resource
     protected static ?string $navigationGroup = 'Abubakirov';
     protected static ?string $model = ImageGallery::class;
     protected static ?string $navigationLabel = 'Изображения';
-    protected static ?string $pluralLabel = 'Изображения';
+    protected static ?string $pluralLabel = 'Изображения Абубакиров';
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';
 
@@ -32,10 +33,6 @@ class AbubakirovImageResource extends Resource
     {
         return $form
             ->schema([
-//                Select::make('project_id')
-//                    ->label('Проект')
-//                    ->options(Project::all()->pluck('name', 'id')->toArray())
-//                    ->required(),
                 TextInput::make('name')
                     ->label('Название')
                     ->required(),
@@ -55,7 +52,15 @@ class AbubakirovImageResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('projects.name')
-                    ->label('Проект'),
+                    ->label('Проект')
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query
+                            ->join('image_gallery_project AS np', 'np.image_gallery_id', '=', 'image_galleries.id') // Присоединяем сводную таблицу по id видео
+                            ->join('projects', 'projects.id', '=', 'np.project_id') // Присоединяем таблицу проектов по project_id
+                            ->where('np.project_id', 2) // Фильтруем по id проекта
+                            ->orderBy('projects.name', $direction) // Сортируем по имени проекта
+                            ->select('image_galleries.*'); // Выбираем все поля из таблицы видео
+                    }),
                 TextColumn::make('name')
                     ->label('Название')
                     ->searchable(),

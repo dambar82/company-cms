@@ -8,6 +8,8 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditAminaVideo extends EditRecord
 {
+    protected static ?string $title = 'Изменить видеогалерею';
+
     protected static string $resource = AminaVideoResource::class;
 
     protected function getHeaderActions(): array

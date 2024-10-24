@@ -4,16 +4,16 @@ namespace App\Filament\Resources\AbubakirovVideoResource\Pages;
 
 use App\Filament\Resources\AbubakirovVideoResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ListRecords;
 
-class EditVideoGallery extends EditRecord
+class ListAbubakirovVideoGalleries extends ListRecords
 {
     protected static string $resource = AbubakirovVideoResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+           // Actions\CreateAction::make(),
         ];
     }
 }
