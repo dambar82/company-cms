@@ -46,4 +46,9 @@ class Project extends Model
     {
         return $this->belongsToMany(ImageGallery::class, 'image_gallery_project');
     }
+
+    public function banners(): BelongsToMany
+    {
+        return $this->belongsToMany(Banner::class, 'banner_project');
+    }
 }

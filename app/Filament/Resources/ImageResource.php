@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ImageResource\Pages;
-use App\Models\Image;
 use App\Models\ImageGallery;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
@@ -24,6 +23,7 @@ class ImageResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationLabel = 'Фотогалереи';
+
     protected static ?string $pluralLabel = 'Фотогалереи';
 
     public ?Model $record = null;
