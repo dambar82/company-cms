@@ -23,7 +23,7 @@ class VideoGallery extends Model
 
     protected $guarded = array();
 
-    public function videos()
+    public function videos(): HasMany
     {
         return $this->hasMany(Video::class);
     }
