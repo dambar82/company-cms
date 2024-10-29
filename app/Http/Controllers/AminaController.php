@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Filament\Resources\AminaAudioResource;
 use App\Filament\Resources\AminaNewsResource;
 use App\Filament\Resources\AminaVideoResource;
+use App\Filament\Resources\VideoResource;
 use App\Http\Resources\AudioResource;
 use App\Http\Resources\NewsResource;
 use App\Http\Resources\VideoGalleryResources;
@@ -41,7 +42,7 @@ class AminaController extends Controller
      */
     public function getAudios()
     {
-        return AminaAudioResource::collection(Audio::all()->where('project_id', '=', 1));
+        return AudioResource::collection(Audio::all()->where('project_id', '=', 1));
 //        return AudioResource::collection(
 //        Audio::query()
 //            ->whereHas('projects', function ($query) {
@@ -77,7 +78,7 @@ class AminaController extends Controller
      */
     public function getAudio(int $id)
     {
-        return new AminaAudioResource(Audio::query()->find($id));
+        return new AudioResource(Audio::query()->find($id));
 //        $audio = Audio::query()
 //            ->whereHas('projects', function ($query) {
 //            $query->where('project_id', 1);
@@ -123,7 +124,7 @@ class AminaController extends Controller
         foreach ($newsWithoutImages as $news) {
             $allNews[] = $news;
         }
-        return AminaNewsResource::collection($allNews);
+        return NewsResource::collection($allNews);
 //        $allNews = News::query()
 //            ->whereHas('projects', function ($query) {
 //                $query->where('project_id', 1);
@@ -162,7 +163,7 @@ class AminaController extends Controller
      */
     public function getNews(int $id)
     {
-        return new AminaNewsResource(News::query()->find($id));
+        return new NewsResource(News::query()->find($id));
 //        $news = News::query()
 //            ->whereHas('projects', function ($query) {
 //            $query->where('project_id', 1);
@@ -191,7 +192,7 @@ class AminaController extends Controller
      */
     public function getVideos()
     {
-        return AminaVideoResource::collection(VideoGallery::all()->where('project_id', '=', 1));
+        return VideoGalleryResources::collection(VideoGallery::all()->where('project_id', '=', 1));
 //        return VideoGalleryResources::collection(
 //            VideoGallery::query()
 //            ->whereHas('projects', function ($query) {
@@ -227,7 +228,7 @@ class AminaController extends Controller
      */
     public function getVideo(int $id)
     {
-        return new AminaVideoResource(VideoGallery::query()->find($id));
+        return new VideoGalleryResources(VideoGallery::query()->find($id));
 //        $videoGallery = VideoGallery::query()
 //            ->whereHas('projects', function ($query) {
 //            $query->where('project_id', 1);
