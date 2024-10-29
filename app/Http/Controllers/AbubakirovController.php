@@ -6,7 +6,7 @@ use App\Http\Resources\ImageGalleryResources;
 use App\Http\Resources\VideoGalleryResources;
 use App\Models\ImageGallery;
 use App\Models\VideoGallery;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class AbubakirovController extends Controller
 {
@@ -30,10 +30,11 @@ class AbubakirovController extends Controller
      *     )
      * )
      */
-    public function getAllImageGallery()
+    public function getAllImageGallery(): AnonymousResourceCollection
     {
         return ImageGalleryResources::collection(
-            ImageGallery::whereHas('projects', function ($query) {
+            ImageGallery::query()
+                ->whereHas('projects', function ($query) {
                 $query->where('project_id', 2);
             })->get()
         );
@@ -66,9 +67,10 @@ class AbubakirovController extends Controller
      *     )
      * )
      */
-    public function getImageGallery(int $id)
+    public function getImageGallery(int $id): ImageGalleryResources
     {
-        $imageGallery = ImageGallery::whereHas('projects', function ($query) {
+        $imageGallery = ImageGallery::query()
+            ->whereHas('projects', function ($query) {
             $query->where('project_id', 2);
         })->findOrFail($id);
 
@@ -95,10 +97,11 @@ class AbubakirovController extends Controller
      *     )
      * )
      */
-    public function getVideos()
+    public function getVideos(): AnonymousResourceCollection
     {
         return VideoGalleryResources::collection(
-            VideoGallery::whereHas('projects', function ($query) {
+            VideoGallery::query()
+                ->whereHas('projects', function ($query) {
                 $query->where('project_id', 2);
             })->get()
         );
@@ -131,9 +134,10 @@ class AbubakirovController extends Controller
      *     )
      * )
      */
-    public function getVideo(int $id)
+    public function getVideo(int $id): VideoGalleryResources
     {
-        $videoGallery = VideoGallery::whereHas('projects', function ($query) {
+        $videoGallery = VideoGallery::query()
+            ->whereHas('projects', function ($query) {
             $query->where('project_id', 2);
         })->findOrFail($id);
 

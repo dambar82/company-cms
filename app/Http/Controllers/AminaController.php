@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Resources\AudioResource;
 use App\Http\Resources\NewsResource;
 use App\Http\Resources\VideoGalleryResources;
@@ -40,7 +39,8 @@ class AminaController extends Controller
     public function getAudios(): AnonymousResourceCollection
     {
         return AudioResource::collection(
-        Audio::whereHas('projects', function ($query) {
+        Audio::query()
+            ->whereHas('projects', function ($query) {
             $query->where('project_id', 1);
         })->get()
     );
@@ -73,7 +73,8 @@ class AminaController extends Controller
      */
     public function getAudio(int $id): AudioResource
     {
-        $audio = Audio::whereHas('projects', function ($query) {
+        $audio = Audio::query()
+            ->whereHas('projects', function ($query) {
             $query->where('project_id', 1);
         })->findOrFail($id);
 
@@ -138,7 +139,8 @@ class AminaController extends Controller
      */
     public function getNews(int $id): NewsResource
     {
-        $news = News::whereHas('projects', function ($query) {
+        $news = News::query()
+            ->whereHas('projects', function ($query) {
             $query->where('project_id', 1);
         })->findOrFail($id);
 
@@ -166,7 +168,8 @@ class AminaController extends Controller
     public function getVideos(): AnonymousResourceCollection
     {
         return VideoGalleryResources::collection(
-            VideoGallery::whereHas('projects', function ($query) {
+            VideoGallery::query()
+            ->whereHas('projects', function ($query) {
                 $query->where('project_id', 1);
             })->get()
         );
@@ -199,7 +202,8 @@ class AminaController extends Controller
      */
     public function getVideo(int $id): VideoGalleryResources
     {
-        $videoGallery = VideoGallery::whereHas('projects', function ($query) {
+        $videoGallery = VideoGallery::query()
+            ->whereHas('projects', function ($query) {
             $query->where('project_id', 1);
         })->findOrFail($id);
 
