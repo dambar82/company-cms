@@ -30,14 +30,18 @@ class AbubakirovController extends Controller
      *     )
      * )
      */
-    public function getAllImageGallery(): AnonymousResourceCollection
+    public function getAllImageGallery(): array
     {
-        return ImageGalleryResources::collection(
-            ImageGallery::query()
-                ->whereHas('projects', function ($query) {
+        $galleries = ImageGallery::query()
+            ->whereHas('projects', function ($query) {
                 $query->where('project_id', 2);
-            })->get()
-        );
+            })
+            ->get();
+
+        return [
+            'imgGallery' => ImageGalleryResources::collection($galleries)
+        ];
+
     }
 
     /**
@@ -67,14 +71,16 @@ class AbubakirovController extends Controller
      *     )
      * )
      */
-    public function getImageGallery(int $id): ImageGalleryResources
+    public function getImageGallery(int $id): array
     {
         $imageGallery = ImageGallery::query()
             ->whereHas('projects', function ($query) {
             $query->where('project_id', 2);
         })->findOrFail($id);
 
-        return new ImageGalleryResources($imageGallery);
+        return [
+            'imgGallery' => new ImageGalleryResources($imageGallery)
+        ];
     }
 
     /**
@@ -97,14 +103,14 @@ class AbubakirovController extends Controller
      *     )
      * )
      */
-    public function getVideos(): AnonymousResourceCollection
+    public function getVideos(): array
     {
-        return VideoGalleryResources::collection(
-            VideoGallery::query()
-                ->whereHas('projects', function ($query) {
-                $query->where('project_id', 2);
-            })->get()
-        );
+        $galleries = VideoGallery::query()
+            ->whereHas('projects', function ($query) {
+            $query->where('project_id', 2);
+        })->get();
+
+        return ['videoGallery' => VideoGalleryResources::collection($galleries)];
     }
 
     /**
@@ -134,13 +140,13 @@ class AbubakirovController extends Controller
      *     )
      * )
      */
-    public function getVideo(int $id): VideoGalleryResources
+    public function getVideo(int $id): array
     {
         $videoGallery = VideoGallery::query()
             ->whereHas('projects', function ($query) {
             $query->where('project_id', 2);
         })->findOrFail($id);
 
-        return new VideoGalleryResources($videoGallery);
+        return ['videoGallery' => new VideoGalleryResources($videoGallery)];
     }
 }
