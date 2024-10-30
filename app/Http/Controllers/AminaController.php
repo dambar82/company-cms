@@ -177,7 +177,7 @@ class AminaController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/amona/videos/{id}",
+     *     path="/api/amina/videos/{id}",
      *     tags={"Amina"},
      *     summary="Видео по ID",
      *     description="Returns a video resource for the specified ID.",

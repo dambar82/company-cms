@@ -18,11 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResources([
-    'imgGallery' => ImageGalleryController::class,
-    'videoGallery' => VideoGalleryController::class
-]);
-
 Route::prefix('amina')->group( function () {
     Route::get('audio', [AminaController::class, 'getAudios']);
     Route::get('audio/{id}', [AminaController::class, 'getAudio']);

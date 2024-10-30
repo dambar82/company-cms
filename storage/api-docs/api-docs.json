@@ -321,14 +321,14 @@
                 }
             }
         },
-        "/api/amona/videos/{id}": {
+        "/api/amina/videos/{id}": {
             "get": {
                 "tags": [
                     "Amina"
                 ],
                 "summary": "Видео по ID",
                 "description": "Returns a video resource for the specified ID.",
-                "operationId": "4c124cfc51ca31f9725ed24274f47063",
+                "operationId": "07127531d661e8cfdef41957d03395ae",
                 "parameters": [
                     {
                         "name": "id",
