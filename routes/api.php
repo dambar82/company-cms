@@ -2,9 +2,6 @@
 
 use App\Http\Controllers\AbubakirovController;
 use App\Http\Controllers\AminaController;
-use Illuminate\Http\Request;
-use App\Http\Controllers\ImageGalleryController;
-use App\Http\Controllers\VideoGalleryController;
 use Illuminate\Support\Facades\Route;
 
 /*

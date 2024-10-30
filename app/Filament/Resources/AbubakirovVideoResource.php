@@ -42,10 +42,10 @@ class AbubakirovVideoResource extends Resource
                     ->required(),
                 FileUpload::make('preview')
                     ->directory('abubakirov/preview'),
-                Forms\Components\FileUpload::make('video')
-                    ->directory('	abubakirov/video')
-                    ->label('Видео')
-                    ->acceptedFileTypes(['video/mp4', 'video/quicktime']),
+//                Forms\Components\FileUpload::make('video')
+//                    ->directory('	abubakirov/video')
+//                    ->label('Видео')
+//                    ->acceptedFileTypes(['video/mp4', 'video/quicktime']),
             ]);
     }
 
