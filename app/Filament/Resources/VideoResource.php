@@ -45,10 +45,10 @@ class VideoResource extends Resource
                     ->required(),
                 FileUpload::make('preview')
                     ->directory('preview'),
-                FileUpload::make('video')
-                    ->directory('video')
-                    ->label('Видео')
-                    ->acceptedFileTypes(['video/mp4', 'video/quicktime']),
+//                FileUpload::make('video')
+//                    ->directory('video')
+//                    ->label('Видео')
+//                    ->acceptedFileTypes(['video/mp4', 'video/quicktime']),
             ]);
     }
 
