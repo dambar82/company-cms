@@ -19,7 +19,7 @@ class VideoGalleryResources extends JsonResource
             'title' => $this->title,
             'preview' => $this->preview != null ? asset('storage/') . '/' . $this->preview : null,
             'video' => $this->video != null ? asset('storage/') . '/' . $this->video : null,
-            'videos' => VideoResource::collection($this->video)
+//            'videos' => VideoResource::collection($this->video)
         ];
     }
 }
