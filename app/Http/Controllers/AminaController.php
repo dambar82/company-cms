@@ -101,13 +101,27 @@ class AminaController extends Controller
      */
     public function getAllNews(): AnonymousResourceCollection
     {
-        $allNews = News::query()
+        $newsWithImages = News::query()
             ->whereHas('projects', function ($query) {
                 $query->where('project_id', 1);
             })
             ->where('active', true)
+            ->whereNotNull('images')
+            ->where('images', '<>', '[]')
             ->orderBy('created_at', 'desc')
             ->get();
+
+        $newsWithoutImages = News::query()
+            ->whereHas('projects', function ($query) {
+                $query->where('project_id', 1);
+            })
+            ->where('active', true)
+            ->whereNull('images')
+            ->orWhere('images', '=', '[]')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $allNews = $newsWithImages->merge($newsWithoutImages);
 
         return NewsResource::collection($allNews);
     }

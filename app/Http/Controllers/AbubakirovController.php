@@ -6,7 +6,6 @@ use App\Http\Resources\ImageGalleryResources;
 use App\Http\Resources\VideoGalleryResources;
 use App\Models\ImageGallery;
 use App\Models\VideoGallery;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class AbubakirovController extends Controller
 {
@@ -41,7 +40,6 @@ class AbubakirovController extends Controller
         return [
             'imgGallery' => ImageGalleryResources::collection($galleries)
         ];
-
     }
 
     /**
