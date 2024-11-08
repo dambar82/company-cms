@@ -46,6 +46,8 @@ class News extends Model
         'title',
         'content',
         'images',
+        'video',
+        'link_to_video',
         'date',
         'active'
     ];

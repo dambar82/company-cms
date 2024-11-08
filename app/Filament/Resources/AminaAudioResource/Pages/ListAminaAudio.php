@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\AminaAudioResource\Pages;
 
 use App\Filament\Resources\AminaAudioResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAminaAudio extends ListRecords

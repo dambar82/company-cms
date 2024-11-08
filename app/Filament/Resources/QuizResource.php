@@ -17,6 +17,8 @@ use Filament\Tables\Table;
 
 class QuizResource extends Resource
 {
+    protected static ?string $navigationGroup = "Викторины";
+
     protected static ?string $model = Quiz::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\AbubakirovImageResource\Pages;
 
 use App\Filament\Resources\AbubakirovImageResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateAbubakirovImage extends CreateRecord

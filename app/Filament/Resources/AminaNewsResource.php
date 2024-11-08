@@ -40,7 +40,13 @@ class AminaNewsResource extends Resource
                 FileUpload::make('images')
                     ->label('Фотографии')
                     ->multiple()
-                    ->directory('amina/news'),
+                    ->directory('news/images'),
+                FileUpload::make('video')
+                    ->label('Загрузить видео')
+                    ->multiple()
+                    ->directory('news/video'),
+                TextInput::make('link_to_video')
+                    ->label('Добавить ссылку на видео'),
                 RichEditor::make('content')
                     ->toolbarButtons([
                         'attachFiles',
