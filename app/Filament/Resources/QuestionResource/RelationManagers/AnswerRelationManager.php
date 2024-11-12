@@ -28,8 +28,8 @@ class AnswerRelationManager extends RelationManager
                     ->label('Выберете значение')
                     ->options(
                         [
-                            0 => 'правильный ответ',
-                            1 => 'неправильный ответ'
+                            1 => 'правильный ответ',
+                            0 => 'неправильный ответ'
                         ]
                     )
             ]);
