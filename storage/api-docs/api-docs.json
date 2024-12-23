@@ -359,6 +359,67 @@
                     }
                 }
             }
+        },
+        "/api/blog/posts": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Получить список всех записей",
+                "operationId": "64c5a3a0868be07b7df6f958b29ebc70",
+                "responses": {
+                    "200": {
+                        "description": "Список публикаций успешно получен",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера"
+                    }
+                }
+            }
+        },
+        "/api/blog/posts/{post}": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Получить запись по ID",
+                "operationId": "fa09f925b67c6773050b3b4dfb28d9c7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID публикации",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Публикация успешно получена",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Публикация не найдена"
+                    },
+                    "500": {
+                        "description": "Ошибка сервера"
+                    }
+                }
+            }
         }
     },
     "tags": [
@@ -369,6 +430,10 @@
         {
             "name": "Amina",
             "description": "Amina"
+        },
+        {
+            "name": "Posts",
+            "description": "Posts"
         }
     ]
 }
