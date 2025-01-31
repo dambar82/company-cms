@@ -36,24 +36,9 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
-             //   Group::
-                Section::make('Для проектов:')
-                    ->schema([
-                    CheckBoxList::make('projects')
-                    ->relationship('projects', 'name')
-                ]),
                 TextInput::make('title')
-                    ->label('Название'),
-                FileUpload::make('images')
-                    ->label('Фотографии')
-                    ->multiple()
-                    ->directory('news/images'),
-                FileUpload::make('video')
-                    ->label('Загрузить видео')
-                    ->multiple()
-                    ->directory('news/video'),
-                TextInput::make('link_to_video')
-                    ->label('Добавить ссылку на видео'),
+                    ->label('Название')
+                    ->columnSpanFull(),
                 RichEditor::make('content')
                     ->toolbarButtons([
                         'attachFiles',
@@ -73,8 +58,30 @@ class NewsResource extends Resource
                     ])
                     ->label('Текст новости')
                     ->columnSpanFull(),
+
+
+
+                FileUpload::make('images')
+                    ->label('Фотографии')
+                    ->multiple()
+                    ->directory('news/images'),
+                FileUpload::make('video')
+                    ->label('Загрузить видео')
+                    ->multiple()
+                    ->directory('news/video'),
+                TextInput::make('link_to_video')
+                    ->label('Ссылка на видео'),
                 DatePicker::make('date')
                     ->label('Дата'),
+                Section::make('Для проектов:')
+                    ->schema([
+                    CheckBoxList::make('projects')
+                    ->relationship('projects', 'name')
+                ]),
+
+
+
+
                 Checkbox::make('active')
                     ->label('Новость активна')
             ]);
