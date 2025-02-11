@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2f90d86217204bc6172b4e0d8146d13",
+    "content-hash": "fa5702b6500d6514fb616ee5018af709",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3554,6 +3554,52 @@
             "time": "2024-03-23T07:42:40+00:00"
         },
         {
+            "name": "lee-to/laravel-package-command",
+            "version": "0.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lee-to/laravel-package-command.git",
+                "reference": "c2bcc9fb28882b1eac9abcb35b4559f41ab6eea4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lee-to/laravel-package-command/zipball/c2bcc9fb28882b1eac9abcb35b4559f41ab6eea4",
+                "reference": "c2bcc9fb28882b1eac9abcb35b4559f41ab6eea4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0|^8.1|^8.2"
+            },
+            "require-dev": {
+                "fakerphp/faker": "^1.9.2",
+                "mockery/mockery": "^1.4.4",
+                "phpunit/phpunit": "^9.5.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Leeto\\PackageCommand\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Danil Shutsky",
+                    "email": "info@cutcode.ru",
+                    "homepage": "https://github.com/lee-to"
+                }
+            ],
+            "description": "Package development command",
+            "support": {
+                "issues": "https://github.com/lee-to/laravel-package-command/issues",
+                "source": "https://github.com/lee-to/laravel-package-command/tree/0.9.2"
+            },
+            "time": "2024-12-22T16:01:40+00:00"
+        },
+        {
             "name": "livewire/livewire",
             "version": "v3.4.12",
             "source": {
@@ -3796,6 +3842,95 @@
                 }
             ],
             "time": "2024-04-12T21:02:21+00:00"
+        },
+        {
+            "name": "moonshine/moonshine",
+            "version": "2.23.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moonshine-software/moonshine.git",
+                "reference": "7dcb1494b35a493021197a1a2a615536dcbf5143"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moonshine-software/moonshine/zipball/7dcb1494b35a493021197a1a2a615536dcbf5143",
+                "reference": "7dcb1494b35a493021197a1a2a615536dcbf5143",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "lee-to/laravel-package-command": "^0.9",
+                "php": "^8.1|^8.2|^8.3",
+                "rap2hpoutre/fast-excel": "^5.4"
+            },
+            "conflict": {
+                "laravel/framework": "<10.20.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "nunomaduro/larastan": "^2.9",
+                "orchestra/testbench": "^8.0|^9.0",
+                "pestphp/pest": "^2.34",
+                "pestphp/pest-plugin-laravel": "^2.2",
+                "pestphp/pest-plugin-mock": "^2.0",
+                "rector/rector": "^1.0"
+            },
+            "suggest": {
+                "laravel/socialite": "Required to use the Socialite",
+                "unisharp/laravel-filemanager": "Required if you want tinymce file manager"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MoonShine\\Providers\\MoonShineServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "MoonShine\\": "src/",
+                    "MoonShine\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Danil Shutsky",
+                    "email": "info@cutcode.ru",
+                    "homepage": "https://cutcode.dev"
+                }
+            ],
+            "description": "Laravel administration panel",
+            "homepage": "https://moonshine-laravel.com",
+            "keywords": [
+                "admin",
+                "dashboard",
+                "laravel",
+                "moonshine"
+            ],
+            "support": {
+                "issues": "https://github.com/moonshine-software/moonshine/issues",
+                "source": "https://github.com/moonshine-software/moonshine"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/moonshine-software",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/moonshine",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2025-02-09T08:14:30+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -5128,6 +5263,76 @@
                 }
             ],
             "time": "2024-04-27T21:32:50+00:00"
+        },
+        {
+            "name": "rap2hpoutre/fast-excel",
+            "version": "v5.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rap2hpoutre/fast-excel.git",
+                "reference": "83604f2a16fbb0374747299173abe691b24916da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rap2hpoutre/fast-excel/zipball/83604f2a16fbb0374747299173abe691b24916da",
+                "reference": "83604f2a16fbb0374747299173abe691b24916da",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "openspout/openspout": "^4.24",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "illuminate/database": "^6.20.12 || ^7.30.4 || ^8.24.0 || ^9.0 || ^10.0 || ^11.0",
+                "phpunit/phpunit": "^9.5 || ^10.1",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Rap2hpoutre\\FastExcel\\Providers\\FastExcelServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions/fastexcel.php"
+                ],
+                "psr-4": {
+                    "Rap2hpoutre\\FastExcel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "rap2h",
+                    "email": "raphaelht@gmail.com"
+                }
+            ],
+            "description": "Fast Excel import/export for Laravel",
+            "keywords": [
+                "csv",
+                "excel",
+                "laravel",
+                "xls",
+                "xlsx"
+            ],
+            "support": {
+                "issues": "https://github.com/rap2hpoutre/fast-excel/issues",
+                "source": "https://github.com/rap2hpoutre/fast-excel/tree/v5.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/rap2hpoutre",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-06-03T08:00:43+00:00"
         },
         {
             "name": "ryangjchandler/blade-capture-directive",
