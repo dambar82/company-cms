@@ -2,22 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources;
+namespace App\MoonShine\Resources\Abubakirov;
 
 use App\Models\ImageGallery;
+use App\MoonShine\Resources\ProjectResource;
 use Illuminate\Database\Eloquent\Model;
-
+use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
+use MoonShine\Fields\Field;
+use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Text;
 use MoonShine\Resources\ModelResource;
-use MoonShine\Decorations\Block;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Field;
-use MoonShine\Components\MoonShineComponent;
 
 /**
  * @extends ModelResource<ImageGallery>
@@ -28,10 +27,12 @@ class AbubakirovImageGalleryResource extends ModelResource
 
     protected string $title = 'Фотогалереи Абубакиров';
 
+    protected string $sortDirection = 'ASC';
+
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return list<MoonShineComponent|Field>
+     * @return Field
      */
     public function fields(): array
     {
@@ -39,17 +40,19 @@ class AbubakirovImageGalleryResource extends ModelResource
             Grid::make([
                 Column::make([
                     Block::make([
-                        ID::make()->sortable(),
-                        BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())->hideOnIndex(),
                         Text::make('Название', 'name'),
                         Text::make('Описание', 'title'),
+                        Image::make('Изображение', 'caption')
+                            ->dir('abubakirov/gallery')
+                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
                     ])
                 ])->columnSpan(8),
 
                 Column::make([
                     Block::make([
-                        Image::make('Изображение', 'caption')
-                            ->dir('abubakirov/gallery')
+                        BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
+                            ->hideOnIndex()
+                            ->required(),
                     ])
                 ])->columnSpan(4)
             ])

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,7 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Audio wherePath($value)
  * @method static Builder|Audio whereTitle($value)
  * @method static Builder|Audio whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Audio extends Model
 {
@@ -38,7 +39,6 @@ class Audio extends Model
     protected $table = 'audios';
 
     protected $fillable = [
-        'project_id',
         'title',
         'path'
     ];

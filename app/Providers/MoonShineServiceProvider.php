@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\MoonShine\Resources\AbubakirovImageGalleryResource;
-use App\MoonShine\Resources\AbubakirovImageResource;
+use App\MoonShine\Resources\Abubakirov\AbubakirovImageGalleryResource;
+use App\MoonShine\Resources\Abubakirov\AbubakirovImageResource;
+use App\MoonShine\Resources\Abubakirov\AbubakirovVideoGalleryResource;
+use App\MoonShine\Resources\Abubakirov\AbubakirovVideoResource;
+use App\MoonShine\Resources\Amina\AminaAudioResource;
+use App\MoonShine\Resources\Amina\AminaNewsResource;
+use App\MoonShine\Resources\Amina\AminaVideoGalleryResource;
+use App\MoonShine\Resources\Amina\AminaVideoResource;
 use App\MoonShine\Resources\ProjectResource;
-use MoonShine\Providers\MoonShineApplicationServiceProvider;
-use MoonShine\Menu\MenuGroup;
-use MoonShine\Menu\MenuItem;
+use Closure;
 use MoonShine\Contracts\Resources\ResourceContract;
 use MoonShine\Menu\MenuElement;
+use MoonShine\Menu\MenuGroup;
+use MoonShine\Menu\MenuItem;
 use MoonShine\Pages\Page;
-use Closure;
+use MoonShine\Providers\MoonShineApplicationServiceProvider;
 
 class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
 {
@@ -42,8 +48,16 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             MenuItem::make('Проекты', new ProjectResource()),
            MenuGroup::make('Абубакиров', [
                MenuItem::make('Фотогалереи', new AbubakirovImageGalleryResource())->icon('heroicons.outline.photo'),
-               MenuItem::make('Фотографии', new AbubakirovImageResource())->icon('heroicons.photo')
+               MenuItem::make('Фотографии', new AbubakirovImageResource())->icon('heroicons.photo'),
+               MenuItem::make('Видеогалереи', new AbubakirovVideoGalleryResource())->icon('heroicons.outline.video-camera'),
+               MenuItem::make('Видео', new AbubakirovVideoResource())->icon('heroicons.video-camera')
            ])->icon('heroicons.inbox-stack'),
+            MenuGroup::make('Амина', [
+                MenuItem::make('Новости', new AminaNewsResource())->icon('heroicons.newspaper'),
+                MenuItem::make('Аудио', new AminaAudioResource())->icon('heroicons.speaker-wave'),
+                MenuItem::make('Видегалереи', new AminaVideoGalleryResource())->icon('heroicons.outline.video-camera'),
+                MenuItem::make('Видео', new AminaVideoResource())->icon('heroicons.video-camera')
+            ])->icon('heroicons.inbox-stack')
         ];
     }
 

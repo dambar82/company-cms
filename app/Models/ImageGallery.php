@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ImageGallery whereName($value)
  * @method static Builder|ImageGallery whereTitle($value)
  * @method static Builder|ImageGallery whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class ImageGallery extends Model
 {
@@ -42,7 +43,6 @@ class ImageGallery extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'project_id',
         'name',
         'title',
         'caption',

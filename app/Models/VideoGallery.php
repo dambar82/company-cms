@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -35,7 +36,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|VideoGallery whereTitle($value)
  * @method static Builder|VideoGallery whereUpdatedAt($value)
  * @method static Builder|VideoGallery whereVideo($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class VideoGallery extends Model
 {
@@ -44,7 +45,6 @@ class VideoGallery extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'project_id',
         'name',
         'title',
         'preview',

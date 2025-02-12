@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,14 +26,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Video whereUpdatedAt($value)
  * @method static Builder|Video whereVideo($value)
  * @method static Builder|Video whereVideoGalleryId($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Video extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'video_galleries_id',
+        'video_gallery_id',
         'description',
         'video'
     ];
