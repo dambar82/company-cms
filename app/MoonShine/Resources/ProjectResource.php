@@ -7,6 +7,7 @@ namespace App\MoonShine\Resources;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Project;
 
+use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Text;
 use MoonShine\Resources\ModelResource;
 use MoonShine\Decorations\Block;
@@ -25,6 +26,10 @@ class ProjectResource extends ModelResource
 
     public string $column = 'name';
 
+    protected string $sortDirection = 'ASC';
+
+    protected ?ClickAction $clickAction = ClickAction::EDIT;
+
     /**
      * @return list<MoonShineComponent|Field>
      */
@@ -32,7 +37,6 @@ class ProjectResource extends ModelResource
     {
         return [
             Block::make([
-                ID::make()->sortable(),
                 Text::make('Название', 'name')
             ]),
         ];

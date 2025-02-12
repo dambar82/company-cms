@@ -14,7 +14,6 @@ use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
-use MoonShine\Fields\ID;
 use MoonShine\Fields\Select;
 use MoonShine\Fields\Text;
 use MoonShine\Resources\ModelResource;

@@ -6,16 +6,13 @@ namespace App\MoonShine\Resources\Abubakirov;
 
 use App\Models\Image;
 use App\Models\ImageGallery;
-use App\MoonShine\Resources\ProjectResource;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
-use MoonShine\Fields\ID;
 use MoonShine\Fields\Image as Img;
-use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Select;
 use MoonShine\Fields\Text;
 use MoonShine\Resources\ModelResource;

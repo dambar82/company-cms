@@ -14,7 +14,6 @@ use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
-use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Text;
@@ -45,10 +44,10 @@ class AminaVideoGalleryResource extends ModelResource
                         Text::make('Название', 'name'),
                         Text::make('Описание', 'title'),
                         Image::make( 'preview')
-                            ->dir('amina/preview')
+                            ->dir('	amina/videos/preview')
                             ->allowedExtensions(['png', 'jpg', 'jpeg']),
                         File::make('Видео', 'video')
-                            ->dir('amina/video')
+                            ->dir('	amina/videos/video')
                             ->hideOnIndex()
                             ->allowedExtensions(['mp4'])
                             ->disableDownload()

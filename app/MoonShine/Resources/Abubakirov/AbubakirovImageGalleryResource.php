@@ -12,7 +12,6 @@ use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
-use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Text;

@@ -14,7 +14,6 @@ use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
-use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Switcher;
@@ -51,13 +50,14 @@ class AminaNewsResource extends ModelResource
                         Image::make('Фотографии', 'images')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
                             ->dir('news/images')
-                            ->multiple(),
+                            ->multiple()
+                            ->removable(),
                         File::make('Видео', 'video')
                             ->allowedExtensions(['mp4'])
                             ->disableDownload()
                             ->dir('news/video')
-                            ->hideOnIndex(),
-
+                            ->hideOnIndex()
+                            ->removable()
                     ])
                 ])->columnSpan(8),
 
