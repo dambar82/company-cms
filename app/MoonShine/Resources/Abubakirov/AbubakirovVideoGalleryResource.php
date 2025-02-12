@@ -76,7 +76,7 @@ class AbubakirovVideoGalleryResource extends ModelResource
         return parent::query()
             ->join('video_gallery_project as vgp', 'video_galleries.id', '=', 'vgp.video_gallery_id')
             ->join('projects as p', 'p.id', '=', 'vgp.project_id')
-            ->where('p.id', 1)
+            ->where('p.id', 2)
             ->select('video_galleries.*');
     }
 }

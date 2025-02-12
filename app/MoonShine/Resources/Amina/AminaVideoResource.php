@@ -79,7 +79,7 @@ class AminaVideoResource extends ModelResource
             ->join('video_galleries as vg', 'videos.video_gallery_id', '=', 'vg.id')
             ->join('video_gallery_project as vgp', 'vg.id', '=', 'vgp.video_gallery_id')
             ->join('projects as p', 'vgp.project_id', '=', 'p.id')
-            ->where('p.id', 2)
+            ->where('p.id', 1)
             ->select('videos.*');
     }
 }
