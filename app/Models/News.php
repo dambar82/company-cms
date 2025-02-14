@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,14 +36,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|News whereImages($value)
  * @method static Builder|News whereTitle($value)
  * @method static Builder|News whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class News extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'project_id',
         'title',
         'content',
         'images',

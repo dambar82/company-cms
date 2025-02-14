@@ -44,8 +44,8 @@ class AminaVideoResource extends Resource
                 FileUpload::make('video')
                     ->directory('amina/video')
                     ->label('Видео')
-                    ->acceptedFileTypes(['video/mp4', 'video/quicktime'])
-                ->maxSize(2000000),
+                    ->acceptedFileTypes(['video/mp4', 'video/*'])
+                    ->maxSize(2000000),
             ]);
     }
 
