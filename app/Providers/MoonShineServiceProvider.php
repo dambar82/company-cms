@@ -56,7 +56,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Аудио', new AminaAudioResource())->icon('heroicons.speaker-wave'),
                 MenuItem::make('Видео', new AminaVideoGalleryResource())->icon('heroicons.outline.video-camera'),
             ])->icon('heroicons.inbox-stack'),
-            MenuItem::make('Вести', new LeadResource()),
+            // MenuItem::make('Вести', new LeadResource()),
         ];
     }
 

@@ -6,6 +6,7 @@ namespace App\MoonShine\Resources\Amina;
 
 use App\Models\Audio;
 use App\MoonShine\Resources\ProjectResource;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
@@ -55,6 +56,7 @@ class AminaAudioResource extends ModelResource
                     Block::make([
                         BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
                             ->hideOnIndex()
+                            ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 1))
                             ->required()
                     ])
                 ])->columnSpan(4)

@@ -60,6 +60,7 @@ class AminaVideoGalleryResource extends ModelResource
                     Block::make([
                         BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
                             ->hideOnIndex()
+                            ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 1))
                             ->required(),
                     ])
                 ])->columnSpan(4)
