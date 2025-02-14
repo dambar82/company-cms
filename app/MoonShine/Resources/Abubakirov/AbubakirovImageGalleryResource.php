@@ -13,9 +13,15 @@ use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Image as Img;
+use MoonShine\Fields\Json;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Text;
+use MoonShine\Handlers\ExportHandler;
+use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Throwable;
 
 /**
  * @extends ModelResource<ImageGallery>
@@ -31,7 +37,8 @@ class AbubakirovImageGalleryResource extends ModelResource
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return Field
+     * @return array
+     * @throws Throwable
      */
     public function fields(): array
     {
@@ -51,9 +58,24 @@ class AbubakirovImageGalleryResource extends ModelResource
                     Block::make([
                         BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
                             ->hideOnIndex()
-                            ->required(),
+                            ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 2))
+                            ->required()
                     ])
-                ])->columnSpan(4)
+                ])->columnSpan(4),
+            ]),
+        Block::make([
+            Json::make('Фотографии', 'images')
+                ->hideOnIndex()
+                ->asRelation(new AbubakirovImageResource())
+                ->fields([
+                    Img::make('', 'image')
+                        ->dir('abubakirov/img')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                    ->removable(),
+                    Text::make('', 'description')->placeholder('Добавьте описание')
+                ])
+                ->creatable()
+                ->removable()
             ])
         ];
     }
@@ -67,5 +89,15 @@ class AbubakirovImageGalleryResource extends ModelResource
     public function rules(Model $item): array
     {
         return [];
+    }
+
+    public function import(): ?ImportHandler
+    {
+        return null;
+    }
+
+    public function export(): ?ExportHandler
+    {
+        return null;
     }
 }

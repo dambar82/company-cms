@@ -17,6 +17,8 @@ use MoonShine\Fields\File;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Text;
+use MoonShine\Handlers\ExportHandler;
+use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
 
 /**
@@ -83,5 +85,15 @@ class AminaVideoGalleryResource extends ModelResource
             ->join('projects as p', 'p.id', '=', 'vgp.project_id')
             ->where('p.id', 1)
             ->select('video_galleries.*');
+    }
+
+    public function import(): ?ImportHandler
+    {
+        return null;
+    }
+
+    public function export(): ?ExportHandler
+    {
+        return null;
     }
 }

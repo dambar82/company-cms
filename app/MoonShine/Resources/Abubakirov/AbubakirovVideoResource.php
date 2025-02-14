@@ -16,6 +16,8 @@ use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
 use MoonShine\Fields\Select;
 use MoonShine\Fields\Text;
+use MoonShine\Handlers\ExportHandler;
+use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
 
 /**
@@ -53,7 +55,10 @@ class AbubakirovVideoResource extends ModelResource
                 Column::make([
                     Block::make([
                         Select::make('Видеогалерея', 'video_gallery_id')
-                            ->options(VideoGallery::pluck('name', 'id')->toArray())
+                            ->options(VideoGallery::join('video_gallery_project', 'video_gallery_project.video_gallery_id', '=', 'video_galleries.id')
+                                ->where('video_gallery_project.project_id', 2)
+                                ->pluck('video_galleries.name', 'video_galleries.id')
+                                ->toArray())
                             ->required()
                     ])
                 ])->columnSpan(4)
@@ -80,5 +85,15 @@ class AbubakirovVideoResource extends ModelResource
             ->join('projects as p', 'vgp.project_id', '=', 'p.id')
             ->where('p.id', 2)
             ->select('videos.*');
+    }
+
+    public function import(): ?ImportHandler
+    {
+        return null;
+    }
+
+    public function export(): ?ExportHandler
+    {
+        return null;
     }
 }

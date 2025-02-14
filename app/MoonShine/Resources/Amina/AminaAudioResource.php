@@ -15,6 +15,8 @@ use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Text;
+use MoonShine\Handlers\ExportHandler;
+use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
 
 /**
@@ -69,5 +71,15 @@ class AminaAudioResource extends ModelResource
     public function rules(Model $item): array
     {
         return [];
+    }
+
+    public function import(): ?ImportHandler
+    {
+        return null;
+    }
+
+    public function export(): ?ExportHandler
+    {
+        return null;
     }
 }

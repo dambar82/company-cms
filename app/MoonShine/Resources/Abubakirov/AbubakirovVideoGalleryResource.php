@@ -13,9 +13,13 @@ use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
+use MoonShine\Fields\File;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Json;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Text;
+use MoonShine\Handlers\ExportHandler;
+use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
 
 /**
@@ -52,9 +56,25 @@ class AbubakirovVideoGalleryResource extends ModelResource
                     Block::make([
                         BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
                             ->hideOnIndex()
+                            ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 2))
                             ->required(),
                     ])
                 ])->columnSpan(4)
+            ]),
+            Block::make([
+                Json::make('Видео', 'videos')
+                    ->hideOnIndex()
+                    ->asRelation(new AbubakirovVideoResource())
+                    ->fields([
+                        File::make('', 'video')
+                            ->dir('abubakirov/video')
+                            ->allowedExtensions(['mp4'])
+                            ->disableDownload()
+                            ->hideOnIndex(),
+                        Text::make('', 'description')->placeholder('Добавьте описание')
+                    ])
+                    ->creatable()
+                    ->removable()
             ])
         ];
     }
@@ -77,5 +97,15 @@ class AbubakirovVideoGalleryResource extends ModelResource
             ->join('projects as p', 'p.id', '=', 'vgp.project_id')
             ->where('p.id', 2)
             ->select('video_galleries.*');
+    }
+
+    public function import(): ?ImportHandler
+    {
+        return null;
+    }
+
+    public function export(): ?ExportHandler
+    {
+        return null;
     }
 }
