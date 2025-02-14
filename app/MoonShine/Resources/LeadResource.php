@@ -23,6 +23,8 @@ use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Fields\Url;
+use MoonShine\Handlers\ExportHandler;
+use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
 use MoonShine\Decorations\Block;
 use MoonShine\Fields\ID;
@@ -80,7 +82,8 @@ class LeadResource extends ModelResource
                     TinyMce::make('Текст', 'content')
                 ])
                         ->creatable()
-                        ->removable(),
+                        ->removable()
+                        ->hideOnIndex(),
             Json::make('Добавить фотографию', 'images')
                 ->asRelation(new LeadImageResource())
                 ->fields([
@@ -91,7 +94,8 @@ class LeadResource extends ModelResource
                     Text::make('', 'description')->placeholder('Добавьте описание')
                 ])
                 ->creatable()
-                ->removable(),
+                ->removable()
+                ->hideOnIndex(),
             Json::make('Добавить видео', 'videos')
                 ->asRelation(new LeadVideoResource())
                 ->fields([
@@ -104,7 +108,8 @@ class LeadResource extends ModelResource
                     Text::make('', 'description')->placeholder('Добавьте описание')
                 ])
                 ->creatable()
-                ->removable(),
+                ->removable()
+                ->hideOnIndex(),
         ];
     }
 
@@ -117,5 +122,15 @@ class LeadResource extends ModelResource
     public function rules(Model $item): array
     {
         return [];
+    }
+
+    public function import(): ?ImportHandler
+    {
+        return null;
+    }
+
+    public function export(): ?ExportHandler
+    {
+        return null;
     }
 }
