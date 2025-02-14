@@ -46,13 +46,15 @@ class AminaVideoGalleryResource extends ModelResource
                         Text::make('Название', 'name'),
                         Text::make('Описание', 'title'),
                         Image::make( 'preview')
-                            ->dir('	amina/videos/preview')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg']),
+                            ->dir('amina/videos/preview')
+                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                            ->removable(),
                         File::make('Видео', 'video')
-                            ->dir('	amina/videos/video')
+                            ->dir('amina/videos/video')
                             ->hideOnIndex()
                             ->allowedExtensions(['mp4'])
                             ->disableDownload()
+                            ->removable()
                     ])
                 ])->columnSpan(8),
 
