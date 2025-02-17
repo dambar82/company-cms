@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\MoonShine\Resources\Abubakirov\AbubakirovImageGalleryResource;
-use App\MoonShine\Resources\Abubakirov\AbubakirovImageResource;
 use App\MoonShine\Resources\Abubakirov\AbubakirovVideoGalleryResource;
-use App\MoonShine\Resources\Abubakirov\AbubakirovVideoResource;
 use App\MoonShine\Resources\Amina\AminaAudioResource;
 use App\MoonShine\Resources\Amina\AminaNewsResource;
 use App\MoonShine\Resources\Amina\AminaVideoGalleryResource;
-use App\MoonShine\Resources\Amina\AminaVideoResource;
 use App\MoonShine\Resources\LeadResource;
+use App\MoonShine\Resources\LeadResourceOld;
+use App\MoonShine\Resources\MasterDigitalTechnologies\MDTImageGalleryResource;
+use App\MoonShine\Resources\MasterDigitalTechnologies\MDTVideoGalleryResource;
 use App\MoonShine\Resources\ProjectResource;
 use Closure;
 use MoonShine\Contracts\Resources\ResourceContract;
@@ -48,6 +48,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
     {
         return [
             MenuItem::make('Проекты', new ProjectResource()),
+            MenuDivider::make(),
            MenuGroup::make('Абубакиров', [
                MenuItem::make('Фотогалереи', new AbubakirovImageGalleryResource())->icon('heroicons.outline.photo'),
                MenuItem::make('Видеогалереи', new AbubakirovVideoGalleryResource())->icon('heroicons.outline.video-camera'),
@@ -57,7 +58,13 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Аудио', new AminaAudioResource())->icon('heroicons.speaker-wave'),
                 MenuItem::make('Видео', new AminaVideoGalleryResource())->icon('heroicons.outline.video-camera'),
             ])->icon('heroicons.inbox-stack'),
+            MenuGroup::make('Мастер Цифровых Технологий', [
+                MenuItem::make('Фотогалереи', new MDTImageGalleryResource())->icon('heroicons.outline.photo'),
+                MenuItem::make('Видео', new MDTVideoGalleryResource())->icon('heroicons.outline.video-camera'),
+            ])->icon('heroicons.inbox-stack'),
             MenuDivider::make(),
+           // MenuItem::make('Вести', new LeadResourceOld())->icon('heroicons.outline.newspaper'),
+         //   MenuDivider::make(),
             MenuItem::make('Вести', new LeadResource())->icon('heroicons.outline.newspaper'),
         ];
     }

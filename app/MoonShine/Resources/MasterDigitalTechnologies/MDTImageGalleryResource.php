@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources\Abubakirov;
+namespace App\MoonShine\Resources\MasterDigitalTechnologies;
 
 use App\Models\ImageGallery;
+use App\MoonShine\Resources\Abubakirov\AbubakirovImageResource;
 use App\MoonShine\Resources\ProjectResource;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
+use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Image as Img;
 use MoonShine\Fields\Json;
@@ -20,25 +23,22 @@ use MoonShine\Fields\Text;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Throwable;
 
 /**
  * @extends ModelResource<ImageGallery>
  */
-class AbubakirovImageGalleryResource extends ModelResource
+class MDTImageGalleryResource extends ModelResource
 {
     protected string $model = ImageGallery::class;
 
-    protected string $title = 'Фотогалереи Абубакиров';
+    protected string $title = 'Фотогалереи МЦТ';
 
     protected string $sortDirection = 'ASC';
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return array
-     * @throws Throwable
+     * @return Field
      */
     public function fields(): array
     {
@@ -49,7 +49,7 @@ class AbubakirovImageGalleryResource extends ModelResource
                         Text::make('Название', 'name'),
                         Text::make('Описание', 'title'),
                         Image::make('Изображение', 'caption')
-                            ->dir('abubakirov/gallery')
+                            ->dir('mdt/gallery')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
                     ])
                 ])->columnSpan(8),
@@ -58,24 +58,24 @@ class AbubakirovImageGalleryResource extends ModelResource
                     Block::make([
                         BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
                             ->hideOnIndex()
-                            ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 2))
+                            ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 3))
                             ->required()
                     ])
                 ])->columnSpan(4),
             ]),
-        Block::make([
-            Json::make('Фотографии', 'images')
-                ->hideOnIndex()
-                ->asRelation(new AbubakirovImageResource())
-                ->fields([
-                    Img::make('', 'image')
-                        ->dir('abubakirov/img')
-                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                    ->removable(),
-                    Text::make('', 'description')->placeholder('Добавьте описание')
-                ])
-                ->creatable()
-                ->removable()
+            Block::make([
+                Json::make('Фотографии', 'images')
+                    ->hideOnIndex()
+                    ->asRelation(new MDTImageResource())
+                    ->fields([
+                        Img::make('', 'image')
+                            ->dir('mdt/images')
+                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                            ->removable(),
+                        Text::make('', 'description')->placeholder('Добавьте описание')
+                    ])
+                    ->creatable()
+                    ->removable()
             ])
         ];
     }
@@ -106,7 +106,7 @@ class AbubakirovImageGalleryResource extends ModelResource
         return parent::query()
             ->join('image_gallery_project as igp', 'image_galleries.id', '=', 'igp.image_gallery_id')
             ->join('projects as p', 'p.id', '=', 'igp.project_id')
-            ->where('p.id', 2)
+            ->where('p.id', 3)
             ->select('image_galleries.*');
     }
 }
