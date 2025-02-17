@@ -9,7 +9,11 @@ use App\MoonShine\Resources\Amina\AminaNewsResource;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\News;
 
+use MoonShine\ActionButtons\ActionButton;
+use MoonShine\ActionButtons\ActionButtons;
+use MoonShine\Components\ActionGroup;
 use MoonShine\Decorations\Column;
+use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Date;
@@ -73,43 +77,78 @@ class LeadResource extends ModelResource
                     Block::make([
                         Date::make('Дата публикации', 'date'),
                         Switcher::make('Новость активна', 'is_active')->updateOnPreview(),
+
+                    ]),
+                    Block::make([
+                        ActionGroup::make([
+                            ActionButton::make(
+                                label: 'Добавить текст',
+                                url: 'https://moonshine-laravel.com',
+                            )
+                                ->primary()
+                                ->icon('heroicons.outline.plus'),
+                            ActionButton::make(
+                                label: 'Добавить фото',
+                                url: 'https://moonshine-laravel.com',
+                            )
+                                ->primary()
+                                ->icon('heroicons.outline.plus'),
+                            ActionButton::make(
+                                label: 'Добавить видео',
+                                url: 'https://moonshine-laravel.com',
+                            )
+                                ->primary()
+                                ->icon('heroicons.outline.plus')
+                        ])
                     ])
                 ])->columnSpan(4),
             ]),
-            Json::make('Добавить блок с текстом', 'contents')
-                ->asRelation(new LeadContentResource())
-                ->fields([
-                    TinyMce::make('Текст', 'content')
-                ])
-                        ->creatable()
-                        ->removable()
-                        ->hideOnIndex(),
-            Json::make('Добавить фотографию', 'images')
-                ->asRelation(new LeadImageResource())
-                ->fields([
-                    Image::make('', 'image')
-                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                        ->dir('lead/images')
-                        ->removable(),
-                    Text::make('', 'description')->placeholder('Добавьте описание')
-                ])
-                ->creatable()
-                ->removable()
-                ->hideOnIndex(),
-            Json::make('Добавить видео', 'videos')
-                ->asRelation(new LeadVideoResource())
-                ->fields([
-                    File::make('', 'video')
-                        ->allowedExtensions(['mp4'])
-                        ->disableDownload()
-                        ->dir('lead/videos')
-                        ->hideOnIndex()
-                        ->removable(),
-                    Text::make('', 'description')->placeholder('Добавьте описание')
-                ])
-                ->creatable()
-                ->removable()
-                ->hideOnIndex(),
+            Divider::make(),
+            Block::make([
+                Json::make('Текст', 'contents')
+                    ->asRelation(new LeadContentResource())
+                    ->fields([
+                        TinyMce::make('', 'content')
+                    ])
+                    ->creatable()
+                    ->removable()
+                    ->hideOnIndex()
+                ]),
+            Divider::make(),
+            Block::make([
+                Json::make('Фото', 'images')
+                    ->asRelation(new LeadImageResource())
+                    ->fields([
+                        Image::make('', 'image')
+                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                            ->dir('lead/images')
+                            ->removable(),
+                        Text::make('', 'description')
+                            ->placeholder('Добавьте описание')
+                    ])
+                    ->creatable()
+                    ->removable()
+                    ->hideOnIndex()
+                ]),
+            Divider::make(),
+            Block::make([
+                Json::make('Видео', 'videos')
+                    ->asRelation(new LeadVideoResource())
+                    ->fields([
+                        File::make('', 'video')
+                            ->allowedExtensions(['mp4'])
+                            ->disableDownload()
+                            ->dir('lead/videos')
+                            ->hideOnIndex()
+                            ->removable(),
+                        Text::make('', 'description')
+                            ->placeholder('Добавьте описание')
+                    ])
+                    ->creatable()
+                    ->removable()
+                    ->hideOnIndex()
+            ])
+
         ];
     }
 

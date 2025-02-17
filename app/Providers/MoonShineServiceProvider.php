@@ -16,6 +16,7 @@ use App\MoonShine\Resources\LeadResource;
 use App\MoonShine\Resources\ProjectResource;
 use Closure;
 use MoonShine\Contracts\Resources\ResourceContract;
+use MoonShine\Menu\MenuDivider;
 use MoonShine\Menu\MenuElement;
 use MoonShine\Menu\MenuGroup;
 use MoonShine\Menu\MenuItem;
@@ -56,6 +57,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Аудио', new AminaAudioResource())->icon('heroicons.speaker-wave'),
                 MenuItem::make('Видео', new AminaVideoGalleryResource())->icon('heroicons.outline.video-camera'),
             ])->icon('heroicons.inbox-stack'),
+            MenuDivider::make(),
             MenuItem::make('Вести', new LeadResource())->icon('heroicons.outline.newspaper'),
         ];
     }
