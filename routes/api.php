@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AbubakirovController;
 use App\Http\Controllers\AminaController;
+use App\Http\Controllers\MDTController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,4 +30,11 @@ Route::prefix('abubakirov')->group( function () {
     Route::get('image-gallery/{id}', [AbubakirovController::class, 'getImageGallery']);
     Route::get('video-gallery', [AbubakirovController::class, 'getVideos']);
     Route::get('video-gallery/{id}', [AbubakirovController::class, 'getVideo']);
+});
+
+Route::prefix('master_dig_tech')->group( function () {
+    Route::get('videos', [MDTController::class, 'getVideos']);
+    Route::get('video/{id}', [MDTController::class, 'getVideo']);
+    Route::get('images', [MDTController::class, 'getImages']);
+    Route::get('images/{id}', [MDTController::class, 'getImage']);
 });
