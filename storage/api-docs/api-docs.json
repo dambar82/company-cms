@@ -427,14 +427,14 @@
                 }
             }
         },
-        "/api/master_dig_tech/images": {
+        "/api/master_dig_tech/services": {
             "get": {
                 "tags": [
                     "Master Digital Technologies"
                 ],
-                "summary": "Все фото",
-                "description": "Returns a collection of image resources filtered by project ID 3.",
-                "operationId": "98e57f1a8607f5872a1a1f9cb6515aec",
+                "summary": "Все услуги",
+                "description": "Returns a collection of services filtered by project ID 3.",
+                "operationId": "90514d5243dd44e265c7ab0fce4983cd",
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -445,7 +445,46 @@
                         }
                     },
                     "404": {
-                        "description": "No images found for the specified project",
+                        "description": "No services found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/master_dig_tech/services/{id}": {
+            "get": {
+                "tags": [
+                    "Master Digital Technologies"
+                ],
+                "summary": "Услуга по ID",
+                "description": "Returns a service resource for the specified ID.",
+                "operationId": "055004e31a08151b9576c59babb08b91",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the service",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Service not found",
                         "content": {
                             "application/json": {
                                 "schema": {}

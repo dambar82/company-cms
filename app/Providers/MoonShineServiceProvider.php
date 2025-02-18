@@ -59,7 +59,9 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Видео', new AminaVideoGalleryResource())->icon('heroicons.outline.video-camera'),
             ])->icon('heroicons.inbox-stack'),
             MenuGroup::make('Мастер Цифровых Технологий', [
-                MenuItem::make('Фотогалереи', new MDTImageGalleryResource())->icon('heroicons.outline.photo'),
+                MenuItem::make('Услуги', new MDTImageGalleryResource())->icon('heroicons.outline.wrench-screwdriver
+
+'),
                 MenuItem::make('Видео', new MDTVideoGalleryResource())->icon('heroicons.outline.video-camera'),
             ])->icon('heroicons.inbox-stack'),
             MenuDivider::make(),

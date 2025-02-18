@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ImageGalleryResources;
 use App\Http\Resources\ImageResources;
 use App\Http\Resources\VideoGalleryResources;
 use App\Models\Image;
@@ -76,10 +77,10 @@ class MDTController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/master_dig_tech/images",
+     *     path="/api/master_dig_tech/services",
      *     tags={"Master Digital Technologies"},
-     *     summary="Все фото",
-     *     description="Returns a collection of image resources filtered by project ID 3.",
+     *     summary="Все услуги",
+     *     description="Returns a collection of services filtered by project ID 3.",
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
@@ -87,21 +88,80 @@ class MDTController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="No images found for the specified project",
+     *         description="No services found for the specified project",
      *         @OA\JsonContent()
      *     )
      * )
      */
-    public function getImages(): AnonymousResourceCollection
+    public function getServices(): AnonymousResourceCollection
     {
-        $galleryIds = ImageGallery::whereHas('projects', function ($query) {
+        $services = ImageGallery::whereHas('projects', function ($query) {
             $query->where('project_id', 3);
-        })->pluck('id');
+        })->get();
 
-        $images = Image::whereIn('image_gallery_id', $galleryIds)->get();
-
-        return ImageResources::collection($images);
+        return ImageGalleryResources::collection($services);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/master_dig_tech/services/{id}",
+     *     tags={"Master Digital Technologies"},
+     *     summary="Услуга по ID",
+     *     description="Returns a service resource for the specified ID.",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the service",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Service not found",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function getService(int $id): ImageGalleryResources
+    {
+        $service = ImageGallery::find($id);
+
+        return new ImageGalleryResources($service);
+    }
+
+//    /**
+//     * @OA\Get(
+//     *     path="/api/master_dig_tech/images",
+//     *     tags={"Master Digital Technologies"},
+//     *     summary="Все фото",
+//     *     description="Returns a collection of image resources filtered by project ID 3.",
+//     *     @OA\Response(
+//     *         response=200,
+//     *         description="Successful response",
+//     *         @OA\JsonContent()
+//     *     ),
+//     *     @OA\Response(
+//     *         response=404,
+//     *         description="No images found for the specified project",
+//     *         @OA\JsonContent()
+//     *     )
+//     * )
+//     */
+//    public function getImages(): AnonymousResourceCollection
+//    {
+//        $galleryIds = ImageGallery::whereHas('projects', function ($query) {
+//            $query->where('project_id', 3);
+//        })->pluck('id');
+//
+//        $images = Image::whereIn('image_gallery_id', $galleryIds)->get();
+//
+//        return ImageResources::collection($images);
+//    }
 
     /**
      * @OA\Get(

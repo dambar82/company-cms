@@ -11,6 +11,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
+use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
@@ -31,7 +32,7 @@ class MDTImageGalleryResource extends ModelResource
 {
     protected string $model = ImageGallery::class;
 
-    protected string $title = 'Фотогалереи МЦТ';
+    protected string $title = 'Услуги МЦТ';
 
     protected string $sortDirection = 'ASC';
 
@@ -48,9 +49,6 @@ class MDTImageGalleryResource extends ModelResource
                     Block::make([
                         Text::make('Название', 'name'),
                         Text::make('Описание', 'title'),
-                        Image::make('Изображение', 'caption')
-                            ->dir('mdt/gallery')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
                     ])
                 ])->columnSpan(8),
 
@@ -63,6 +61,7 @@ class MDTImageGalleryResource extends ModelResource
                     ])
                 ])->columnSpan(4),
             ]),
+            Divider::make(),
             Block::make([
                 Json::make('Фотографии', 'images')
                     ->hideOnIndex()
