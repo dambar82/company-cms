@@ -87,7 +87,9 @@ class MDTImageGalleryResource extends ModelResource
      */
     public function rules(Model $item): array
     {
-        return [];
+        return [
+            'projects' => ['required']
+        ];
     }
 
     public function import(): ?ImportHandler

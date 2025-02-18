@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources;
+namespace App\MoonShine\Resources\Lead;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\LeadImage;
-
-use MoonShine\Resources\ModelResource;
+use Illuminate\Database\Eloquent\Model;
 use MoonShine\Decorations\Block;
-use MoonShine\Fields\ID;
 use MoonShine\Fields\Field;
-use MoonShine\Components\MoonShineComponent;
+use MoonShine\Fields\ID;
+use MoonShine\Resources\ModelResource;
 
 /**
  * @extends ModelResource<LeadImage>
@@ -23,7 +21,7 @@ class LeadImageResource extends ModelResource
     protected string $title = 'LeadImages';
 
     /**
-     * @return list<MoonShineComponent|Field>
+     * @return Field
      */
     public function fields(): array
     {

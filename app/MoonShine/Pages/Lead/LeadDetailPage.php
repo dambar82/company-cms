@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\Lead;
 
-use App\MoonShine\Resources\LeadContentResource;
-use App\MoonShine\Resources\LeadImageResource;
-use App\MoonShine\Resources\LeadVideoResource;
+use App\MoonShine\Resources\Lead\LeadContentResource;
+use App\MoonShine\Resources\Lead\LeadImageResource;
+use App\MoonShine\Resources\Lead\LeadVideoResource;
+use MoonShine\Components\MoonShineComponent;
 use MoonShine\Fields\Date;
+use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
@@ -15,8 +17,6 @@ use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Pages\Crud\DetailPage;
-use MoonShine\Components\MoonShineComponent;
-use MoonShine\Fields\Field;
 use Throwable;
 
 class LeadDetailPage extends DetailPage

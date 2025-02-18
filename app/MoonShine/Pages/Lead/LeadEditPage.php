@@ -4,31 +4,35 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\Lead;
 
-use App\MoonShine\Resources\LeadContentResource;
-use App\MoonShine\Resources\LeadImageResource;
-use App\MoonShine\Resources\LeadVideoResource;
+use App\Models\Lead;
+use App\MoonShine\Resources\Lead\LeadContentResource;
+use App\MoonShine\Resources\Lead\LeadImageResource;
+use App\MoonShine\Resources\Lead\LeadVideoResource;
 use MoonShine\ActionButtons\ActionButton;
 use MoonShine\Components\ActionGroup;
+use MoonShine\Components\FormBuilder;
+use MoonShine\Components\MoonShineComponent;
 use MoonShine\Decorations\Block;
+use MoonShine\Decorations\Collapse;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
-use MoonShine\Enums\PageType;
 use MoonShine\Fields\Date;
+use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
-use MoonShine\MoonShineRequest;
-use MoonShine\Pages\Crud\FormPage;
-use MoonShine\Components\MoonShineComponent;
-use MoonShine\Fields\Field;
+use MoonShine\Pages\Page;
+use MoonShine\TypeCasts\ModelCast;
 use Throwable;
 
-class LeadEditPage extends FormPage
+class LeadEditPage extends Page
 {
+    protected string $title = 'Редактировать';
+
     /**
      * @return list<MoonShineComponent|Field>
      * @throws Throwable
@@ -38,149 +42,108 @@ class LeadEditPage extends FormPage
         return [
             Grid::make([
                 Column::make([
+                    Text::make('Название', 'title'),
+                ])->columnSpan(8),
+                Column::make([
+                    Date::make('Дата публикации', 'date'),
+                    Switcher::make('Новость активна', 'is_active'),
+                ])->columnSpan(4)
+            ]),
+            Block::make([
+                TinyMce::make('Текст новости', 'content'),
+            ]),
+            Divider::make(),
+            Grid::make([
+                Column::make([
                     Block::make([
-                        Text::make('Название', 'title'),
-                        TinyMce::make('Текст новости', 'content'),
-                        Image::make('Фотографии', 'image')
+                        Image::make('Фотография', 'image')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
                             ->dir('lead/images')
-                            ->removable(),
+                            ->removable()
+                    ])
+                ])->columnSpan(6),
+                Column::make([
+                    Block::make([
                         File::make('Видео', 'video')
                             ->allowedExtensions(['mp4'])
                             ->disableDownload()
-                            ->dir('lead/videos')
-                            ->removable()
+                            ->dir('lead/videos')->removable()
+
+
                     ])
-                ])->columnSpan(8),
-                Column::make([
-                    Block::make([
-                        Date::make('Дата публикации', 'date'),
-                        Switcher::make('Новость активна', 'is_active'),
-
-                    ]),
-                    Block::make([
-                        ActionGroup::make([
-                            ActionButton::make(
-                                label: 'Добавить текст',
-                                url: '#',
-                                item: ['id' => 'add']
-
-                            )->method('getTextBlock')
-                                ->primary()
-                                ->icon('heroicons.outline.plus'),
-                            ActionButton::make(
-                                label: 'Добавить фото',
-                                url: 'https://moonshine-laravel.com',
-                            )
-                                ->primary()
-                                ->icon('heroicons.outline.plus'),
-                            ActionButton::make(
-                                label: 'Добавить видео',
-                                url: 'https://moonshine-laravel.com',
-                            )
-                                ->primary()
-                                ->icon('heroicons.outline.plus')
+                ])->columnSpan(6)
+            ]),
+            Divider::make(),
+            Collapse::make('Добавить блок с текстом', [
+                Block::make([
+                    Json::make('Текст', 'contents')
+                        ->asRelation(new LeadContentResource())
+                        ->fields([
+                            TinyMce::make('', 'content')
                         ])
+                        ->removable()
                     ])
-                ])->columnSpan(4),
             ]),
             Divider::make(),
-            Block::make([
-                Json::make('Текст', 'contents')
-                    ->asRelation(new LeadContentResource())
-                    ->fields([
-                        TinyMce::make('', 'content')
+            Collapse::make('Добавить фото', [
+                Block::make([
+                    Json::make('Фото', 'images')
+                        ->asRelation(new LeadImageResource())
+                        ->fields([
+                            Image::make('', 'image')
+                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                                ->dir('lead/images')
+                                ->removable(),
+                            Text::make('', 'description')
+                                ->placeholder('Добавьте описание')
+                        ])
+                        ->removable()
                     ])
-                    ->creatable(
-                        button: ActionButton::make('New', '#', ['id' => 'add'])->primary()->method(
-                            'updateSomething',
-                            params: ['resourceItem' => $this->getResource()->getItemID()]
-                        )
-                    )
-                    ->removable()
-            ]),
+                ]),
             Divider::make(),
-            Block::make([
-                Json::make('Фото', 'images')
-                    ->asRelation(new LeadImageResource())
-                    ->fields([
-                        Image::make('', 'image')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->dir('lead/images')
-                            ->removable(),
-                        Text::make('', 'description')
-                            ->placeholder('Добавьте описание')
-                    ])
+            Collapse::make('Добавить видео', [
+                Block::make([
+                    Json::make('Видео', 'videos')
+                        ->asRelation(new LeadVideoResource())
+                        ->fields([
+                            File::make('', 'video')
+                                ->allowedExtensions(['mp4'])
+                                ->disableDownload()
+                                ->dir('lead/videos')
+                                ->removable(),
+                            Text::make('', 'description')
+                                ->placeholder('Добавьте описание')
+                        ])
                     ->removable()
-            ]),
-            Divider::make(),
-            Block::make([
-                Json::make('Видео', 'videos')
-                    ->asRelation(new LeadVideoResource())
-                    ->fields([
-                        File::make('', 'video')
-                            ->allowedExtensions(['mp4'])
-                            ->disableDownload()
-                            ->dir('lead/videos')
-                            ->removable(),
-                        Text::make('', 'description')
-                            ->placeholder('Добавьте описание')
-                    ])
-                    ->removable()
+                ])
             ])
         ];
     }
 
-    /**
-     * @return list<MoonShineComponent>
-     * @throws Throwable
-     */
-    protected function topLayer(): array
+    protected function getItem()
     {
-        return [
-            ...parent::topLayer()
-        ];
+        return Lead::findOrFail(request('_id'));
     }
 
-    /**
-     * @return list<MoonShineComponent>
-     * @throws Throwable
-     */
-    protected function mainLayer(): array
-    {
-        return [
-            ...parent::mainLayer()
-        ];
-    }
-
-    /**
-     * @return list<MoonShineComponent>
-     * @throws Throwable
-     */
-    protected function bottomLayer(): array
-    {
-        return [
-            ...parent::bottomLayer()
-        ];
-    }
 
     /**
      * @throws Throwable
      */
-    public function getTextBlock(MoonShineRequest $request)
+    public function components(): array
     {
-        Json::make('Текст', 'contents')
-            ->asRelation(new LeadContentResource())
-            ->fields([
-                TinyMce::make('', 'content')
-            ])
-            ->creatable(
-                button: ActionButton::make('New', '#', ['id' => 'add'])->primary()->method(
-                    'updateSomething',
-                    params: ['resourceItem' => $this->getResource()->getItemID()]
-                )
-            )
-            ->removable();
+        return [
+            FormBuilder::make()
+                ->fields($this->fields())
+                ->fillCast($this->getItem(), ModelCast::make(Lead::class))
+        ];
+    }
+
+    public function breadcrumbs(): array
+    {
+        return [
+            url('moonshine/resource/lead-resource/lead-index-page') => 'Новости',
+             '#' => $this->title()
+        ];
     }
 }
 

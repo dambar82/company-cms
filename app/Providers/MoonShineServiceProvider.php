@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\MoonShine\Pages\Lead\LeadEditPage;
 use App\MoonShine\Resources\Abubakirov\AbubakirovImageGalleryResource;
 use App\MoonShine\Resources\Abubakirov\AbubakirovVideoGalleryResource;
 use App\MoonShine\Resources\Amina\AminaAudioResource;
 use App\MoonShine\Resources\Amina\AminaNewsResource;
 use App\MoonShine\Resources\Amina\AminaVideoGalleryResource;
-use App\MoonShine\Resources\LeadResource;
-use App\MoonShine\Resources\LeadResourceOld;
+use App\MoonShine\Resources\Lead\LeadResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\MDTImageGalleryResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\MDTVideoGalleryResource;
 use App\MoonShine\Resources\ProjectResource;
@@ -38,7 +38,9 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
      */
     protected function pages(): array
     {
-        return [];
+        return [
+            new LeadEditPage()
+        ];
     }
 
     /**
@@ -65,9 +67,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Видео', new MDTVideoGalleryResource())->icon('heroicons.outline.video-camera'),
             ])->icon('heroicons.inbox-stack'),
             MenuDivider::make(),
-           // MenuItem::make('Вести', new LeadResourceOld())->icon('heroicons.outline.newspaper'),
-         //   MenuDivider::make(),
-            MenuItem::make('Вести', new LeadResource())->icon('heroicons.outline.newspaper'),
+            MenuItem::make('Новости', new LeadResource())->icon('heroicons.outline.newspaper'),
         ];
     }
 
