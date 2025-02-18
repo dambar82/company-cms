@@ -14,6 +14,9 @@ use App\MoonShine\Resources\Lead\LeadResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\MDTImageGalleryResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\MDTVideoGalleryResource;
 use App\MoonShine\Resources\ProjectResource;
+use App\MoonShine\Resources\Quiz\QuestionResource;
+use App\MoonShine\Resources\Quiz\QuizResource;
+use App\MoonShine\Resources\Quiz\ResultResource;
 use Closure;
 use MoonShine\Contracts\Resources\ResourceContract;
 use MoonShine\Menu\MenuDivider;
@@ -61,13 +64,17 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Видео', new AminaVideoGalleryResource())->icon('heroicons.outline.video-camera'),
             ])->icon('heroicons.inbox-stack'),
             MenuGroup::make('Мастер Цифровых Технологий', [
-                MenuItem::make('Услуги', new MDTImageGalleryResource())->icon('heroicons.outline.wrench-screwdriver
-
-'),
+                MenuItem::make('Услуги', new MDTImageGalleryResource())->icon('heroicons.outline.wrench-screwdriver'),
                 MenuItem::make('Видео', new MDTVideoGalleryResource())->icon('heroicons.outline.video-camera'),
             ])->icon('heroicons.inbox-stack'),
             MenuDivider::make(),
             MenuItem::make('Новости', new LeadResource())->icon('heroicons.outline.newspaper'),
+            MenuDivider::make(),
+            MenuGroup::make('Викторины', [
+            MenuItem::make('Викторины', new QuizResource())->icon('heroicons.outline.academic-cap'),
+            MenuItem::make('Вопросы', new QuestionResource())->icon('heroicons.outline.question-mark-circle'),
+            MenuItem::make('Результаты', new ResultResource())->icon('heroicons.outline.arrow-down-circle'),
+            ])->icon('heroicons.academic-cap')
         ];
     }
 
