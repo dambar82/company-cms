@@ -34,7 +34,7 @@ Route::prefix('abubakirov')->group( function () {
 
 Route::prefix('master_dig_tech')->group( function () {
     Route::get('videos', [MDTController::class, 'getVideos']);
-    Route::get('video/{id}', [MDTController::class, 'getVideo']);
+    Route::get('videos/{id}', [MDTController::class, 'getVideo']);
     Route::get('images', [MDTController::class, 'getImages']);
     Route::get('images/{id}', [MDTController::class, 'getImage']);
 });
