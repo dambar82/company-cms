@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\MDT\PhotoContentResource;
-use App\Http\Resources\MDT\VideoContentResource;
 use App\Models\MDT\Category;
-use App\Models\MDT\PhotoContent;
 use App\Models\MDT\Service;
-use App\Models\MDT\VideoContent;
+use App\Http\Resources\MDT\ServiceContentResource;
+use App\Models\MDT\ServiceContent;
 
 class MDTController extends Controller
 {
@@ -31,7 +29,7 @@ class MDTController extends Controller
      */
     public function getServices()
     {
-        return Service::select('name', 'slug')->get();
+        return ServiceContentResource::collection(ServiceContent::all());
     }
 
     /**
@@ -62,8 +60,9 @@ class MDTController extends Controller
     public function getServiceBySlug(string $serviceSlug)
     {
         $serviceId = Service::where('slug', $serviceSlug)->pluck('id');
+        $serviceContents = ServiceContent::whereIn('service_id', $serviceId)->get();
 
-        return Category::whereIn('service_id', $serviceId)->select('name', 'slug')->get();
+        return ServiceContentResource::collection($serviceContents);
     }
 
     /**
@@ -71,7 +70,7 @@ class MDTController extends Controller
      *     path="/api/services/{service_slug}/{category_slug}",
      *     tags={"Master Digital Technologies"},
      *     summary="Получить контент по услугам и категориям",
-     *     description="Возвращает фотографии и видео для заданной услуги и категории.",
+     *     description="Возвращает контент для заданной услуги и категории.",
      *     @OA\Parameter(
      *         name="serviceSlug",
      *         in="query",
@@ -108,17 +107,14 @@ class MDTController extends Controller
      *     )
      * )
      */
-    public function getContent(string $serviceSlug, string $categorySlug): array
+    public function getContent(string $serviceSlug, string $categorySlug)
     {
         $serviceId = Service::where('slug', $serviceSlug)->value('id');
         $categoryId = Category::where('slug', $categorySlug)->value('id');
 
-        $photoContent = PhotoContent::where('service_id', $serviceId)->where('category_id', $categoryId)->get();
-        $videoContent = VideoContent::where('service_id', $serviceId)->where('category_id', $categoryId)->get();
+        $serviceContents = ServiceContent::where('service_id', $serviceId)
+            ->where('category_id', $categoryId)->get();
 
-        return [
-            'photos' => PhotoContentResource::collection($photoContent),
-            'videos' => VideoContentResource::collection($videoContent),
-        ];
+        return ServiceContentResource::collection($serviceContents);
     }
 }

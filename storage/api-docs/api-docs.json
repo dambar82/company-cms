@@ -433,7 +433,7 @@
                     "Master Digital Technologies"
                 ],
                 "summary": "Получить контент по услугам и категориям",
-                "description": "Возвращает фотографии и видео для заданной услуги и категории.",
+                "description": "Возвращает контент для заданной услуги и категории.",
                 "operationId": "549095ad0b12ffe194d7aea5f65c15c5",
                 "parameters": [
                     {

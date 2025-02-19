@@ -11,9 +11,8 @@ use App\MoonShine\Resources\Amina\AminaAudioResource;
 use App\MoonShine\Resources\Amina\AminaNewsResource;
 use App\MoonShine\Resources\Amina\AminaVideoGalleryResource;
 use App\MoonShine\Resources\Lead\LeadResource;
-use App\MoonShine\Resources\MasterDigitalTechnologies\PhotoContentResource;
+use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceResource;
-use App\MoonShine\Resources\MasterDigitalTechnologies\VideoContentResource;
 use App\MoonShine\Resources\ProjectResource;
 use App\MoonShine\Resources\Quiz\QuestionResource;
 use App\MoonShine\Resources\Quiz\QuizResource;
@@ -66,8 +65,9 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             ])->icon('heroicons.inbox-stack'),
             MenuGroup::make('Мастер Цифровых Технологий', [
                 MenuItem::make('Услуги', new ServiceResource())->icon('heroicons.outline.wrench-screwdriver'),
-                MenuItem::make('Фото', new PhotoContentResource())->icon('heroicons.outline.photo'),
-                MenuItem::make('Видео', new VideoContentResource())->icon('heroicons.outline.video-camera')
+//                MenuItem::make('Фото', new PhotoContentResource())->icon('heroicons.outline.photo'),
+//                MenuItem::make('Видео', new VideoContentResource())->icon('heroicons.outline.video-camera')
+                MenuItem::make('Контент', new ServiceContentResource())->icon('heroicons.outline.arrows-pointing-in')
             ])->icon('heroicons.inbox-stack'),
             MenuDivider::make(),
             MenuItem::make('Новости', new LeadResource())->icon('heroicons.outline.newspaper'),
