@@ -15,6 +15,7 @@ use App\MoonShine\Resources\Lead\LeadResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceResource;
 use App\MoonShine\Resources\PageResource;
+use App\MoonShine\Resources\PostResource;
 use App\MoonShine\Resources\ProjectResource;
 use App\MoonShine\Resources\Quiz\QuestionResource;
 use App\MoonShine\Resources\Quiz\QuizResource;
@@ -81,6 +82,8 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             MenuItem::make('Баннеры', new BannerResource())->icon('heroicons.outline.clipboard-document-list'),
             MenuDivider::make(),
             MenuItem::make('Страницы', new PageResource())->icon('heroicons.outline.book-open'),
+            MenuDivider::make(),
+            MenuItem::make('Посты', new PostResource())->icon('heroicons.outline.arrow-up-on-square-stack'),
         ];
     }
 
