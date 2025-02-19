@@ -71,7 +71,7 @@ class AbubakirovImageGalleryResource extends ModelResource
                     Img::make('', 'image')
                         ->dir('abubakirov/img')
                         ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                    ->removable(),
+                        ->removable(),
                     Text::make('', 'description')->placeholder('Добавьте описание')
                 ])
                 ->creatable()

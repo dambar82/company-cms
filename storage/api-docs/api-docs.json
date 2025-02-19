@@ -360,73 +360,6 @@
                 }
             }
         },
-        "/api/master_dig_tech/videos": {
-            "get": {
-                "tags": [
-                    "Master Digital Technologies"
-                ],
-                "summary": "Все видео",
-                "description": "Returns a collection of video resources filtered by project ID 3.",
-                "operationId": "5834f42ea28bf722ae58001d9d80ff25",
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "No videos found for the specified project",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/master_dig_tech/videos/{id}": {
-            "get": {
-                "tags": [
-                    "Master Digital Technologies"
-                ],
-                "summary": "Видео по ID",
-                "description": "Returns a video resource for the specified ID.",
-                "operationId": "ea835268fcac3784d8ad1097c61a4ab3",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the video record",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Video record not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/master_dig_tech/services": {
             "get": {
                 "tags": [
@@ -455,22 +388,22 @@
                 }
             }
         },
-        "/api/master_dig_tech/services/{id}": {
+        "/api/master_dig_tech/services/{service_slug}": {
             "get": {
                 "tags": [
                     "Master Digital Technologies"
                 ],
-                "summary": "Услуга по ID",
-                "description": "Returns a service resource for the specified ID.",
-                "operationId": "055004e31a08151b9576c59babb08b91",
+                "summary": "Услуга по slug",
+                "description": "Returns a service resource for the specified slug.",
+                "operationId": "19dd0db2112194e84c114dd18d37fc4c",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "service_slug",
                         "in": "path",
-                        "description": "ID of the service",
+                        "description": "Slug of the service",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -494,41 +427,57 @@
                 }
             }
         },
-        "/api/master_dig_tech/images/{id}": {
+        "/api/services/{service_slug}/{category_slug}": {
             "get": {
                 "tags": [
                     "Master Digital Technologies"
                 ],
-                "summary": "Фото по ID",
-                "description": "Returns a image for the specified ID.",
-                "operationId": "fcfd8195c180cbce022f0780ea564b15",
+                "summary": "Получить контент по услугам и категориям",
+                "description": "Возвращает фотографии и видео для заданной услуги и категории.",
+                "operationId": "549095ad0b12ffe194d7aea5f65c15c5",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the image",
+                        "name": "serviceSlug",
+                        "in": "query",
+                        "description": "Слаг услуги",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "categorySlug",
+                        "in": "query",
+                        "description": "Слаг категории",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful response",
+                        "description": "Успешный ответ",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "photos": {
+                                            "type": "array",
+                                            "items": {}
+                                        },
+                                        "videos": {
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
                     "404": {
-                        "description": "Image not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Услуга или категория не найдены"
                     }
                 }
             }

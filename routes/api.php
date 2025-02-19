@@ -33,10 +33,7 @@ Route::prefix('abubakirov')->group( function () {
 });
 
 Route::prefix('master_dig_tech')->group( function () {
-    Route::get('videos', [MDTController::class, 'getVideos']);
-    Route::get('videos/{id}', [MDTController::class, 'getVideo']);
     Route::get('services', [MDTController::class, 'getServices']);
-    Route::get('services/{id}', [MDTController::class, 'getService']);
-//    Route::get('images', [MDTController::class, 'getImages']);
-    Route::get('images/{id}', [MDTController::class, 'getImage']);
+    Route::get('services/{service_slug}', [MDTController::class, 'getServiceBySlug']);
+    Route::get('services/{service_slug}/{category_slug}', [MDTController::class, 'getContent']);
 });
