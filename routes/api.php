@@ -36,4 +36,5 @@ Route::prefix('master_dig_tech')->group( function () {
     Route::get('services', [MDTController::class, 'getServices']);
     Route::get('services/{service_slug}', [MDTController::class, 'getServiceBySlug']);
     Route::get('services/{service_slug}/{category_slug}', [MDTController::class, 'getContent']);
+    Route::get('categories', [MDTController::class, 'getCategories']);
 });

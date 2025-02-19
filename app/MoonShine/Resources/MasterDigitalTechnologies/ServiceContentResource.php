@@ -8,6 +8,7 @@ use App\Models\MDT\Category;
 use App\Models\MDT\Service;
 use App\Models\MDT\ServiceContent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
@@ -18,6 +19,7 @@ use MoonShine\Fields\File;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Select;
+use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
@@ -46,10 +48,9 @@ class ServiceContentResource extends ModelResource
                 ID::make()->sortable()->hideOnIndex(),
                 Column::make([
                     Block::make([
-                        Image::make('Фото', 'image')
-                            ->dir('mdt/images')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->removable(),
+                        Text::make('Название', 'name'),
+                        TinyMce::make('Описание', 'description')
+                        ->hideOnIndex(),
                         File::make('Видео', 'video')
                             ->dir('mdt/video/videos')
                             ->allowedExtensions(['mp4'])
@@ -58,9 +59,7 @@ class ServiceContentResource extends ModelResource
                         Image::make('Preview')
                             ->dir('mdt/video/preview')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->removable(),
-                        TinyMce::make('Описание', 'description')
-                            ->hideOnIndex()
+                            ->removable()
                     ]),
                 ])
                     ->columnSpan(8),
@@ -78,6 +77,13 @@ class ServiceContentResource extends ModelResource
                             )
                             ->required()
                     ]),
+                    Divider::make(),
+                        Block::make([
+                            Image::make('Фото', 'image')
+                                ->dir('mdt/images')
+                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                                ->removable(),
+                        ])
                 ])
                     ->columnSpan(4),
             ])

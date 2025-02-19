@@ -48,7 +48,7 @@ class ServiceResource extends ModelResource
                 ])->columnSpan(6),
                 Column::make([
                     Block::make([
-                        Text::make('Slug')->required(),
+                        Text::make('Slug')->required()->locked(),
                     ])
                 ])->columnSpan(6)
             ]),
@@ -67,7 +67,7 @@ class ServiceResource extends ModelResource
                                 ->columnSpan(6),
                             Column::make([
                                 Block::make([
-                                    Text::make('Slug')->hideOnIndex()->required()
+                                    Text::make('Slug')->hideOnIndex()->required()->locked()
                                 ])
                             ])
                                 ->columnSpan(6)
