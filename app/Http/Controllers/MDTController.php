@@ -6,6 +6,7 @@ use App\Models\MDT\Category;
 use App\Models\MDT\Service;
 use App\Http\Resources\MDT\ServiceContentResource;
 use App\Models\MDT\ServiceContent;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MDTController extends Controller
 {
@@ -27,7 +28,7 @@ class MDTController extends Controller
      *     )
      * )
      */
-    public function getServices()
+    public function getServices(): AnonymousResourceCollection
     {
         return ServiceContentResource::collection(ServiceContent::all());
     }
@@ -57,7 +58,7 @@ class MDTController extends Controller
      *     )
      * )
      */
-    public function getServiceBySlug(string $serviceSlug)
+    public function getServiceBySlug(string $serviceSlug): AnonymousResourceCollection
     {
         $serviceId = Service::where('slug', $serviceSlug)->pluck('id');
         $serviceContents = ServiceContent::whereIn('service_id', $serviceId)->get();
@@ -107,7 +108,7 @@ class MDTController extends Controller
      *     )
      * )
      */
-    public function getContent(string $serviceSlug, string $categorySlug)
+    public function getContent(string $serviceSlug, string $categorySlug): AnonymousResourceCollection
     {
         $serviceId = Service::where('slug', $serviceSlug)->value('id');
         $categoryId = Category::where('slug', $categorySlug)->value('id');
@@ -116,5 +117,10 @@ class MDTController extends Controller
             ->where('category_id', $categoryId)->get();
 
         return ServiceContentResource::collection($serviceContents);
+    }
+
+    public function getCategories()
+    {
+        return Category::all()->select('name', 'slug');
     }
 }
