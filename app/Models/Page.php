@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,28 +26,28 @@ use Illuminate\Support\Carbon;
  * @property array|null $images
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @method static Builder|Pages active()
- * @method static Builder|Pages newModelQuery()
- * @method static Builder|Pages newQuery()
- * @method static Builder|Pages query()
- * @method static Builder|Pages whereCanComment($value)
- * @method static Builder|Pages whereCanLike($value)
- * @method static Builder|Pages whereCaption($value)
- * @method static Builder|Pages whereCreatedAt($value)
- * @method static Builder|Pages whereDate($value)
- * @method static Builder|Pages whereFullContent($value)
- * @method static Builder|Pages whereId($value)
- * @method static Builder|Pages whereImages($value)
- * @method static Builder|Pages whereIsVisible($value)
- * @method static Builder|Pages whereMetaDescription($value)
- * @method static Builder|Pages whereMetaTitle($value)
- * @method static Builder|Pages whereShortDescription($value)
- * @method static Builder|Pages whereTitle($value)
- * @method static Builder|Pages whereUpdatedAt($value)
- * @method static Builder|Pages whereUrl($value)
+ * @method static Builder|Page active()
+ * @method static Builder|Page newModelQuery()
+ * @method static Builder|Page newQuery()
+ * @method static Builder|Page query()
+ * @method static Builder|Page whereCanComment($value)
+ * @method static Builder|Page whereCanLike($value)
+ * @method static Builder|Page whereCaption($value)
+ * @method static Builder|Page whereCreatedAt($value)
+ * @method static Builder|Page whereDate($value)
+ * @method static Builder|Page whereFullContent($value)
+ * @method static Builder|Page whereId($value)
+ * @method static Builder|Page whereImages($value)
+ * @method static Builder|Page whereIsVisible($value)
+ * @method static Builder|Page whereMetaDescription($value)
+ * @method static Builder|Page whereMetaTitle($value)
+ * @method static Builder|Page whereShortDescription($value)
+ * @method static Builder|Page whereTitle($value)
+ * @method static Builder|Page whereUpdatedAt($value)
+ * @method static Builder|Page whereUrl($value)
  * @mixin Eloquent
  */
-class Pages extends Model
+class Page extends Model
 {
     use HasFactory;
 

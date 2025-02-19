@@ -2,7 +2,7 @@
 //
 //namespace App\Filament\Resources;
 //
-//use App\Filament\Resources\AnswerResource\Pages;
+//use App\Filament\Resources\AnswerResource\Page;
 //use App\Models\Answer;
 //use App\Models\Question;
 //use Filament\Forms;
@@ -92,9 +92,9 @@
 //    public static function getPages(): array
 //    {
 //        return [
-//            'index' => Pages\ListAnswers::route('/'),
-//            'create' => Pages\CreateAnswer::route('/create'),
-//            'edit' => Pages\EditAnswer::route('/{record}/edit'),
+//            'index' => Page\ListAnswers::route('/'),
+//            'create' => Page\CreateAnswer::route('/create'),
+//            'edit' => Page\EditAnswer::route('/{record}/edit'),
 //        ];
 //    }
 //}

@@ -10,9 +10,11 @@ use App\MoonShine\Resources\Abubakirov\AbubakirovVideoGalleryResource;
 use App\MoonShine\Resources\Amina\AminaAudioResource;
 use App\MoonShine\Resources\Amina\AminaNewsResource;
 use App\MoonShine\Resources\Amina\AminaVideoGalleryResource;
+use App\MoonShine\Resources\BannerResource;
 use App\MoonShine\Resources\Lead\LeadResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceResource;
+use App\MoonShine\Resources\PageResource;
 use App\MoonShine\Resources\ProjectResource;
 use App\MoonShine\Resources\Quiz\QuestionResource;
 use App\MoonShine\Resources\Quiz\QuizResource;
@@ -65,8 +67,6 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             ])->icon('heroicons.inbox-stack'),
             MenuGroup::make('Мастер Цифровых Технологий', [
                 MenuItem::make('Услуги', new ServiceResource())->icon('heroicons.outline.wrench-screwdriver'),
-//                MenuItem::make('Фото', new PhotoContentResource())->icon('heroicons.outline.photo'),
-//                MenuItem::make('Видео', new VideoContentResource())->icon('heroicons.outline.video-camera')
                 MenuItem::make('Контент', new ServiceContentResource())->icon('heroicons.outline.arrows-pointing-in')
             ])->icon('heroicons.inbox-stack'),
             MenuDivider::make(),
@@ -76,7 +76,11 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             MenuItem::make('Викторины', new QuizResource())->icon('heroicons.outline.academic-cap'),
             MenuItem::make('Вопросы', new QuestionResource())->icon('heroicons.outline.question-mark-circle'),
             MenuItem::make('Результаты', new ResultResource())->icon('heroicons.outline.arrow-down-circle'),
-            ])->icon('heroicons.academic-cap')
+            ])->icon('heroicons.academic-cap'),
+            MenuDivider::make(),
+            MenuItem::make('Баннеры', new BannerResource())->icon('heroicons.outline.clipboard-document-list'),
+            MenuDivider::make(),
+            MenuItem::make('Страницы', new PageResource())->icon('heroicons.outline.book-open'),
         ];
     }
 
