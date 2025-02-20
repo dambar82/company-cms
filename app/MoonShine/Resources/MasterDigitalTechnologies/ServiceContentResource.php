@@ -52,7 +52,7 @@ class ServiceContentResource extends ModelResource
                 ID::make()->sortable()->hideOnIndex(),
                 Column::make([
                     Block::make([
-                        Text::make('Название', 'name'),
+                        Text::make('Название', 'name')->required(),
                         TinyMce::make('Описание', 'description')
                         ->hideOnIndex(),
                         File::make('Видео', 'video')
@@ -78,10 +78,14 @@ class ServiceContentResource extends ModelResource
 
                   //  BelongsTo::make('Услуга', 'service', resource: new ServiceResource()),
                         Divider::make(),
-                    BelongsTo::make('Категория', 'category', resource: new CategoryResource())
-                        ->associatedWith('service_id')
+//                    BelongsTo::make('Категория', 'category', resource: new CategoryResource())
+//                        ->associatedWith('service_id')
 
-
+                        Select::make('Категория', 'category_id')
+                            ->options(
+                                Category::pluck('name', 'id')->toArray()
+                            )
+                            ->required(),
 
 
 //                        Select::make('Категория', 'category_id')
