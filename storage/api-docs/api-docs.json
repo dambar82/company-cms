@@ -366,7 +366,7 @@
                     "Master Digital Technologies"
                 ],
                 "summary": "Все услуги",
-                "description": "Returns a collection of services filtered by project ID 3.",
+                "description": "Returns a collection of services filtered.",
                 "operationId": "90514d5243dd44e265c7ab0fce4983cd",
                 "responses": {
                     "200": {
@@ -378,7 +378,7 @@
                         }
                     },
                     "404": {
-                        "description": "No services found for the specified project",
+                        "description": "No services found",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -478,6 +478,89 @@
                     },
                     "404": {
                         "description": "Услуга или категория не найдены"
+                    }
+                }
+            }
+        },
+        "/api/master_dig_tech/categories": {
+            "get": {
+                "tags": [
+                    "Master Digital Technologies"
+                ],
+                "summary": "Все категории",
+                "description": "Returns a collection of categories.",
+                "operationId": "69c814f857ba09050817e39ecad21746",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No categories found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/master_dig_tech/categories/{service_slug}": {
+            "get": {
+                "tags": [
+                    "Master Digital Technologies"
+                ],
+                "summary": "Все категории в выбранной услуге",
+                "description": "Returns a collection of categories by service.",
+                "operationId": "24a50e81a3701e0066634a5e0144db11",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No categories found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/master_dig_tech/send_request": {
+            "post": {
+                "tags": [
+                    "Master Digital Technologies"
+                ],
+                "summary": "Создать заявку на услугу",
+                "operationId": "0fc94f2ee96d018b7ec815b576d6d164",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Request not done",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
                 }
             }

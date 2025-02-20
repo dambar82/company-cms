@@ -28,6 +28,7 @@ class ServiceContentResource extends JsonResource
                 'slug' => $category->slug
                 ],
             'content' => [
+                    'id' => $this->id,
                     'description' => $this->description,
                     'image' => $this->image ? asset('storage/' . $this->image) : null,
                     'preview' => $this->preview ? asset('storage/' . $this->preview) : null,

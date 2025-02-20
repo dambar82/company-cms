@@ -12,6 +12,7 @@ use App\MoonShine\Resources\Amina\AminaNewsResource;
 use App\MoonShine\Resources\Amina\AminaVideoGalleryResource;
 use App\MoonShine\Resources\BannerResource;
 use App\MoonShine\Resources\Lead\LeadResource;
+use App\MoonShine\Resources\MasterDigitalTechnologies\RequestResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceResource;
 use App\MoonShine\Resources\PageResource;
@@ -68,7 +69,8 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             ])->icon('heroicons.inbox-stack'),
             MenuGroup::make('Мастер Цифровых Технологий', [
                 MenuItem::make('Услуги', new ServiceResource())->icon('heroicons.outline.wrench-screwdriver'),
-                MenuItem::make('Контент', new ServiceContentResource())->icon('heroicons.outline.arrows-pointing-in')
+                MenuItem::make('Контент', new ServiceContentResource())->icon('heroicons.outline.arrows-pointing-in'),
+                MenuItem::make('Заявки', new RequestResource())->icon('heroicons.outline.inbox-arrow-down')
             ])->icon('heroicons.inbox-stack'),
             MenuDivider::make(),
             MenuItem::make('Новости', new LeadResource())->icon('heroicons.outline.newspaper'),

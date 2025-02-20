@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendRequestMail;
 use App\Models\MDT\Category;
 use App\Models\MDT\Service;
 use App\Http\Resources\MDT\ServiceContentResource;
 use App\Models\MDT\ServiceContent;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\JsonResponse;
+use App\Models\MDT\Request as NewRequest;
+use Illuminate\Support\Facades\Mail;
 
 class MDTController extends Controller
 {
@@ -15,7 +20,7 @@ class MDTController extends Controller
      *     path="/api/master_dig_tech/services",
      *     tags={"Master Digital Technologies"},
      *     summary="Все услуги",
-     *     description="Returns a collection of services filtered by project ID 3.",
+     *     description="Returns a collection of services filtered.",
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
@@ -23,7 +28,7 @@ class MDTController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="No services found for the specified project",
+     *         description="No services found",
      *         @OA\JsonContent()
      *     )
      * )
@@ -119,15 +124,87 @@ class MDTController extends Controller
         return ServiceContentResource::collection($serviceContents);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/master_dig_tech/categories",
+     *     tags={"Master Digital Technologies"},
+     *     summary="Все категории",
+     *     description="Returns a collection of categories.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="No categories found",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
     public function getCategories()
     {
         return Category::all()->select('name', 'slug');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/master_dig_tech/categories/{service_slug}",
+     *     tags={"Master Digital Technologies"},
+     *     summary="Все категории в выбранной услуге",
+     *     description="Returns a collection of categories by service.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="No categories found",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
     public  function getCategoriesByServiceSlug(string $serviceSlug)
     {
         $service = Service::where('slug', $serviceSlug)->first();
 
         return Category::where('service_id', $service->id)->select('name', 'slug')->get();
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/master_dig_tech/send_request",
+     *     tags={"Master Digital Technologies"},
+     *     summary="Создать заявку на услугу",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Request not done",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
+    public function sendRequest(Request $request): JsonResponse
+    {
+        $requestData = $request->validate([
+            'company' => 'required|string',
+            'name'=> 'required|string|min:2|max:20',
+            'surname'=> 'required|string|min:2|max:20',
+            'phone'=> 'required|string',
+            'email'=> 'required|email',
+            'budget'=> 'required|string',
+            'service'=> 'required|string',
+            'description' => 'required|string|min:10|max:250'
+        ]);
+
+        $requestData = NewRequest::create($requestData);
+        Mail::to('zakaz@mdt-agency.ru')->send(new SendRequestMail($requestData));
+
+        return response()->json(['message' => 'Заявка успешно создана.', 'data' => $requestData]);
     }
 }
