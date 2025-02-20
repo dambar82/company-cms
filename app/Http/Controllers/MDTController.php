@@ -123,4 +123,11 @@ class MDTController extends Controller
     {
         return Category::all()->select('name', 'slug');
     }
+
+    public  function getCategoriesByServiceSlug(string $serviceSlug)
+    {
+        $service = Service::where('slug', $serviceSlug)->first();
+
+        return Category::where('service_id', $service->id)->select('name', 'slug')->get();
+    }
 }
