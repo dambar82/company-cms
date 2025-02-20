@@ -7,7 +7,9 @@ namespace App\MoonShine\Resources\MasterDigitalTechnologies;
 use App\Models\MDT\Category;
 use App\Models\MDT\Service;
 use App\Models\MDT\ServiceContent;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
@@ -15,9 +17,11 @@ use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
+use MoonShine\Fields\Fields;
 use MoonShine\Fields\File;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Select;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
@@ -39,7 +43,7 @@ class ServiceContentResource extends ModelResource
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return Field
+     * @return array
      */
     public function fields(): array
     {
@@ -70,19 +74,48 @@ class ServiceContentResource extends ModelResource
                                 Service::pluck('name', 'id')->toArray()
                             )
                             ->required(),
+
+
+                  //  BelongsTo::make('Услуга', 'service', resource: new ServiceResource()),
                         Divider::make(),
-                        Select::make('Категория', 'category_id')
-                            ->options(
-                                Category::pluck('name', 'id')->toArray()
-                            )
-                            ->required()
+                    BelongsTo::make('Категория', 'category', resource: new CategoryResource())
+                        ->associatedWith('service_id')
+
+
+
+
+//                        Select::make('Категория', 'category_id')
+//                            ->reactive(function(Fields $fields, ?string $value, Field $field, array $values): Fields {
+//                                $field->setValue($value);
+//
+//                                return tap($fields, static fn ($fields) =>
+//                                $fields
+//                                    ->findByColumn('service_id')
+//                                    ?->options(
+//                                        Category::where('service_id', $value)
+//                                            ->get()
+//                                            ->pluck('name', 'id')
+//                                            ->toArray()
+//                                    )
+//                                );
+//                            })
+//                            ->required()
+
+//                            ->asyncSearch(
+//                                'name',
+//                                asyncSearchQuery: function (Builder $query, Request $request): Builder {
+//                                    return $query->where('service_id', $request->get('service_id'));
+//                                },
+//                                replaceQuery: true
+//                            )
                     ]),
                     Divider::make(),
                         Block::make([
                             Image::make('Фото', 'image')
                                 ->dir('mdt/images')
                                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                                ->removable(),
+                                ->removable()
+                                ->required()
                         ])
                 ])
                     ->columnSpan(4),
