@@ -203,7 +203,8 @@ class MDTController extends Controller
         ]);
 
         $requestData = NewRequest::create($requestData);
-        Mail::to('zakaz@mdt-agency.ru')->send(new SendRequestMail($requestData));
+       //  Mail::to('zakaz@mdt-agency.ru')->send(new SendRequestMail($requestData));    Мастер Цифровых Технологий
+        Mail::to('dmitrij.m.183@yandex.ru')->send(new SendRequestMail($requestData));
 
         return response()->json(['message' => 'Заявка успешно создана.', 'data' => $requestData]);
     }
