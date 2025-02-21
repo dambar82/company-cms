@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\MoonShine\Pages\Lead\LeadEditPage;
 use App\MoonShine\Resources\Abubakirov\AbubakirovImageGalleryResource;
 use App\MoonShine\Resources\Abubakirov\AbubakirovVideoGalleryResource;
 use App\MoonShine\Resources\Amina\AminaAudioResource;
@@ -45,9 +44,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
      */
     protected function pages(): array
     {
-        return [
-            new LeadEditPage()
-        ];
+        return [];
     }
 
     /**

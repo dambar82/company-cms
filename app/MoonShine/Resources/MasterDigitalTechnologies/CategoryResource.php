@@ -32,6 +32,8 @@ class CategoryResource extends ModelResource
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected string $column = 'name';
+
     /**
      * @return Field
      */

@@ -30,6 +30,8 @@ class ServiceResource extends ModelResource
 
     protected string $title = 'Услуги МЦТ';
 
+    protected string $column = 'name';
+
     protected string $sortDirection = 'ASC';
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;

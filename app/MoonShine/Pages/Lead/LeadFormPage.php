@@ -74,8 +74,8 @@ class LeadFormPage extends FormPage
         ];
 
         if ($this->getResource()->getItem()) {
-             $createForm = array_merge($createForm,
-               [  Divider::make(),
+             $createForm = array_merge($createForm, [
+                 Divider::make(),
                  Collapse::make('Добавить блок с текстом', [
                      Block::make([
                          Json::make('Текст', 'contents')
