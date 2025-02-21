@@ -100,23 +100,4 @@ class LeadFormPage extends FormPage
             ...parent::bottomLayer()
         ];
     }
-
-    /**
-     * @throws Throwable
-     */
-    public function getTextBlock(MoonShineRequest $request)
-    {
-        Json::make('Текст', 'contents')
-            ->asRelation(new LeadContentResource())
-            ->fields([
-                TinyMce::make('', 'content')
-            ])
-            ->creatable(
-                button: ActionButton::make('New', '#', ['id' => 'add'])->primary()->method(
-                    'updateSomething',
-                    params: ['resourceItem' => $this->getResource()->getItemID()]
-                )
-            )
-            ->removable();
-    }
 }

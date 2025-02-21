@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use MoonShine\Decorations\Block;
+use MoonShine\Decorations\Collapse;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
@@ -21,6 +22,7 @@ use MoonShine\Fields\Fields;
 use MoonShine\Fields\File;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Json;
 use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Select;
 use MoonShine\Fields\Text;
@@ -69,23 +71,26 @@ class ServiceContentResource extends ModelResource
                     ->columnSpan(8),
                 Column::make([
                     Block::make([
-                        Select::make('Услуга', 'service_id')
-                            ->options(
-                                Service::pluck('name', 'id')->toArray()
-                            )
-                            ->required(),
+//                        Select::make('Услуга', 'service_id')
+//                            ->options(
+//                                Service::pluck('name', 'id')->toArray()
+//                            )
+//                            ->required(),
 
 
-                  //  BelongsTo::make('Услуга', 'service', resource: new ServiceResource()),
+                    BelongsTo::make('Service')
+                        ->required(),
                         Divider::make(),
-//                    BelongsTo::make('Категория', 'category', resource: new CategoryResource())
-//                        ->associatedWith('service_id')
+                    BelongsTo::make('Категория', 'category', resource: new CategoryResource())
 
-                        Select::make('Категория', 'category_id')
-                            ->options(
-                                Category::pluck('name', 'id')->toArray()
-                            )
-                            ->required(),
+
+
+//                        Select::make('Категория', 'category_id')
+//                            ->options(
+//                                Category::pluck('name', 'id')->toArray()
+//                            )
+//                            ->required()
+//                        ->async('/search'),
 
 
 //                        Select::make('Категория', 'category_id')
@@ -123,7 +128,33 @@ class ServiceContentResource extends ModelResource
                         ])
                 ])
                     ->columnSpan(4),
-            ])
+            ]),
+
+            Collapse::make('Добавить фото', [
+                Block::make([
+                    Json::make('Фото', 'images')
+                        ->asRelation(new ServiceContentImageResource())
+                        ->fields([
+                            Grid::make([
+                                Column::make([
+                                    Block::make([
+                                        Image::make('', 'image')
+                                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                                            ->dir('lead/images')
+                                            ->removable()
+                                            ->hideOnIndex(),
+                                        Text::make('', 'name')
+                                            ->hideOnIndex()
+                                            ->placeholder('Добавьте название'),
+                                    TinyMce::make('Описание', 'description')
+                                        ->hideOnIndex()
+                                ])
+                            ])
+                        ])
+                    ])->removable()
+                    ])
+                ])
+
         ];
     }
 

@@ -27,6 +27,11 @@ class ServiceContent extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'service_id', 'id');
+        return $this->belongsTo(Category::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ServiceContentImage::class);
     }
 }
