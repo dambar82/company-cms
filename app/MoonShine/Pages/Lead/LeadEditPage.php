@@ -4,34 +4,41 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\Lead;
 
+use MoonShine\Pages\Crud\EditPage;
 use App\Models\Lead;
 use App\MoonShine\Resources\Lead\LeadContentResource;
 use App\MoonShine\Resources\Lead\LeadImageResource;
 use App\MoonShine\Resources\Lead\LeadVideoResource;
-use MoonShine\ActionButtons\ActionButton;
-use MoonShine\Components\ActionGroup;
+use Illuminate\Database\Eloquent\Model;
 use MoonShine\Components\FormBuilder;
 use MoonShine\Components\MoonShineComponent;
+use MoonShine\Contracts\MoonShineRenderable;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Collapse;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
+use MoonShine\Decorations\Fragment;
 use MoonShine\Decorations\Grid;
+use MoonShine\Enums\JsEvent;
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Field;
+use MoonShine\Fields\Fields;
 use MoonShine\Fields\File;
+use MoonShine\Fields\Hidden;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
+use MoonShine\Pages\Crud\FormPage;
 use MoonShine\Pages\Page;
+use MoonShine\Support\AlpineJs;
 use MoonShine\TypeCasts\ModelCast;
 use Throwable;
 
 class LeadEditPage extends Page
 {
-    protected string $title = 'Редактировать';
+   // protected string $title = 'Редактировать';
 
     /**
      * @return list<MoonShineComponent|Field>
@@ -73,6 +80,7 @@ class LeadEditPage extends Page
                     ])
                 ])->columnSpan(6)
             ]),
+
             Divider::make(),
             Collapse::make('Добавить блок с текстом', [
                 Block::make([
@@ -122,9 +130,8 @@ class LeadEditPage extends Page
 
     protected function getItem()
     {
-        return Lead::findOrFail(request('_id'));
+        return Lead::findOrFail(request('resourceItem'));
     }
-
 
     /**
      * @throws Throwable

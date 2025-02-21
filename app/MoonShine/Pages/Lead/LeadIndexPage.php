@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\Lead;
 
-use App\Models\Lead;
-use MoonShine\ActionButtons\ActionButton;
-use MoonShine\Components\CardsBuilder;
-use MoonShine\Contracts\MoonShineRenderable;
-use MoonShine\Enums\ClickAction;
 use MoonShine\Exceptions\FieldException;
 use MoonShine\Fields\Date;
-use MoonShine\Fields\Fields;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;

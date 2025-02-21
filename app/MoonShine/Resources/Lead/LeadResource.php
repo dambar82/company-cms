@@ -6,12 +6,11 @@ namespace App\MoonShine\Resources\Lead;
 
 use App\Models\Lead;
 use App\MoonShine\Pages\Lead\LeadDetailPage;
-use App\MoonShine\Pages\Lead\LeadEditPage;
 use App\MoonShine\Pages\Lead\LeadFormPage;
 use App\MoonShine\Pages\Lead\LeadIndexPage;
 use Illuminate\Database\Eloquent\Model;
-use MoonShine\ActionButtons\ActionButton;
 use MoonShine\Enums\ClickAction;
+use MoonShine\Enums\PageType;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
 use MoonShine\Pages\Page;
@@ -30,6 +29,8 @@ class LeadResource extends ModelResource
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
     /**
      * @return Page
      */
@@ -40,7 +41,7 @@ class LeadResource extends ModelResource
             LeadFormPage::make(
                 $this->getItemID()
                     ? __('moonshine::ui.edit')
-                    : __('moonshine::ui.add')
+                    : __('moonshine::ui.add'),
             ),
             LeadDetailPage::make(__('moonshine::ui.show')),
         ];
@@ -65,10 +66,5 @@ class LeadResource extends ModelResource
     public function export(): ?ExportHandler
     {
         return null;
-    }
-
-    protected function modifyEditButton(ActionButton $button): ActionButton
-    {
-        return $button->setUrl(fn ($data) => to_page(LeadEditPage::make(), params: ['_id' => $data->getKey()]));
     }
 }
