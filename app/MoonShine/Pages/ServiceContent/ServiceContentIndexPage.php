@@ -21,10 +21,10 @@ class ServiceContentIndexPage extends IndexPage
     {
         return [
             Text::make('Название', 'name')->required(),
-            Image::make('Видео', 'preview'),
             BelongsTo::make('Услуга', 'Service'),
             BelongsTo::make('Категория', 'category', resource: new CategoryResource()),
-            Image::make('Фото', 'image')
+            Image::make('Фото', 'image'),
+            Image::make('Видео', 'preview'),
         ];
     }
 }

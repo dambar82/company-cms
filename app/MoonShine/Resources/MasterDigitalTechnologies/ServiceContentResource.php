@@ -6,7 +6,6 @@ namespace App\MoonShine\Resources\MasterDigitalTechnologies;
 
 use App\Models\MDT\ServiceContent;
 use App\MoonShine\Pages\ServiceContent\ServiceContentDetailPage;
-use App\MoonShine\Pages\ServiceContent\ServiceContentPEditPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentFormPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentIndexPage;
 use Illuminate\Database\Eloquent\Model;

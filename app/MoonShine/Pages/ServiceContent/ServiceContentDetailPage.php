@@ -32,11 +32,11 @@ class ServiceContentDetailPage extends DetailPage
             ID::make()->sortable()->hideOnIndex(),
             Text::make('Название', 'name')->required(),
             TinyMce::make('Описание', 'description'),
-            File::make('Видео', 'video'),
-            Image::make('Preview'),
             BelongsTo::make('Услуга', 'Service'),
             BelongsTo::make('Категория', 'category', resource: new CategoryResource()),
             Image::make('Фото', 'image'),
+            File::make('Видео', 'video'),
+            Image::make('Preview'),
             Json::make('Дополнительные фото', 'images')
                 ->asRelation(new ServiceContentImageResource())
                 ->vertical()

@@ -6,7 +6,6 @@ namespace App\MoonShine\Pages\ServiceContent;
 
 use App\Models\MDT\Category;
 use App\Models\MDT\Service;
-use App\MoonShine\Resources\MasterDigitalTechnologies\CategoryResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentImageResource;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Collapse;
@@ -19,7 +18,6 @@ use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
 use MoonShine\Fields\Position;
-use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Select;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
@@ -31,142 +29,128 @@ class ServiceContentFormPage extends FormPage
 {
     /**
      * @return list<MoonShineComponent|Field>
+     * @throws \Throwable
      */
     public function fields(): array
     {
+        $firstFormElement = [
+            ID::make()->sortable()->hideOnIndex(),
+            Column::make([
+                Block::make([
+                    Text::make('Название', 'name')->required(),
+                ]),
+            ])
+                ->columnSpan(8),
+        ];
+
+        $secondFormElement = [
+            Column::make([
+                Block::make([
+                    Image::make('Фото', 'image')
+                        ->dir('mdt/images')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable()
+                        ->required()
+                ])
+            ])
+                ->columnSpan(4),
+        ];
+
+        $thirdFormElement = [
+            Column::make([
+                Block::make([
+                    Image::make('Фото', 'image')
+                        ->dir('mdt/images')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable()
+                ])
+            ])
+                ->columnSpan(4),
+        ];
+
+        $fourthFormElement = [
+            Column::make([
+                Block::make([
+                    TinyMce::make('Описание', 'description')
+                        ->hideOnIndex(),
+                    File::make('Видео', 'video')
+                        ->dir('mdt/video/videos')
+                        ->allowedExtensions(['mp4'])
+                        ->removable()
+                        ->disableDownload(),
+                    Image::make('Preview')
+                        ->dir('mdt/video/preview')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable()
+                ]),
+            ])
+                ->columnSpan(8),
+            Column::make([
+                Block::make([
+                    Select::make('Услуга', 'service_id')
+                        ->nullable()
+                        ->options(Service::query()->get()->pluck('name', 'id')->toArray())
+                        ->reactive(function(Fields $fields, ?string $value): Fields {
+                            return tap($fields, static fn ($fields) => $fields
+                                ->findByColumn('category_id')
+                                ?->options(Category::where('service_id', $value)
+                                    ->get()
+                                    ->pluck('name', 'id')
+                                    ->toArray())
+                            );
+                        })
+                        ->required(),
+                    Divider::make(),
+                    Select::make('Категория', 'category_id')
+                        ->nullable()
+                        ->options(Category::query()->get()->pluck('name', 'id')->toArray())
+                        ->reactive()
+                        ->required(),
+                ]),
+                Divider::make(),
+            ])
+                ->columnSpan(4),
+        ];
+
         if (!$this->getResource()->getItem()) {
             return [
-                Grid::make([
-                    ID::make()->sortable()->hideOnIndex(),
-                    Column::make([
-                        Block::make([
-                            Text::make('Название', 'name')->required(),
-                            TinyMce::make('Описание', 'description')
-                                ->hideOnIndex(),
-                            File::make('Видео', 'video')
-                                ->dir('mdt/video/videos')
-                                ->allowedExtensions(['mp4'])
-                                ->removable()
-                                ->disableDownload(),
-                            Image::make('Preview')
-                                ->dir('mdt/video/preview')
-                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                                ->removable()
-                        ]),
-                    ])
-                        ->columnSpan(8),
-                    Column::make([
-                        Block::make([
-//                            Select::make('Услуга', 'service_id')
-//                                ->options(Service::all()->pluck('name', 'id')
-//                                    ->toArray())
-//                                    ->required()
-//                                    ->reactive(),
-//                            Select::make('Категория', 'category_id')
-//                                    ->required()
-//                                ->reactive(function (Fields $fields, ?int $value, Select $select) {
-//                                    $select->setValue($value);
-//
-//                                    return tap($fields, static fn ($fields) =>
-//                                    $fields
-//                                        ->findByColumn('category_id')
-//                                        ?->options(
-//                                            Category::where('service_id', $value)
-//                                                ->get()
-//                                                ->pluck('name', 'id')
-//                                                ->toArray()
-//                                        )
-//                                    );
-//                                }),
-
-
-                            BelongsTo::make('Услуга', 'service')
-                                ->required(),
-                            Divider::make(),
-                            BelongsTo::make('Категория', 'category', resource: new CategoryResource())
-                                ->associatedWith('service_id')
-                                ->required(),
-
-
-                        ]),
-                        Divider::make(),
-                        Block::make([
-                            Image::make('Фото', 'image')
-                                ->dir('mdt/images')
-                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                                ->removable()
-                                ->required()
-                        ])
-                    ])
-                        ->columnSpan(4),
-                ])
+                Grid::make(
+                    array_merge($firstFormElement, $secondFormElement, $fourthFormElement)
+                )
             ];
         }
 
         return [
-            Grid::make([
-                ID::make()->sortable()->hideOnIndex(),
-                Column::make([
-                    Block::make([
-                        Text::make('Название', 'name')->required(),
-                        TinyMce::make('Описание', 'description')
-                            ->hideOnIndex(),
-                        File::make('Видео', 'video')
-                            ->dir('mdt/video/videos')
-                            ->allowedExtensions(['mp4'])
-                            ->removable()
-                            ->disableDownload(),
-                        Image::make('Preview')
-                            ->dir('mdt/video/preview')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->removable()
-                    ]),
-                ])
-                    ->columnSpan(8),
-                Column::make([
-                    Block::make([
-                        BelongsTo::make('Услуга', 'Service')
-                            ->required(),
-                        Divider::make(),
-                        BelongsTo::make('Категория', 'category', resource: new CategoryResource())
-                            ->required(),
-                    ]),
-                    Divider::make(),
-                    Block::make([
-                        Image::make('Фото', 'image')
-                            ->dir('mdt/images')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->removable()
-                    ])
-                ])
-                    ->columnSpan(4),
-            ]),
+            Grid::make(
+                array_merge($firstFormElement, $thirdFormElement, $fourthFormElement)
+            ),
+            Divider::make(),
             Collapse::make('Добавить фото', [
-                    Block::make([
-                        Json::make('', 'images')
-                            ->asRelation(new ServiceContentImageResource())
-                            ->vertical()
-                            ->fields([
-                                Grid::make([
-                                    Column::make([
-                                        Block::make([
-                                            Position::make(),
-                                            Image::make('Фото', 'image')
-                                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                                                ->dir('lead/images')
-                                                ->removable()
-                                                ->hideOnIndex(),
-                                            Text::make('Название', 'name')
-                                                ->hideOnIndex()
-                                                ->placeholder('Добавьте название'),
-                                            TinyMce::make('Описание', 'description')
-                                                ->hideOnIndex(),
-                                        ])
+                Block::make([
+                    Json::make('', 'images')
+                        ->asRelation(new ServiceContentImageResource())
+                        ->vertical()
+                        ->fields([
+                            Grid::make([
+                                Column::make([
+                                    Block::make([
+                                        Position::make(),
+                                        Image::make('Фото', 'image')
+                                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                                            ->dir('lead/images')
+                                            ->removable()
+                                            ->hideOnIndex(),
+                                        Text::make('Название', 'name')
+                                            ->hideOnIndex()
+                                            ->placeholder('Добавьте название'),
+                                        TinyMce::make('Описание', 'description')
+                                            ->hideOnIndex(),
                                     ])
                                 ])
-                            ])->removable()
-                    ])
+                            ])
+                        ])->removable()
                 ])
+            ])
         ];
     }
 }
