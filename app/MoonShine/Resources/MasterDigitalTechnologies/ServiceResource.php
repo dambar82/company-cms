@@ -16,10 +16,12 @@ use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
 use MoonShine\Fields\Json;
+use MoonShine\Fields\Slug;
 use MoonShine\Fields\Text;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
+use Throwable;
 
 /**
  * @extends ModelResource<ImageGallery>
@@ -37,49 +39,63 @@ class ServiceResource extends ModelResource
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return Field
+     * @return array
+     * @throws Throwable
      */
     public function fields(): array
     {
-        return [
+        $fields = [
             Grid::make([
                 Column::make([
                     Block::make([
-                        Text::make('Название', 'name')->required(),
+                        Text::make('Название', 'name')
+                            ->required()
+                            ->reactive(),
                     ])
                 ])->columnSpan(6),
                 Column::make([
                     Block::make([
-                        Text::make('Slug')->required()->locked(),
+                        Slug::make('Slug')
+                            ->from('name')
+                            ->live()
+                            ->required()
+                            ->locked()
+                            ->separator('_'),
                     ])
                 ])->columnSpan(6)
             ]),
-            Divider::make(),
-            Block::make([
-                Collapse::make('Добавить категорию', [
-                    Json::make('Категории', 'category')
-                        ->hideOnIndex()
-                        ->asRelation(new CategoryResource())
-                        ->fields([
-                            Column::make([
-                                Block::make([
-                                    Text::make('Название', 'name')->required()
-                                ]),
-                            ])
-                                ->columnSpan(6),
-                            Column::make([
-                                Block::make([
-                                    Text::make('Slug')->hideOnIndex()->required()->locked()
+        ];
+
+        if ($this->getItemID()) {
+                $fields = array_merge($fields, [
+                Divider::make(),
+                Block::make([
+                    Collapse::make('Добавить категорию', [
+                        Json::make('Категории', 'category')
+                            ->hideOnIndex()
+                            ->asRelation(new CategoryResource())
+                            ->fields([
+                                Column::make([
+                                    Block::make([
+                                        Text::make('Название', 'name')->required()
+                                    ]),
                                 ])
+                                    ->columnSpan(6),
+                                Column::make([
+                                    Block::make([
+                                        Text::make('Slug')->required()->locked()
+                                    ])
+                                ])
+                                    ->columnSpan(6)
                             ])
-                                ->columnSpan(6)
-                        ])
-                        ->creatable()
-                        ->removable()
+                            ->creatable()
+                            ->removable()
                     ])
                 ])
+            ]);
+        }
 
-        ];
+        return $fields;
     }
 
     /**

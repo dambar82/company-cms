@@ -30,7 +30,7 @@ class ServiceContent extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function images()
+    public function images(): HasMany
     {
         return $this->hasMany(ServiceContentImage::class);
     }

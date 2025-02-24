@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\ServiceContent;
 
+use App\Models\MDT\Category;
+use App\Models\MDT\Service;
 use App\MoonShine\Resources\MasterDigitalTechnologies\CategoryResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentImageResource;
 use MoonShine\Decorations\Block;
@@ -11,12 +13,14 @@ use MoonShine\Decorations\Collapse;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
+use MoonShine\Fields\Fields;
 use MoonShine\Fields\File;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
 use MoonShine\Fields\Position;
 use MoonShine\Fields\Relationships\BelongsTo;
+use MoonShine\Fields\Select;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Pages\Crud\FormPage;
@@ -53,11 +57,37 @@ class ServiceContentFormPage extends FormPage
                         ->columnSpan(8),
                     Column::make([
                         Block::make([
-                            BelongsTo::make('Услуга', 'Service')
+//                            Select::make('Услуга', 'service_id')
+//                                ->options(Service::all()->pluck('name', 'id')
+//                                    ->toArray())
+//                                    ->required()
+//                                    ->reactive(),
+//                            Select::make('Категория', 'category_id')
+//                                    ->required()
+//                                ->reactive(function (Fields $fields, ?int $value, Select $select) {
+//                                    $select->setValue($value);
+//
+//                                    return tap($fields, static fn ($fields) =>
+//                                    $fields
+//                                        ->findByColumn('category_id')
+//                                        ?->options(
+//                                            Category::where('service_id', $value)
+//                                                ->get()
+//                                                ->pluck('name', 'id')
+//                                                ->toArray()
+//                                        )
+//                                    );
+//                                }),
+
+
+                            BelongsTo::make('Услуга', 'service')
                                 ->required(),
                             Divider::make(),
                             BelongsTo::make('Категория', 'category', resource: new CategoryResource())
+                                ->associatedWith('service_id')
                                 ->required(),
+
+
                         ]),
                         Divider::make(),
                         Block::make([
