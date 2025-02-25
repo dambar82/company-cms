@@ -5,17 +5,23 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\Amina;
 
 use App\Models\News;
+use App\MoonShine\Resources\NewsContentResource;
+use App\MoonShine\Resources\NewsImageResource;
+use App\MoonShine\Resources\NewsVideoResource;
 use App\MoonShine\Resources\ProjectResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Decorations\Block;
+use MoonShine\Decorations\Collapse;
 use MoonShine\Decorations\Column;
+use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Json;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
@@ -43,7 +49,7 @@ class AminaNewsResource extends ModelResource
      */
     public function fields(): array
     {
-        return [
+        $formFields = [
             Grid::make([
                 Column::make([
                     Block::make([
@@ -63,7 +69,6 @@ class AminaNewsResource extends ModelResource
                             ->removable()
                     ])
                 ])->columnSpan(8),
-
                 Column::make([
                     Block::make([
 
@@ -78,8 +83,58 @@ class AminaNewsResource extends ModelResource
                             ->required(),
                     ])
                 ])->columnSpan(4)
-            ])
+            ]),
         ];
+
+        if($this->getItemID()) {
+            $formFields = array_merge($formFields, [
+                Divider::make(),
+                Collapse::make('Добавить блок с текстом', [
+                    Block::make([
+                        Json::make('Текст', 'contents')
+                            ->asRelation(new NewsContentResource())
+                            ->fields([
+                                TinyMce::make('', 'content')
+                            ])
+                            ->removable()
+                    ])
+                ]),
+                Divider::make(),
+                Collapse::make('Добавить фото', [
+                    Block::make([
+                        Json::make('Фото', 'image')
+                            ->asRelation(new NewsImageResource())
+                            ->fields([
+                                Image::make('', 'image')
+                                    ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                                    ->dir('news/images')
+                                    ->removable(),
+                                Text::make('', 'description')
+                                    ->placeholder('Добавьте описание')
+                            ])
+                            ->removable()
+                    ])
+                ]),
+                Divider::make(),
+                Collapse::make('Добавить видео', [
+                    Block::make([
+                        Json::make('Видео', 'videos')
+                            ->asRelation(new NewsVideoResource())
+                            ->fields([
+                                File::make('', 'video')
+                                    ->allowedExtensions(['mp4'])
+                                    ->disableDownload()
+                                    ->dir('news/videos')
+                                    ->removable(),
+                                Text::make('', 'description')
+                                    ->placeholder('Добавьте описание')
+                            ])
+                            ->removable()
+                    ])
+                ])
+            ]);
+        }
+        return $formFields;
     }
 
     /**

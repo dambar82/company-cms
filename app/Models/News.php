@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
@@ -64,5 +65,20 @@ class News extends Model
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'news_project');
+    }
+
+    public function contents(): HasMany
+    {
+        return $this->hasMany(NewsContent::class);
+    }
+
+    public  function image(): HasMany
+    {
+        return $this->hasMany(NewsImage::class);
+    }
+
+    public function videos(): HasMany
+    {
+        return $this->hasMany(NewsVideo::class);
     }
 }
