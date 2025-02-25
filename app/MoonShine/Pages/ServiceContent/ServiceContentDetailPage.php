@@ -13,6 +13,7 @@ use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
 use MoonShine\Fields\Position;
 use MoonShine\Fields\Relationships\BelongsTo;
+use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Pages\Crud\DetailPage;
@@ -37,6 +38,7 @@ class ServiceContentDetailPage extends DetailPage
             Image::make('Фото', 'image'),
             File::make('Видео', 'video'),
             Image::make('Preview'),
+            Switcher::make('В первую очередь', 'is_first')->updateOnPreview(),
             Json::make('Дополнительные фото', 'images')
                 ->asRelation(new ServiceContentImageResource())
                 ->vertical()

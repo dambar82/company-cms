@@ -35,7 +35,10 @@ class MDTController extends Controller
      */
     public function getServices(): AnonymousResourceCollection
     {
-        return ServiceContentResource::collection(ServiceContent::all());
+        $firstServices = ServiceContent::where('is_first', 1)->get();
+        $otherServices = ServiceContent::where('is_first', 0)->get();
+
+        return ServiceContentResource::collection($firstServices->merge($otherServices));
     }
 
     /**
@@ -66,9 +69,14 @@ class MDTController extends Controller
     public function getServiceBySlug(string $serviceSlug): AnonymousResourceCollection
     {
         $serviceId = Service::where('slug', $serviceSlug)->pluck('id');
-        $serviceContents = ServiceContent::whereIn('service_id', $serviceId)->get();
+        $firstServices = ServiceContent::whereIn('service_id', $serviceId)
+            ->where('is_first', 1)
+            ->get();
+        $otherServices = ServiceContent::whereIn('service_id', $serviceId)
+            ->where('is_first', 0)
+            ->get();
 
-        return ServiceContentResource::collection($serviceContents);
+        return ServiceContentResource::collection($firstServices->merge($otherServices));
     }
 
     /**
@@ -118,10 +126,16 @@ class MDTController extends Controller
         $serviceId = Service::where('slug', $serviceSlug)->value('id');
         $categoryId = Category::where('slug', $categorySlug)->value('id');
 
-        $serviceContents = ServiceContent::where('service_id', $serviceId)
-            ->where('category_id', $categoryId)->get();
+        $firstServices = ServiceContent::where('service_id', $serviceId)
+            ->where('category_id', $categoryId)
+            ->where('is_first', 1)
+            ->get();
+        $otherServices = ServiceContent::where('service_id', $serviceId)
+            ->where('category_id', $categoryId)
+            ->where('is_first', 1)
+            ->get();
 
-        return ServiceContentResource::collection($serviceContents);
+        return ServiceContentResource::collection($firstServices->merge($otherServices));
     }
 
     /**

@@ -19,6 +19,7 @@ use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
 use MoonShine\Fields\Position;
 use MoonShine\Fields\Select;
+use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Pages\Crud\FormPage;
@@ -108,6 +109,10 @@ class ServiceContentFormPage extends FormPage
                         ->required(),
                 ]),
                 Divider::make(),
+                Block::make([
+                    Switcher::make( 'В первую очередь', 'Is_first')
+                        ->updateOnPreview()
+                ])
             ])
                 ->columnSpan(4),
         ];
