@@ -39,6 +39,7 @@ class ServiceContentDetailPage extends DetailPage
             File::make('Видео', 'video'),
             Image::make('Preview'),
             Switcher::make('В первую очередь', 'is_first')->updateOnPreview(),
+            Switcher::make( 'Скрыть', 'hidden')->updateOnPreview(),
             Json::make('Дополнительные фото', 'images')
                 ->asRelation(new ServiceContentImageResource())
                 ->vertical()

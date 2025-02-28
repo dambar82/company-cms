@@ -110,7 +110,12 @@ class ServiceContentFormPage extends FormPage
                 ]),
                 Divider::make(),
                 Block::make([
-                    Switcher::make( 'В первую очередь', 'Is_first')
+                    Switcher::make( 'Отобразить в первую очередь', 'Is_first')
+                        ->updateOnPreview(),
+                ]),
+                Divider::make(),
+                Block::make([
+                    Switcher::make( 'Скрыть', 'hidden')
                         ->updateOnPreview()
                 ])
             ])

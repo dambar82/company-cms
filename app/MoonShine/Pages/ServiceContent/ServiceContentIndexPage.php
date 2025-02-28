@@ -26,7 +26,8 @@ class ServiceContentIndexPage extends IndexPage
             BelongsTo::make('Категория', 'category', resource: new CategoryResource()),
             Image::make('Фото', 'image'),
             Image::make('Видео', 'preview'),
-            Switcher::make('В первую очередь', 'is_first')->updateOnPreview()
+            Switcher::make('В первую очередь', 'is_first')->updateOnPreview(),
+            Switcher::make( 'Скрыть', 'hidden')->updateOnPreview()
         ];
     }
 }

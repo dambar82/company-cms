@@ -35,8 +35,8 @@ class MDTController extends Controller
      */
     public function getServices(): AnonymousResourceCollection
     {
-        $firstServices = ServiceContent::where('is_first', 1)->get();
-        $otherServices = ServiceContent::where('is_first', 0)->get();
+        $firstServices = ServiceContent::where('is_first', 1)->where('hidden', 0)->get();
+        $otherServices = ServiceContent::where('is_first', 0)->where('hidden', 0)->get();
 
         return ServiceContentResource::collection($firstServices->merge($otherServices));
     }
@@ -71,9 +71,11 @@ class MDTController extends Controller
         $serviceId = Service::where('slug', $serviceSlug)->pluck('id');
         $firstServices = ServiceContent::whereIn('service_id', $serviceId)
             ->where('is_first', 1)
+            ->where('hidden', 0)
             ->get();
         $otherServices = ServiceContent::whereIn('service_id', $serviceId)
             ->where('is_first', 0)
+            ->where('hidden', 0)
             ->get();
 
         return ServiceContentResource::collection($firstServices->merge($otherServices));
@@ -121,7 +123,7 @@ class MDTController extends Controller
      *     )
      * )
      */
-    public function getContent(string $serviceSlug, string $categorySlug): AnonymousResourceCollection
+    public function getContent(string $serviceSlug, string $categorySlug)
     {
         $serviceId = Service::where('slug', $serviceSlug)->value('id');
         $categoryId = Category::where('slug', $categorySlug)->value('id');
@@ -129,10 +131,12 @@ class MDTController extends Controller
         $firstServices = ServiceContent::where('service_id', $serviceId)
             ->where('category_id', $categoryId)
             ->where('is_first', 1)
+            ->where('hidden', 0)
             ->get();
         $otherServices = ServiceContent::where('service_id', $serviceId)
             ->where('category_id', $categoryId)
             ->where('is_first', 1)
+            ->where('hidden', 0)
             ->get();
 
         return ServiceContentResource::collection($firstServices->merge($otherServices));
