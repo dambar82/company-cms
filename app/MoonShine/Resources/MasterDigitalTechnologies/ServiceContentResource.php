@@ -75,7 +75,7 @@ class ServiceContentResource extends ModelResource
     {
         return [
             BelongsTo::make('Поиск по услуге', 'service', resource: new ServiceResource()),
-            BelongsTo::make('Поиск по категории', 'category', resource: new CategoryResource())
+            BelongsTo::make('Поиск по категории', 'category', resource: new CategoryResource())->nullable()
         ];
     }
 
