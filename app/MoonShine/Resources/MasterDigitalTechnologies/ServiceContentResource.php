@@ -74,7 +74,8 @@ class ServiceContentResource extends ModelResource
     public function filters(): array
     {
         return [
-            BelongsTo::make('category', resource: new CategoryResource())
+            BelongsTo::make('Поиск по услуге', 'service', resource: new ServiceResource()),
+            BelongsTo::make('Поиск по категории', 'category', resource: new CategoryResource())
         ];
     }
 
