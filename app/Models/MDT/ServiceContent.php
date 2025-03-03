@@ -12,6 +12,7 @@ class ServiceContent extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'service_id',
         'category_id',
         'description',

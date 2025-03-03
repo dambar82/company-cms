@@ -9,8 +9,11 @@ use App\MoonShine\Pages\ServiceContent\ServiceContentDetailPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentFormPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentIndexPage;
 use Illuminate\Database\Eloquent\Model;
+use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Buttons\MassDeleteButton;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Enums\PageType;
+use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
 use MoonShine\Pages\Page;
@@ -66,5 +69,17 @@ class ServiceContentResource extends ModelResource
     public function export(): ?ExportHandler
     {
         return null;
+    }
+
+    public function filters(): array
+    {
+        return [
+            BelongsTo::make('category', resource: new CategoryResource())
+        ];
+    }
+
+    public function search(): array
+    {
+        return ['name'];
     }
 }

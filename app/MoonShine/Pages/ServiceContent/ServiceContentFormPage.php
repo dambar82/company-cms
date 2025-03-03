@@ -147,7 +147,7 @@ class ServiceContentFormPage extends FormPage
                                         Position::make(),
                                         Image::make('Фото', 'image')
                                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                                            ->dir('lead/images')
+                                            ->dir('mdt/images')
                                             ->removable()
                                             ->hideOnIndex(),
                                         Text::make('Название', 'name')
