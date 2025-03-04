@@ -26,7 +26,6 @@ class NewsIndexPage extends IndexPage
     {
         return [
             Text::make('Название', 'title'),
-            Image::make('Фотографии', 'images'),
             Date::make('Дата публикации', 'date'),
             Switcher::make('Новость активна', 'is_active')->updateOnPreview(),
             BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
