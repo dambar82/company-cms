@@ -43,7 +43,8 @@ class ServiceContentResource extends JsonResource
                             'image' => $image->image ? asset('storage/' . $image->image) : null,
                         ];
                     }),
-                    'is_first' => $this->is_first
+                    'is_first' => $this->is_first,
+                    'link' => $this->link
                 ]
         ];
     }

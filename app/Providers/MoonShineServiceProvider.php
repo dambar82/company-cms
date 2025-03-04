@@ -69,8 +69,8 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Контент', new ServiceContentResource())->icon('heroicons.outline.arrows-pointing-in'),
                 MenuItem::make('Заявки', new RequestResource())->icon('heroicons.outline.inbox-arrow-down')
             ])->icon('heroicons.inbox-stack'),
-            MenuDivider::make(),
-            MenuItem::make('Новости', new LeadResource())->icon('heroicons.outline.newspaper'),
+         //   MenuDivider::make(),
+        //  MenuItem::make('Новости', new LeadResource())->icon('heroicons.outline.newspaper'),
             MenuDivider::make(),
             MenuGroup::make('Викторины', [
             MenuItem::make('Викторины', new QuizResource())->icon('heroicons.outline.academic-cap'),

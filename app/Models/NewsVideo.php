@@ -12,6 +12,7 @@ class NewsVideo extends Model
     protected $fillable = [
         'news_id',
         'video',
-        'description'
+        'description',
+        'link'
     ];
 }

@@ -9,8 +9,6 @@ use App\MoonShine\Pages\ServiceContent\ServiceContentDetailPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentFormPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentIndexPage;
 use Illuminate\Database\Eloquent\Model;
-use MoonShine\ActionButtons\ActionButton;
-use MoonShine\Buttons\MassDeleteButton;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Enums\PageType;
 use MoonShine\Fields\Relationships\BelongsTo;
@@ -33,6 +31,8 @@ class ServiceContentResource extends ModelResource
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     protected ?PageType $redirectAfterSave = PageType::INDEX;
+
+    protected int $itemsPerPage = 10;
 
     /**
      * @return Page

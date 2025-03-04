@@ -16,15 +16,20 @@ use MoonShine\Decorations\Collapse;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Divider;
 use MoonShine\Decorations\Grid;
+use MoonShine\Decorations\Tab;
+use MoonShine\Decorations\Tabs;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
+use MoonShine\Fields\Number;
 use MoonShine\Fields\Relationships\BelongsToMany;
+use MoonShine\Fields\Slug;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
+use MoonShine\Fields\Textarea;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Fields\Url;
 use MoonShine\Handlers\ExportHandler;
@@ -53,29 +58,19 @@ class AminaNewsResource extends ModelResource
             Grid::make([
                 Column::make([
                     Block::make([
-                        Text::make('Название', 'title'),
-                        TinyMce::make('Текст новости', 'content')
+                        Text::make('Название', 'title')->reactive(),
+                        TextArea::make('Meta-описание', 'content')
                             ->hideOnIndex(),
-                        Image::make('Фотографии', 'images')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->dir('news/images')
-                            ->multiple()
-                            ->removable(),
-                        File::make('Видео', 'video')
-                            ->allowedExtensions(['mp4'])
-                            ->disableDownload()
-                            ->dir('news/video')
-                            ->hideOnIndex()
-                            ->removable()
+                        Slug::make('Slug')->from('title')
+                            ->live()
+                            ->locked()
+                            ->separator('_')
+                            ->hideOnIndex(),
                     ])
                 ])->columnSpan(8),
                 Column::make([
                     Block::make([
-
-                        Url::make('Добавить ссылку на видео','link_to_video')
-                            ->expansion('http')
-                            ->hideOnIndex(),
-                        Date::make('Дата публикации', 'date'),
+                        Date::make('Дата публикации', 'date')->required(),
                         Switcher::make('Новость активна', 'active')->updateOnPreview(),
                         BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
                             ->hideOnIndex()
@@ -94,7 +89,8 @@ class AminaNewsResource extends ModelResource
                         Json::make('Текст', 'contents')
                             ->asRelation(new NewsContentResource())
                             ->fields([
-                                TinyMce::make('', 'content')
+                                TinyMce::make('', 'content'),
+                                Number::make('Sort')
                             ])
                             ->removable()
                     ])
@@ -116,20 +112,33 @@ class AminaNewsResource extends ModelResource
                     ])
                 ]),
                 Divider::make(),
-                Collapse::make('Добавить видео', [
+                Collapse::make('Загрузить видео/Добавить ссылку', [
                     Block::make([
-                        Json::make('Видео', 'videos')
-                            ->asRelation(new NewsVideoResource())
-                            ->fields([
-                                File::make('', 'video')
-                                    ->allowedExtensions(['mp4'])
-                                    ->disableDownload()
-                                    ->dir('news/videos')
-                                    ->removable(),
-                                Text::make('', 'description')
-                                    ->placeholder('Добавьте описание')
+                        Tabs::make([
+                           Tab::make('Загрузить видео', [
+                               Json::make('', 'videos')
+                                   ->asRelation(new NewsVideoResource())
+                                   ->fields([
+                                       File::make('', 'video')
+                                           ->allowedExtensions(['mp4'])
+                                           ->disableDownload()
+                                           ->dir('news/videos')
+                                           ->removable(),
+                                       Text::make('', 'description')
+                                           ->placeholder('Добавьте описание')
+                                   ])
+                                   ->removable()
+                           ]),
+                            Tab::make('Добавить ссылку на видео', [
+                                Json::make('', 'videos')
+                                    ->asRelation(new NewsVideoResource())
+                                    ->fields([
+                                        Url::make('', 'link')->expansion('http')
+                                    ])
+                                    ->removable()
                             ])
-                            ->removable()
+                        ]),
+
                     ])
                 ])
             ]);

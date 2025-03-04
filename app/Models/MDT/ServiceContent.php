@@ -20,7 +20,8 @@ class ServiceContent extends Model
         'preview',
         'video',
         'is_first',
-        'hidden'
+        'hidden',
+        'link'
     ];
 
     public function service(): BelongsTo

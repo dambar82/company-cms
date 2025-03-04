@@ -22,6 +22,7 @@ use MoonShine\Fields\Select;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
+use MoonShine\Fields\Url;
 use MoonShine\Pages\Crud\FormPage;
 use MoonShine\Components\MoonShineComponent;
 use MoonShine\Fields\Field;
@@ -42,38 +43,27 @@ class ServiceContentFormPage extends FormPage
                 ]),
             ])
                 ->columnSpan(8),
+
+            Column::make([
+                Block::make([
+                    URL::make('Добавить ссылку', 'link')->expansion('http'),
+                ]),
+            ])
+                ->columnSpan(4),
         ];
 
         $secondFormElement = [
             Column::make([
                 Block::make([
-                    Image::make('Фото', 'image')
-                        ->dir('mdt/images')
-                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                        ->removable()
-                        ->required()
-                ])
-            ])
-                ->columnSpan(4),
-        ];
-
-        $thirdFormElement = [
-            Column::make([
-                Block::make([
-                    Image::make('Фото', 'image')
-                        ->dir('mdt/images')
-                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                        ->removable()
-                ])
-            ])
-                ->columnSpan(4),
-        ];
-
-        $fourthFormElement = [
-            Column::make([
-                Block::make([
                     TinyMce::make('Описание', 'description')
-                        ->hideOnIndex(),
+                        ->hideOnIndex()]),
+                Divider::make(),
+                Block::make([
+                    Image::make('Основное фото', 'image')
+                        ->dir('mdt/images')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable()
+                        ->required(),
                     File::make('Видео', 'video')
                         ->dir('mdt/video/videos')
                         ->allowedExtensions(['mp4'])
@@ -86,6 +76,34 @@ class ServiceContentFormPage extends FormPage
                 ]),
             ])
                 ->columnSpan(8),
+        ];
+
+        $thirdFormElement = [
+            Column::make([
+                Block::make([
+                    TinyMce::make('Описание', 'description')
+                        ->hideOnIndex()]),
+                Divider::make(),
+                Block::make([
+                    Image::make('Основное фото', 'image')
+                        ->dir('mdt/images')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable(),
+                    File::make('Видео', 'video')
+                        ->dir('mdt/video/videos')
+                        ->allowedExtensions(['mp4'])
+                        ->removable()
+                        ->disableDownload(),
+                    Image::make('Preview')
+                        ->dir('mdt/video/preview')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable()
+                ]),
+            ])
+                ->columnSpan(8),
+        ];
+
+        $fourthFormElement = [
             Column::make([
                 Block::make([
                     Select::make('Услуга', 'service_id')
@@ -125,7 +143,7 @@ class ServiceContentFormPage extends FormPage
         if (!$this->getResource()->getItem()) {
             return [
                 Grid::make(
-                    array_merge($firstFormElement, $secondFormElement, $fourthFormElement)
+                    array_merge($firstFormElement,  $secondFormElement, $fourthFormElement )
                 )
             ];
         }
