@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Pages\Lead;
+namespace App\MoonShine\Pages\News;
 
+use App\MoonShine\Resources\ProjectResource;
 use MoonShine\Exceptions\FieldException;
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Pages\Crud\IndexPage;
@@ -14,7 +16,7 @@ use MoonShine\Components\MoonShineComponent;
 use MoonShine\Fields\Field;
 use Throwable;
 
-class LeadIndexPage extends IndexPage
+class NewsIndexPage extends IndexPage
 {
     /**
      * @return list<MoonShineComponent|Field>
@@ -24,12 +26,11 @@ class LeadIndexPage extends IndexPage
     {
         return [
             Text::make('Название', 'title'),
-            Image::make('Фотографии', 'image')
-                ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                ->dir('lead/images')
-                ->removable(),
+            Image::make('Фотографии', 'images'),
             Date::make('Дата публикации', 'date'),
-            Switcher::make('Новость активна', 'is_active')->updateOnPreview()
+            Switcher::make('Новость активна', 'is_active')->updateOnPreview(),
+            BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
+                ->inLine()
         ];
     }
 
@@ -65,15 +66,4 @@ class LeadIndexPage extends IndexPage
             ...parent::bottomLayer()
         ];
     }
-
-//    protected function itemsComponent(iterable $items, Fields $fields): MoonShineRenderable
-//    {
-//        return CardsBuilder::make($items)
-//            ->fields($fields)
-//            ->title('title')
-//            ->cast($this->getResource()->getModelCast())
-//            ->buttons([
-//                ActionButton::make('Delete'),
-//            ]);
-//    }
 }

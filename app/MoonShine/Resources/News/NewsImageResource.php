@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources\Lead;
+namespace App\MoonShine\Resources\News;
 
-use App\Models\LeadVideo;
+use App\Models\LeadImage;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Decorations\Block;
 use MoonShine\Fields\Field;
@@ -12,13 +12,13 @@ use MoonShine\Fields\ID;
 use MoonShine\Resources\ModelResource;
 
 /**
- * @extends ModelResource<LeadVideo>
+ * @extends ModelResource<LeadImage>
  */
-class LeadVideoResource extends ModelResource
+class NewsImageResource extends ModelResource
 {
-    protected string $model = LeadVideo::class;
+    protected string $model = LeadImage::class;
 
-    protected string $title = 'LeadVideos';
+    protected string $title = 'LeadImages';
 
     /**
      * @return Field
@@ -33,7 +33,7 @@ class LeadVideoResource extends ModelResource
     }
 
     /**
-     * @param LeadVideo $item
+     * @param LeadImage $item
      *
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules

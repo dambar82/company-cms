@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources\Lead;
+namespace App\MoonShine\Resources\News;
 
 use App\Models\LeadContent;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +14,7 @@ use MoonShine\Resources\ModelResource;
 /**
  * @extends ModelResource<LeadContent>
  */
-class LeadContentResource extends ModelResource
+class NewsContentResource extends ModelResource
 {
     protected string $model = LeadContent::class;
 

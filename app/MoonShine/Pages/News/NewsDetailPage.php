@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Pages\Lead;
+namespace App\MoonShine\Pages\News;
 
-use App\MoonShine\Resources\Lead\LeadContentResource;
-use App\MoonShine\Resources\Lead\LeadImageResource;
-use App\MoonShine\Resources\Lead\LeadVideoResource;
+use App\MoonShine\Resources\News\NewsContentResource;
+use App\MoonShine\Resources\News\NewsImageResource;
+use App\MoonShine\Resources\News\NewsVideoResource;
 use MoonShine\Components\MoonShineComponent;
 use MoonShine\Fields\Date;
 use MoonShine\Fields\Field;
@@ -19,7 +19,7 @@ use MoonShine\Fields\TinyMce;
 use MoonShine\Pages\Crud\DetailPage;
 use Throwable;
 
-class LeadDetailPage extends DetailPage
+class NewsDetailPage extends DetailPage
 {
     /**
      * @return list<MoonShineComponent|Field>
@@ -37,12 +37,12 @@ class LeadDetailPage extends DetailPage
             Date::make('Дата публикации', 'date'),
             Switcher::make('Новость активна', 'is_active')->updateOnPreview(),
             Json::make('Текст', 'contents')
-                ->asRelation(new LeadContentResource())
+                ->asRelation(new NewsContentResource())
                 ->fields([
                     TinyMce::make('', 'content')
                 ]),
             Json::make('Фото', 'images')
-                ->asRelation(new LeadImageResource())
+                ->asRelation(new NewsImageResource())
                 ->fields([
                     Image::make('', 'image')
                         ->dir('lead/images'),
@@ -50,7 +50,7 @@ class LeadDetailPage extends DetailPage
                         ->placeholder('Добавьте описание')
                 ]),
             Json::make('Видео', 'videos')
-                ->asRelation(new LeadVideoResource())
+                ->asRelation(new NewsVideoResource())
                 ->fields([
                     File::make('', 'video')
                         ->dir('lead/videos'),

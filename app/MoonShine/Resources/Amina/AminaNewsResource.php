@@ -58,19 +58,28 @@ class AminaNewsResource extends ModelResource
             Grid::make([
                 Column::make([
                     Block::make([
-                        Text::make('Название', 'title')->reactive(),
-                        TextArea::make('Meta-описание', 'content')
+                        Text::make('Название', 'title'),
+                        TinyMce::make('Текст новости', 'content')
                             ->hideOnIndex(),
-                        Slug::make('Slug')->from('title')
-                            ->live()
-                            ->locked()
-                            ->separator('_')
-                            ->hideOnIndex(),
+                        Image::make('Фотографии', 'images')
+                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                            ->dir('news/images')
+                            ->multiple()
+                            ->removable(),
+                        File::make('Видео', 'video')
+                            ->allowedExtensions(['mp4'])
+                            ->disableDownload()
+                            ->dir('news/video')
+                            ->hideOnIndex()
+                            ->removable()
                     ])
                 ])->columnSpan(8),
                 Column::make([
                     Block::make([
-                        Date::make('Дата публикации', 'date')->required(),
+                        Url::make('Добавить ссылку на видео','link_to_video')
+                            ->expansion('http')
+                            ->hideOnIndex(),
+                        Date::make('Дата публикации', 'date'),
                         Switcher::make('Новость активна', 'active')->updateOnPreview(),
                         BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
                             ->hideOnIndex()
@@ -81,68 +90,7 @@ class AminaNewsResource extends ModelResource
             ]),
         ];
 
-        if($this->getItemID()) {
-            $formFields = array_merge($formFields, [
-                Divider::make(),
-                Collapse::make('Добавить блок с текстом', [
-                    Block::make([
-                        Json::make('Текст', 'contents')
-                            ->asRelation(new NewsContentResource())
-                            ->fields([
-                                TinyMce::make('', 'content'),
-                                Number::make('Sort')
-                            ])
-                            ->removable()
-                    ])
-                ]),
-                Divider::make(),
-                Collapse::make('Добавить фото', [
-                    Block::make([
-                        Json::make('Фото', 'image')
-                            ->asRelation(new NewsImageResource())
-                            ->fields([
-                                Image::make('', 'image')
-                                    ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                                    ->dir('news/images')
-                                    ->removable(),
-                                Text::make('', 'description')
-                                    ->placeholder('Добавьте описание')
-                            ])
-                            ->removable()
-                    ])
-                ]),
-                Divider::make(),
-                Collapse::make('Загрузить видео/Добавить ссылку', [
-                    Block::make([
-                        Tabs::make([
-                           Tab::make('Загрузить видео', [
-                               Json::make('', 'videos')
-                                   ->asRelation(new NewsVideoResource())
-                                   ->fields([
-                                       File::make('', 'video')
-                                           ->allowedExtensions(['mp4'])
-                                           ->disableDownload()
-                                           ->dir('news/videos')
-                                           ->removable(),
-                                       Text::make('', 'description')
-                                           ->placeholder('Добавьте описание')
-                                   ])
-                                   ->removable()
-                           ]),
-                            Tab::make('Добавить ссылку на видео', [
-                                Json::make('', 'videos')
-                                    ->asRelation(new NewsVideoResource())
-                                    ->fields([
-                                        Url::make('', 'link')->expansion('http')
-                                    ])
-                                    ->removable()
-                            ])
-                        ]),
 
-                    ])
-                ])
-            ]);
-        }
         return $formFields;
     }
 

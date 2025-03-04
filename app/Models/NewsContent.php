@@ -11,7 +11,10 @@ class NewsContent extends Model
 
     protected $fillable = [
         'news_id',
-        'content'
+        'content',
+        'image',
+        'video',
+        'link'
     ];
 
     public function news()

@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources\Lead;
+namespace App\MoonShine\Resources\News;
 
 use App\Models\Lead;
-use App\MoonShine\Pages\Lead\LeadDetailPage;
-use App\MoonShine\Pages\Lead\LeadFormPage;
-use App\MoonShine\Pages\Lead\LeadIndexPage;
+use App\Models\News;
+use App\MoonShine\Pages\News\NewsDetailPage;
+use App\MoonShine\Pages\News\NewsFormPage;
+use App\MoonShine\Pages\News\NewsIndexPage;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Enums\PageType;
@@ -19,9 +20,9 @@ use MoonShine\Resources\ModelResource;
 /**
  * @extends ModelResource<Lead>
  */
-class LeadResource extends ModelResource
+class NewsResource extends ModelResource
 {
-    protected string $model = Lead::class;
+    protected string $model = News::class;
 
     protected string $title = 'Новости';
 
@@ -37,13 +38,13 @@ class LeadResource extends ModelResource
     public function pages(): array
     {
         return [
-            LeadIndexPage::make($this->title()),
-            LeadFormPage::make(
+            NewsIndexPage::make($this->title()),
+            NewsFormPage::make(
                 $this->getItemID()
                     ? __('moonshine::ui.edit')
                     : __('moonshine::ui.add'),
             ),
-            LeadDetailPage::make(__('moonshine::ui.show')),
+            NewsDetailPage::make(__('moonshine::ui.show')),
         ];
     }
 
