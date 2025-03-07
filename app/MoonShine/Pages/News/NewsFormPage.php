@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\News;
 
+use App\Models\News;
+use App\MoonShine\Components\TextComponent;
+use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceResource;
+use App\MoonShine\Resources\News\NewsResource;
 use App\MoonShine\Resources\NewsContentResource;
 use App\MoonShine\Resources\NewsImageResource;
 use App\MoonShine\Resources\NewsVideoResource;
@@ -23,7 +27,6 @@ use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Json;
-use MoonShine\Fields\Number;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Slug;
 use MoonShine\Fields\Switcher;
@@ -37,6 +40,8 @@ use Throwable;
 
 class NewsFormPage extends FormPage
 {
+    public array $fields = [];
+
     /**
      * @return list<MoonShineComponent|Field>
      * @throws Throwable
@@ -70,6 +75,11 @@ class NewsFormPage extends FormPage
 
         if($this->getResource()->getItem()) {
             $formFields = array_merge($formFields, [
+
+                ActionButton::make('Добавить текст')
+                    ->method('addTextBlock'
+                    ),
+
                 Divider::make(),
                 Collapse::make('Добавить контент', [
                     Block::make([
@@ -96,12 +106,41 @@ class NewsFormPage extends FormPage
                                     Url::make('Ссылка на видео', 'link')->expansion('http')
                                 ]),
                             ])
-                            ->removable()->vertical()
+                            ->removable()
+                            ->vertical()->creatable(limit: 5, button: ActionButton::make('New', '#')->showInDropdown())
                     ])
                 ])
             ]);
         }
-        return $formFields;
+        $this->saveFields($formFields);
+
+        return $this->fields;
     }
 
+    /**
+     * @throws Throwable
+     */
+    public function saveFields($fields): void
+    {
+        $this->fields = $fields;
+    }
+
+    public function addTextBlock()
+    {
+        return [
+            Collapse::make('Добавить текст', [
+                Block::make([
+                    Json::make('', 'contents')
+                        ->asRelation(new NewsContentResource())
+                        ->fields([
+                            Collapse::make('Текст', [
+                                TinyMce::make('', 'content')
+                            ])
+                        ])
+                        ->removable()
+                        ->creatable(false)
+                ])
+            ])
+        ];
+    }
 }
