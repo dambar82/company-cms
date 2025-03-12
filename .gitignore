@@ -18,5 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 _ide_helper.php
-.deploy.sh
+deploy.sh
 .osp/

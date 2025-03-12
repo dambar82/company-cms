@@ -16,6 +16,7 @@ use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Relationships\BelongsToMany;
+use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
@@ -28,7 +29,7 @@ class AminaVideoGalleryResource extends ModelResource
 {
     protected string $model = VideoGallery::class;
 
-    protected string $title = 'Видеогалереи Амина';
+    protected string $title = 'Видео Амина';
 
     protected string $sortDirection = 'ASC';
 
@@ -64,6 +65,7 @@ class AminaVideoGalleryResource extends ModelResource
                             ->hideOnIndex()
                             ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 1))
                             ->required(),
+                        Switcher::make('Опубликовано', 'is_published')->updateOnPreview(),
                     ])
                 ])->columnSpan(4)
             ])
