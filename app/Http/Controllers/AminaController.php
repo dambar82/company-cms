@@ -184,7 +184,7 @@ class AminaController extends Controller
         return VideoGalleryResources::collection(
             VideoGallery::query()
             ->whereHas('projects', function ($query) {
-                $query->where('project_id', 1);
+                $query->where('project_id', 1)->where('is_published', 1);
             })->get()
         );
     }
@@ -218,7 +218,7 @@ class AminaController extends Controller
     {
         $videoGallery = VideoGallery::query()
             ->whereHas('projects', function ($query) {
-            $query->where('project_id', 1);
+            $query->where('project_id', 1)->where('is_published', 1);
         })->findOrFail($id);
 
         return new VideoGalleryResources($videoGallery);
