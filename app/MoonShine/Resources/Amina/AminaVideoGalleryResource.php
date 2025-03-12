@@ -62,7 +62,7 @@ class AminaVideoGalleryResource extends ModelResource
                                     ->disableDownload()
                                     ->removable()
                             ]),
-                            Tab::make('Добавить ссылку на видео', [
+                            Tab::make('Ссылка на видео', [
                                 Url::make('', 'link')
                                     ->expansion('http')
                                     ->hideOnIndex()
