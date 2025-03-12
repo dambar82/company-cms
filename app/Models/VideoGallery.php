@@ -49,6 +49,8 @@ class VideoGallery extends Model
         'title',
         'preview',
         'video',
+        'link',
+        'is_published'
     ];
 
     protected $guarded = array();

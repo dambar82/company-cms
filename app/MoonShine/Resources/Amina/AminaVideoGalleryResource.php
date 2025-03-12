@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use MoonShine\Decorations\Block;
 use MoonShine\Decorations\Column;
 use MoonShine\Decorations\Grid;
+use MoonShine\Decorations\Tab;
+use MoonShine\Decorations\Tabs;
 use MoonShine\Enums\ClickAction;
 use MoonShine\Fields\Field;
 use MoonShine\Fields\File;
@@ -18,6 +20,7 @@ use MoonShine\Fields\Image;
 use MoonShine\Fields\Relationships\BelongsToMany;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
+use MoonShine\Fields\Url;
 use MoonShine\Handlers\ExportHandler;
 use MoonShine\Handlers\ImportHandler;
 use MoonShine\Resources\ModelResource;
@@ -50,12 +53,22 @@ class AminaVideoGalleryResource extends ModelResource
                             ->dir('amina/preview')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
                             ->removable(),
-                        File::make('Видео', 'video')
-                            ->dir('amina/video')
-                            ->hideOnIndex()
-                            ->allowedExtensions(['mp4'])
-                            ->disableDownload()
-                            ->removable()
+                        Tabs::make([
+                            Tab::make('Видео', [
+                                File::make('', 'video')
+                                    ->dir('amina/video')
+                                    ->hideOnIndex()
+                                    ->allowedExtensions(['mp4'])
+                                    ->disableDownload()
+                                    ->removable()
+                            ]),
+                            Tab::make('Добавить ссылку на видео', [
+                                Url::make('', 'link')
+                                    ->expansion('http')
+                                    ->hideOnIndex()
+                            ])
+                        ])
+
                     ])
                 ])->columnSpan(8),
 
