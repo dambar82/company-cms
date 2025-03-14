@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\MasterDigitalTechnologies;
 
+use App\Models\MDT\Category;
+use App\Models\MDT\Service;
 use App\Models\MDT\ServiceContent;
 use App\MoonShine\Pages\ServiceContent\ServiceContentDetailPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentFormPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentIndexPage;
+use MoonShine\Contracts\Core\DependencyInjection\FieldsContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Page;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\Layout\Divider;
+use MoonShine\UI\Fields\Select;
 
 /**
  * @extends ModelResource<ServiceContent, ServiceContentIndexPage, ServiceContentFormPage, ServiceContentDetailPage>
@@ -58,8 +63,26 @@ class ServiceContentResource extends ModelResource
     public function filters(): array
     {
         return [
-            BelongsTo::make('Поиск по услуге', 'service', resource: ServiceResource::class),
-            BelongsTo::make('Поиск по категории', 'category', resource: CategoryResource::class)->nullable()
+             Select::make('Поиск по услуге', 'service_id')
+                 ->nullable()
+                 ->options(Service::query()->get()->pluck('name', 'id')->toArray())
+                 ->reactive(function(FieldsContract  $fields, ?string $value): FieldsContract  {
+                     $fields->findByColumn('category_id')
+                         ?->options(Category::where('service_id', $value)
+                             ->get()
+                             ->pluck('name', 'id')
+                             ->toArray()
+                         );
+
+                     return $fields;
+                 })
+                 ->required(),
+                        Divider::make(),
+                        Select::make('Поиск по категории', 'category_id')
+                            ->nullable()
+                            ->options(Category::query()->get()->pluck('name', 'id')->toArray())
+                            ->reactive()
+                            ->nullable(),
         ];
     }
 }

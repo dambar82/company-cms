@@ -17,6 +17,7 @@ use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Fields\Field;
 use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\Hidden;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
 
@@ -60,20 +61,18 @@ class AminaAudioResource extends ModelResource
                     Column::make([
                         Box::make([
                             ID::make(),
-                            Text::make('Название', 'title'),
+                            Text::make('Название', 'title')
+                                ->required()
+                        ])
+                    ])->columnSpan(8),
+                    Column::make([
+                        Box::make([
+                            Hidden::make('project')->setValue(1),
                             File::make('Аудио', 'path')
                                 ->allowedExtensions(['mp3'])
                                 ->disableDownload()
                                 ->dir('amina/audio')
                                 ->required($this->isCreateFormPage())
-                        ])
-                    ])->columnSpan(8),
-
-                    Column::make([
-                        Box::make([
-                            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                                ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 1))
-                                ->required()
                         ])
                     ])->columnSpan(4)
                 ])

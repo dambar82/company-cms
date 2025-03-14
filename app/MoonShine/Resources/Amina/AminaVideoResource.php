@@ -19,6 +19,7 @@ use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\Field;
 use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\Hidden;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Text;
@@ -64,8 +65,14 @@ class AminaVideoResource extends ModelResource
                     Column::make([
                         Box::make([
                             ID::make(),
-                            Text::make('Название', 'name'),
+                            Text::make('Название', 'name')
+                                ->required(),
                             Text::make('Описание', 'title'),
+                        ])
+                    ])->columnSpan(8),
+                    Column::make([
+                        Box::make([
+                            Hidden::make('project')->setValue(1),
                             Image::make( 'preview')
                                 ->dir('amina/preview')
                                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
@@ -76,20 +83,12 @@ class AminaVideoResource extends ModelResource
                                         ->dir('amina/video')
                                         ->allowedExtensions(['mp4'])
                                         ->disableDownload()
-                                        ->removable()
-                                        ->required($this->isCreateFormPage()),
+                                        ->removable(),
                                 ]),
                                 Tab::make('Ссылка на видео', [
                                     Url::make('','link')->blank()
                                 ])
                             ])
-                        ])
-                    ])->columnSpan(8),
-                    Column::make([
-                        Box::make([
-                            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                                ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 1))
-                                ->required(),
                         ])
                     ])->columnSpan(4)
                 ])

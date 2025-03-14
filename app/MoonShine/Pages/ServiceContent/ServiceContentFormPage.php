@@ -74,9 +74,7 @@ class ServiceContentFormPage extends FormPage
                     Box::make([
                         Switcher::make( 'Отобразить в первую очередь', 'Is_first')
                             ->updateOnPreview(),
-                    ]),
                     Divider::make(),
-                    Box::make([
                         Switcher::make( 'Скрыть', 'hidden')
                             ->updateOnPreview()
                     ])

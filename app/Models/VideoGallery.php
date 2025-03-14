@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  *
@@ -50,7 +51,8 @@ class VideoGallery extends Model
         'preview',
         'video',
         'link',
-        'is_published'
+        'is_published',
+        'project'
     ];
 
     protected $guarded = array();
@@ -68,5 +70,17 @@ class VideoGallery extends Model
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'video_gallery_project');
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (VideoGallery $videoGallery) {
+            DB::table('video_gallery_project')->insert([
+                'video_gallery_id' => $videoGallery->id,
+                'project_id' => $videoGallery->project,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        });
     }
 }

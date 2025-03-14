@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  *
@@ -51,7 +52,8 @@ class News extends Model
         'video',
         'link_to_video',
         'date',
-        'active'
+        'active',
+        'project'
     ];
 
     protected $casts = [
@@ -71,5 +73,19 @@ class News extends Model
     public function contents(): HasMany
     {
         return $this->hasMany(NewsContent::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (News $news) {
+            if ($news->project != null) {
+                DB::table('news_project')->insert([
+                    'news_id' => $news->id,
+                    'project_id' => $news->project,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        });
     }
 }

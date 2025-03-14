@@ -7,7 +7,6 @@ namespace App\MoonShine\Resources\Abubakirov;
 use App\Models\VideoGallery;
 use App\MoonShine\Resources\ProjectResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
 use MoonShine\Laravel\Resources\ModelResource;
@@ -17,11 +16,10 @@ use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Divider;
 use MoonShine\UI\Components\Layout\Grid;
-use MoonShine\UI\Fields\Field;
 use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\Hidden;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
-use MoonShine\UI\Fields\Json;
 use MoonShine\UI\Fields\Text;
 
 /**
@@ -58,28 +56,31 @@ class AbubakirovVideoGalleryResource extends ModelResource
      */
     protected function formFields(): iterable
     {
-        return [
+
+        $fields = [
             Box::make([
                 ID::make(),
                 Grid::make([
                     Column::make([
                         Box::make([
                             Text::make('Название', 'name'),
-                            Text::make('Описание', 'title'),
+                            Text::make('Описание', 'title')
+                        ])
+                    ])->columnSpan(8),
+                    Column::make([
+                        Box::make([
                             Image::make( 'preview')
                                 ->dir('abubakirov/preview')
                                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
                         ])
-                    ])->columnSpan(8),
+                    ])->columnSpan(4),
+                    Hidden::make('project')->setValue(2)
+                ])
+            ])
+        ];
 
-                    Column::make([
-                        Box::make([
-                            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                                ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 2))
-                                ->required(),
-                        ])
-                    ])->columnSpan(4)
-                ]),
+        if($this->isUpdateFormPage()) {
+            $fields = array_merge($fields, [
                 Divider::make(),
                 Box::make([
                     RelationRepeater::make(
@@ -98,12 +99,14 @@ class AbubakirovVideoGalleryResource extends ModelResource
                         ->creatable()
                         ->removable()
                 ])
-            ])
-        ];
+            ]);
+        }
+
+        return $fields;
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function detailFields(): iterable
     {

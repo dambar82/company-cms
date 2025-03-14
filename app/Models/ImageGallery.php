@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
@@ -46,6 +48,7 @@ class ImageGallery extends Model
         'name',
         'title',
         'caption',
+        'project'
     ];
 
     public function images(): HasMany
@@ -61,5 +64,17 @@ class ImageGallery extends Model
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'image_gallery_project');
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (ImageGallery $imageGallery) {
+            DB::table('image_gallery_project')->insert([
+                'image_gallery_id' => $imageGallery->id,
+                'project_id' => $imageGallery->project,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        });
     }
 }

@@ -15,9 +15,12 @@ use MoonShine\Support\Enums\SortDirection;
 use MoonShine\TinyMce\Fields\TinyMce;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Divider;
 use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Components\Layout\LineBreak;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
+use MoonShine\UI\Fields\Hidden;
 use MoonShine\UI\Fields\Url;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\Field;
@@ -68,18 +71,27 @@ class AminaNewsResource extends ModelResource
     {
         return [
             Box::make([
-
                 Grid::make([
                     Column::make([
                         Box::make([
                             ID::make(),
                             Text::make('Название', 'title'),
                             TinyMce::make('Текст новости', 'content'),
+                            Hidden::make('project')->setValue(1)
+                        ])
+                    ])->columnSpan(8),
+                    Column::make([
+                        Box::make([
+                            Date::make('Дата публикации', 'date')->required(),
+                            Divider::make(),
+                            Switcher::make('Новость активна', 'active')->updateOnPreview(),
+                            Divider::make(),
                             Image::make('Фотографии', 'images')
                                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
                                 ->dir('news/images')
                                 ->multiple()
                                 ->removable(),
+                            Divider::make(),
                             Tabs::make([
                                 Tab::make('Видео', [
                                     File::make('', 'video')
@@ -93,17 +105,8 @@ class AminaNewsResource extends ModelResource
                                 ])
                             ])
                         ])
-                    ])->columnSpan(8),
-                    Column::make([
-                        Box::make([
-                            Date::make('Дата публикации', 'date')->required(),
-                            Switcher::make('Новость активна', 'active')->updateOnPreview(),
-                            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                                ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 1))
-                                ->required(),
-                        ])
                     ])->columnSpan(4)
-                ]),
+                ])
             ])
         ];
     }

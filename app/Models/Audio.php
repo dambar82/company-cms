@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  *
@@ -40,7 +41,8 @@ class Audio extends Model
 
     protected $fillable = [
         'title',
-        'path'
+        'path',
+        'project'
     ];
 
     public function project(): HasOne
@@ -51,5 +53,19 @@ class Audio extends Model
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'audio_project');
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (Audio $audio) {
+            if ($audio->project != null) {
+                DB::table('audio_project')->insert([
+                    'audio_id' => $audio->id,
+                    'project_id' => $audio->project,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        });
     }
 }
