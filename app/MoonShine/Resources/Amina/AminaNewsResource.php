@@ -75,7 +75,8 @@ class AminaNewsResource extends ModelResource
                     Column::make([
                         Box::make([
                             ID::make(),
-                            Text::make('Название', 'title'),
+                            Text::make('Название', 'title')
+                                ->required(),
                             TinyMce::make('Текст новости', 'content'),
                             Hidden::make('project')->setValue(1)
                         ])

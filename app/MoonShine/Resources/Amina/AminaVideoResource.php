@@ -67,7 +67,8 @@ class AminaVideoResource extends ModelResource
                             ID::make(),
                             Text::make('Название', 'name')
                                 ->required(),
-                            Text::make('Описание', 'title'),
+                            Text::make('Описание', 'title')
+                                ->required(),
                         ])
                     ])->columnSpan(8),
                     Column::make([
