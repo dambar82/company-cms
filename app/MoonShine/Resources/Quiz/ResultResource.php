@@ -6,17 +6,16 @@ namespace App\MoonShine\Resources\Quiz;
 
 use App\Models\Quiz;
 use App\Models\Result;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\Select;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Select;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<Result>
@@ -27,31 +26,66 @@ class ResultResource extends ModelResource
 
     protected string $title = 'Результаты';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
     /**
-     * @return Field
+     * @return iterable
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        Select::make('Викторина', 'quiz_id')
-                            ->options(
-                                Quiz::pluck('name', 'id')->toArray()
-                            )
+            ID::make()->sortable(),
+            Select::make('Викторина', 'quiz_id')
+                ->options(
+                    Quiz::pluck('name', 'id')->toArray()
+                ),
+            Text::make('Рузультат', 'result')
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            Select::make('Викторина', 'quiz_id')
+                                ->options(
+                                    Quiz::pluck('name', 'id')->toArray()
+                                )
                         ])
-                ])->columnSpan(6),
-                Column::make([
-                    Block::make([
-                        Text::make('Рузультат', 'result')
+                    ])->columnSpan(6),
+                    Column::make([
+                        Box::make([
+                            Text::make('Рузультат', 'result')
                         ])
-                ])->columnSpan(6),
+                    ])->columnSpan(6),
+                ])
             ])
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Select::make('Викторина', 'quiz_id')
+                ->options(
+                    Quiz::pluck('name', 'id')->toArray()
+                ),
+            Text::make('Рузультат', 'result')
         ];
     }
 
@@ -61,18 +95,8 @@ class ResultResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

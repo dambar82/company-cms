@@ -72,14 +72,4 @@ class News extends Model
     {
         return $this->hasMany(NewsContent::class);
     }
-
-    public  function image(): HasMany
-    {
-        return $this->hasMany(NewsImage::class);
-    }
-
-    public function videos(): HasMany
-    {
-        return $this->hasMany(NewsVideo::class);
-    }
 }

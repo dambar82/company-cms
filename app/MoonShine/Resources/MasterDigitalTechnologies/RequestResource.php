@@ -5,20 +5,17 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\MasterDigitalTechnologies;
 
 use App\Models\MDT\Request;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\ActionButtons\ActionButton;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Exceptions\FieldException;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Text;
-use MoonShine\Fields\Textarea;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Laravel\Enums\Action;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
 
 /**
  * @extends ModelResource<Request>
@@ -29,63 +26,80 @@ class RequestResource extends ModelResource
 
     protected string $title = 'Заявки';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
-    protected ?ClickAction $clickAction = ClickAction::EDIT;
+    protected ?ClickAction $clickAction = ClickAction::DETAIL;
 
     /**
-     * @return Field
-     * @throws FieldException
+     * @return iterable
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        ID::make()->sortable()->hideOnIndex(),
-                        Text::make('Имя', 'name')->readonly(),
-                        Text::make('Фамилия', 'surname')->readonly(),
-                        Text::make('Телефон', 'phone')->readonly()->copy(),
-                        Text::make('Почта', 'email')->readonly()->copy(),
+            ID::make()->sortable(),
+            Text::make('Имя', 'name')->readonly(),
+            Text::make('Фамилия', 'surname')->readonly(),
+            Text::make('Компания', 'company')->readonly(),
+            Text::make('Услуга', 'service')->readonly()
+        ];
+    }
 
-                    ])
-                ])->columnSpan(6),
-                Column::make([
-                    Block::make([
-                        Text::make('Компания', 'company')->readonly(),
-                        Text::make('Примерный бюджет', 'budget')->readonly(),
-                        Text::make('Услуга', 'service')->readonly(),
-                        Textarea::make('Описание', 'description')->hideOnIndex()->readonly(),
-                    ])
-                ])->columnSpan(6)
+    /**
+     * @return iterable
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            ID::make()->sortable(),
+                            Text::make('Имя', 'name')->readonly(),
+                            Text::make('Фамилия', 'surname')->readonly(),
+                            Text::make('Телефон', 'phone')->readonly()->copy(),
+                            Text::make('Почта', 'email')->readonly()->copy(),
+
+                        ])
+                    ])->columnSpan(6),
+                    Column::make([
+                        Box::make([
+                            Text::make('Компания', 'company')->readonly(),
+                            Text::make('Примерный бюджет', 'budget')->readonly(),
+                            Text::make('Услуга', 'service')->readonly(),
+                            Textarea::make('Описание', 'description')->readonly(),
+                        ])
+                    ])->columnSpan(6)
+                ])
             ])
         ];
     }
 
     /**
-     * @param Request $item
-     *
-     * @return array<string, string[]|string>
-     * @see https://laravel.com/docs/validation#available-validation-rules
+     * @return iterable
      */
-    public function rules(Model $item): array
+    protected function detailFields(): iterable
     {
-        return [];
+        return [
+            ID::make(),
+            Text::make('Имя', 'name')->readonly(),
+            Text::make('Фамилия', 'surname')->readonly(),
+            Text::make('Телефон', 'phone')->readonly()->copy(),
+            Text::make('Почта', 'email')->readonly()->copy(),
+            Text::make('Компания', 'company')->readonly(),
+            Text::make('Примерный бюджет', 'budget')->readonly(),
+            Text::make('Услуга', 'service')->readonly(),
+            Textarea::make('Описание', 'description')->readonly(),
+        ];
     }
 
-    public function import(): ?ImportHandler
+    protected function activeActions(): ListOf
     {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
-    }
-
-    public function getActiveActions(): array
-    {
-        return ['view', 'update'];
+        return parent::activeActions()
+            ->except(Action::UPDATE)
+            ->except(Action::CREATE)
+            ->except(Action::DELETE)
+            ->except(Action::MASS_DELETE);
     }
 }

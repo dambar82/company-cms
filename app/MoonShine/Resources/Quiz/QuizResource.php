@@ -6,18 +6,18 @@ namespace App\MoonShine\Resources\Quiz;
 
 use App\Models\Quiz;
 use App\MoonShine\Resources\ProjectResource;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Relationships\BelongsToMany;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
+use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<Quiz>
@@ -30,33 +30,73 @@ class QuizResource extends ModelResource
 
     public string $column = 'name';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
     /**
-     * @return Field
+     * @return iterable
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        Text::make('Название', 'name'),
-                        Image::make('Картинка', 'image')
-                            ->dir('quiz')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                    ])
-                ])->columnSpan(8),
-                Column::make([
-                    Block::make([
-                        BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
-                            ->required()->inLine()
-                    ])
-                ])->columnSpan(4)
+            ID::make()->sortable(),
+            Text::make('Название', 'name'),
+            Image::make('Картинка', 'image'),
+            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                ->inLine('', true)
+        ];
+    }
 
+    /**
+     * @return iterable
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            Text::make('Название', 'name'),
+                            Image::make('Картинка', 'image')
+                                ->dir('quiz')
+                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ])
+                    ])->columnSpan(8),
+                    Column::make([
+                        Box::make([
+                            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                                ->required()
+                        ])
+                    ])->columnSpan(4)
+                ])
             ])
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('Название', 'name'),
+            Image::make('Картинка', 'image'),
+            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                ->inLine('', true),
+            RelationRepeater::make(
+                'Вопросы',
+                'questions',
+                resource: QuestionResource::class)
+                ->fields([
+                    Text::make('Вопрос', 'question'),
+                    Image::make('Картинка', 'image')
+                ])
         ];
     }
 
@@ -66,18 +106,8 @@ class QuizResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

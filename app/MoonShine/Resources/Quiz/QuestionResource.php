@@ -6,21 +6,20 @@ namespace App\MoonShine\Resources\Quiz;
 
 use App\Models\Question;
 use App\Models\Quiz;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Divider;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Checkbox;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Json;
-use MoonShine\Fields\Select;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Divider;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\Checkbox;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Select;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<Question>
@@ -33,43 +32,92 @@ class QuestionResource extends ModelResource
 
     public string $column = 'name';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
     /**
-     * @return Field
-     * @throws \Throwable
+     * @return iterable
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        Text::make('Вопрос', 'question'),
-                        Image::make('Картинка', 'image')
-                            ->dir('questions')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                    ])
-                ])->columnSpan(8),
-                Column::make([
-                    Select::make('Викторина', 'quiz_id')
-                        ->options(Quiz::pluck('name', 'id')->toArray())
-                ])->columnSpan(4)
-            ]),
-            Divider::make(),
-            Block::make([
-                Json::make('Ответы', 'answer')
-                    ->hideOnIndex()
-                    ->asRelation(new AnswerResource())
-                    ->fields([
-                        Text::make('Ответ', 'answer')->placeholder('Добавьте текст с ответом'),
-                        Checkbox::make('Ответ верный', 'correct_answer')
-                    ])
-                    ->creatable()
-                    ->removable()
+            ID::make()->sortable(),
+            Text::make('Вопрос', 'question'),
+            Image::make('Картинка', 'image'),
+            Select::make('Викторина', 'quiz_id')
+                ->options(Quiz::pluck('name', 'id')->toArray())
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function formFields(): iterable
+    {
+        $fields = [
+            Box::make([
+                ID::make(),
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            Text::make('Вопрос', 'question'),
+                            Image::make('Картинка', 'image')
+                                ->dir('questions')
+                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ])
+                    ])->columnSpan(8),
+                    Column::make([
+                        Select::make('Викторина', 'quiz_id')
+                            ->options(Quiz::pluck('name', 'id')->toArray())
+                    ])->columnSpan(4)
+                ])
             ])
+        ];
+
+        if ($this->getItem()) {
+            $fields = array_merge($fields, [
+                Divider::make(),
+                Box::make([
+                    RelationRepeater::make(
+                        'Ответы',
+                        'answer',
+                        resource: AnswerResource::class)
+                        ->fields([
+                            Text::make('Ответ', 'answer')->placeholder('Добавьте текст с ответом'),
+                            Checkbox::make('Ответ верный', 'correct_answer')
+                        ])
+                        ->creatable()
+                        ->removable()
+                ])
+
+            ]);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('Вопрос', 'question'),
+            Image::make('Картинка', 'image'),
+            Select::make('Викторина', 'quiz_id')
+                ->options(Quiz::pluck('name', 'id')->toArray()),
+            RelationRepeater::make(
+                'Ответы',
+                'answer',
+                resource: AnswerResource::class)
+                ->fields([
+                    Text::make('Ответ', 'answer')->placeholder('Добавьте текст с ответом'),
+                    Checkbox::make('Ответ верный', 'correct_answer')
+                ])
         ];
     }
 
@@ -79,18 +127,8 @@ class QuestionResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

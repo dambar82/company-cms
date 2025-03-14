@@ -8,17 +8,15 @@ use App\Models\MDT\ServiceContent;
 use App\MoonShine\Pages\ServiceContent\ServiceContentDetailPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentFormPage;
 use App\MoonShine\Pages\ServiceContent\ServiceContentIndexPage;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Enums\PageType;
-use MoonShine\Fields\Relationships\BelongsTo;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Pages\Page;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+use MoonShine\Laravel\Pages\Page;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
 
 /**
- * @extends ModelResource<ServiceContent>
+ * @extends ModelResource<ServiceContent, ServiceContentIndexPage, ServiceContentFormPage, ServiceContentDetailPage>
  */
 class ServiceContentResource extends ModelResource
 {
@@ -26,7 +24,7 @@ class ServiceContentResource extends ModelResource
 
     protected string $title = 'Контент';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
@@ -37,16 +35,12 @@ class ServiceContentResource extends ModelResource
     /**
      * @return Page
      */
-    public function pages(): array
+    protected function pages(): array
     {
         return [
-            ServiceContentIndexPage::make($this->title()),
-            ServiceContentFormPage::make(
-                $this->getItemID()
-                    ? __('moonshine::ui.edit')
-                    : __('moonshine::ui.add')
-            ),
-            ServiceContentDetailPage::make(__('moonshine::ui.show')),
+            ServiceContentIndexPage::class,
+            ServiceContentFormPage::class,
+            ServiceContentDetailPage::class,
         ];
     }
 
@@ -56,31 +50,16 @@ class ServiceContentResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 
     public function filters(): array
     {
         return [
-            BelongsTo::make('Поиск по услуге', 'service', resource: new ServiceResource()),
-            BelongsTo::make('Поиск по категории', 'category', resource: new CategoryResource())->nullable()
+            BelongsTo::make('Поиск по услуге', 'service', resource: ServiceResource::class),
+            BelongsTo::make('Поиск по категории', 'category', resource: CategoryResource::class)->nullable()
         ];
-    }
-
-    public function search(): array
-    {
-        return ['name'];
     }
 }

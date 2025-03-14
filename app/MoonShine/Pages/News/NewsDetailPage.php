@@ -5,63 +5,50 @@ declare(strict_types=1);
 namespace App\MoonShine\Pages\News;
 
 use App\MoonShine\Resources\News\NewsContentResource;
-use App\MoonShine\Resources\News\NewsImageResource;
-use App\MoonShine\Resources\News\NewsVideoResource;
-use MoonShine\Components\MoonShineComponent;
-use MoonShine\Fields\Date;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\File;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Json;
-use MoonShine\Fields\Switcher;
-use MoonShine\Fields\Text;
-use MoonShine\Fields\TinyMce;
-use MoonShine\Pages\Crud\DetailPage;
+use App\MoonShine\Resources\ProjectResource;
+use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
+use MoonShine\Laravel\Fields\Relationships\HasMany;
+use MoonShine\Laravel\Pages\Crud\DetailPage;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Fields\Date;
+use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Url;
 use Throwable;
+
 
 class NewsDetailPage extends DetailPage
 {
     /**
-     * @return list<MoonShineComponent|Field>
-     * @throws Throwable
+     * @return list<ComponentContract|FieldContract>
      */
-    public function fields(): array
+    protected function fields(): iterable
     {
         return [
+            ID::make(),
             Text::make('Название', 'title'),
             TinyMce::make('Текст новости', 'content'),
-            Image::make('Фотографии', 'image')
-                ->dir('lead/images'),
-            File::make('Видео', 'video')
-                ->dir('lead/videos'),
             Date::make('Дата публикации', 'date'),
             Switcher::make('Новость активна', 'is_active')->updateOnPreview(),
-            Json::make('Текст', 'contents')
-                ->asRelation(new NewsContentResource())
+            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                ->inLine('', true),
+            HasMany::make('Текст', 'contents', resource: NewsContentResource::class)
                 ->fields([
-                    TinyMce::make('', 'content')
+                    TinyMce::make('Текст', 'content'),
+                    Image::make('Фото', 'image'),
+                    File::make('Видео', 'video'),
+                    Url::make('Ссылка на видео','link')
                 ]),
-            Json::make('Фото', 'images')
-                ->asRelation(new NewsImageResource())
-                ->fields([
-                    Image::make('', 'image')
-                        ->dir('lead/images'),
-                    Text::make('', 'description')
-                        ->placeholder('Добавьте описание')
-                ]),
-            Json::make('Видео', 'videos')
-                ->asRelation(new NewsVideoResource())
-                ->fields([
-                    File::make('', 'video')
-                        ->dir('lead/videos'),
-                    Text::make('', 'description')
-                        ->placeholder('Добавьте описание')
-                ])
         ];
     }
 
     /**
-     * @return list<MoonShineComponent>
+     * @return list<ComponentContract>
      * @throws Throwable
      */
     protected function topLayer(): array
@@ -72,7 +59,7 @@ class NewsDetailPage extends DetailPage
     }
 
     /**
-     * @return list<MoonShineComponent>
+     * @return list<ComponentContract>
      * @throws Throwable
      */
     protected function mainLayer(): array
@@ -83,7 +70,7 @@ class NewsDetailPage extends DetailPage
     }
 
     /**
-     * @return list<MoonShineComponent>
+     * @return list<ComponentContract>
      * @throws Throwable
      */
     protected function bottomLayer(): array

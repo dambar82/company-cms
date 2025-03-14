@@ -7,14 +7,14 @@ namespace App\MoonShine\Resources;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Project;
 
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
-use MoonShine\Decorations\Block;
-use MoonShine\Fields\Field;
-use MoonShine\Components\MoonShineComponent;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\ID;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<Project>
@@ -27,19 +27,42 @@ class ProjectResource extends ModelResource
 
     public string $column = 'name';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return list<MoonShineComponent|Field>
+     * @return list<FieldContract>
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Block::make([
+            ID::make()->sortable(),
+            Text::make('Название', 'name')
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract|FieldContract>
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
                 Text::make('Название', 'name')
-            ]),
+            ])
+        ];
+    }
+
+    /**
+     * @return list<FieldContract>
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Название', 'name')
         ];
     }
 
@@ -49,18 +72,8 @@ class ProjectResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

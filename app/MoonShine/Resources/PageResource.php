@@ -4,27 +4,26 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Page;
-
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Divider;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Checkbox;
-use MoonShine\Fields\Date;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Text;
-use MoonShine\Fields\Textarea;
-use MoonShine\Fields\TinyMce;
-use MoonShine\Fields\Url;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
-use MoonShine\Decorations\Block;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Field;
-use MoonShine\Components\MoonShineComponent;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Divider;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\Checkbox;
+use MoonShine\UI\Fields\Date;
+use MoonShine\UI\Fields\ID;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
+use MoonShine\UI\Fields\Url;
 
 /**
  * @extends ModelResource<Page>
@@ -35,53 +34,92 @@ class PageResource extends ModelResource
 
     protected string $title = 'Страницы';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
     /**
-     * @return list<MoonShineComponent|Field>
+     * @return list<FieldContract>
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        ID::make()->sortable()->hideOnIndex(),
-                        Text::make('Название', 'title'),
-                        Textarea::make('Короткое описание', 'short_description')->hideOnIndex(),
-                        TinyMce::make('Полное описание', 'full_content')->hideOnIndex(),
-                        Text::make('meta_title')->hideOnIndex(),
-                        Textarea::make('meta_description')->hideOnIndex(),
-                        Url::make('url')->expansion('http')->hideOnIndex()
-                    ])
-                ])->columnSpan(8),
-                Column::make([
-                    Block::make([
-                        Checkbox::make('Видимость', 'is_visible')->hideOnIndex(),
-                        Checkbox::make('Allow Comments', 'can_comment')->hideOnIndex(),
-                        Checkbox::make('Allow Likes', 'can_like')->hideOnIndex()
-                    ]),
-                    Divider::make(),
-                    Block::make([
-                        Image::make('Картинка', 'caption')
-                            ->dir('pages/captions')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->removable(),
-                        Image::make('Фотографии', 'images')
-                            ->dir('pages/images')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->removable()
-                            ->multiple()
-                            ->hideOnIndex()
-                    ]),
-                    Divider::make(),
-                    Block::make([
-                        Date::make('Date')
-                    ])
-                ])->columnSpan(4),
+            ID::make()->sortable(),
+            Text::make('Название', 'title'),
+            Switcher::make('Видимость', 'is_visible')->updateOnPreview(),
+            Image::make('Картинка', 'caption'),
+            Date::make('Date')
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract|FieldContract>
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            Text::make('Название', 'title'),
+                            Textarea::make('Короткое описание', 'short_description'),
+                            TinyMce::make('Полное описание', 'full_content'),
+                            Text::make('meta_title'),
+                            Textarea::make('meta_description'),
+                            Url::make('Ссылка', 'url')
+                        ])
+                    ])->columnSpan(8),
+                    Column::make([
+                        Box::make([
+                            Checkbox::make('Видимость', 'is_visible'),
+                            Checkbox::make('Разрешить комментарии', 'can_comment'),
+                            Checkbox::make('Разрешить лайки', 'can_like')
+                        ]),
+                        Divider::make(),
+                        Box::make([
+                            Image::make('Картинка', 'caption')
+                                ->dir('pages/captions')
+                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                                ->removable(),
+                            Image::make('Фотографии', 'images')
+                                ->dir('pages/images')
+                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                                ->removable()
+                                ->multiple()
+                        ]),
+                        Divider::make(),
+                        Box::make([
+                            Date::make('Date')
+                        ])
+                    ])->columnSpan(4),
+                ])
             ])
+        ];
+    }
+
+    /**
+     * @return list<FieldContract>
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Название', 'title'),
+            Textarea::make('Короткое описание', 'short_description'),
+            TinyMce::make('Полное описание', 'full_content'),
+            Text::make('meta_title'),
+            Textarea::make('meta_description'),
+            Url::make('Ссылка', 'url'),
+            Switcher::make('Видимость', 'is_visible')->updateOnPreview(),
+            Switcher::make('Разрешить комментарии', 'can_comment')->updateOnPreview(),
+            Switcher::make('Разрешить лайки', 'can_like')->updateOnPreview(),
+            Image::make('Картинка', 'caption'),
+            Image::make('Фотографии', 'images')->multiple(),
+            Date::make('Date')
         ];
     }
 
@@ -91,18 +129,8 @@ class PageResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

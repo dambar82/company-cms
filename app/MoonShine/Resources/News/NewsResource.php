@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\News;
 
-use App\Models\Lead;
 use App\Models\News;
 use App\MoonShine\Pages\News\NewsDetailPage;
 use App\MoonShine\Pages\News\NewsFormPage;
 use App\MoonShine\Pages\News\NewsIndexPage;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Enums\PageType;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Pages\Page;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
 
 /**
- * @extends ModelResource<Lead>
+ * @extends ModelResource<News, NewsIndexPage, NewsFormPage, NewsDetailPage>
  */
 class NewsResource extends ModelResource
 {
@@ -26,46 +22,32 @@ class NewsResource extends ModelResource
 
     protected string $title = 'Новости';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     protected ?PageType $redirectAfterSave = PageType::INDEX;
 
     /**
-     * @return Page
+     * @return array
      */
-    public function pages(): array
+    protected function pages(): array
     {
         return [
-            NewsIndexPage::make($this->title()),
-            NewsFormPage::make(
-                $this->getItemID()
-                    ? __('moonshine::ui.edit')
-                    : __('moonshine::ui.add'),
-            ),
-            NewsDetailPage::make(__('moonshine::ui.show')),
+            NewsIndexPage::class,
+            NewsFormPage::class,
+            NewsDetailPage::class,
         ];
     }
 
     /**
-     * @param Lead $item
+     * @param News $item
      *
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

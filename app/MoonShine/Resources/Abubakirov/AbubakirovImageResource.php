@@ -5,19 +5,10 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\Abubakirov;
 
 use App\Models\Image;
-use App\Models\ImageGallery;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\Image as Img;
-use MoonShine\Fields\Select;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\ID;
 
 /**
  * @extends ModelResource<Image>
@@ -26,36 +17,37 @@ class AbubakirovImageResource extends ModelResource
 {
     protected string $model = Image::class;
 
-    protected string $title = 'Фотографии Абубакиров';
-
-    protected string $sortDirection = 'ASC';
-
-    protected ?ClickAction $clickAction = ClickAction::EDIT;
+    protected string $title = 'AbubakirovImages';
 
     /**
-     * @return Field
+     * @return FieldContract
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        Img::make('Изображение', 'image')
-                            ->dir('abubakirov/img')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg']),
-                        Text::make('Описание', 'description'),
-                    ])
-                ])->columnSpan(8),
+            ID::make()->sortable(),
+        ];
+    }
 
-                Column::make([
-                    Block::make([
-                        Select::make('Фотогалерея', 'image_gallery_id')
-                            ->options(ImageGallery::pluck('name', 'id')->toArray())
-                            ->required()
-                    ])
-                ])->columnSpan(4)
+    /**
+     * @return FieldContract
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
             ])
+        ];
+    }
+
+    /**
+     * @return FieldContract
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
         ];
     }
 
@@ -65,18 +57,8 @@ class AbubakirovImageResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

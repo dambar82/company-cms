@@ -5,19 +5,9 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\MasterDigitalTechnologies;
 
 use App\Models\MDT\Category;
-use App\Models\MDT\Service;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Select;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\ID;
 
 /**
  * @extends ModelResource<Category>
@@ -26,40 +16,39 @@ class CategoryResource extends ModelResource
 {
     protected string $model = Category::class;
 
-    protected string $title = 'Категории услуг';
-
-    protected string $sortDirection = 'ASC';
-
-    protected ?ClickAction $clickAction = ClickAction::EDIT;
+    protected string $title = 'Categories';
 
     protected string $column = 'name';
 
     /**
-     * @return Field
+     * @return iterable
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        ID::make()->sortable()->hideOnIndex(),
-                        Text::make('Название', 'name')->required(),
-                        Text::make('Slug')->hideOnIndex()->required()
-                    ]),
-                ])
-                ->columnSpan(8),
-                Column::make([
-                    Block::make([
-                        Select::make('Услуга', 'service_id')
-                        ->options(
-                            Service::pluck('name', 'id')->toArray()
-                        )
-                        ->required()
-                    ])
-                ])
-                ->columnSpan(4)
+            ID::make()->sortable(),
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
             ])
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
         ];
     }
 
@@ -69,18 +58,8 @@ class CategoryResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

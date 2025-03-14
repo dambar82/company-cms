@@ -5,36 +5,34 @@ declare(strict_types=1);
 namespace App\MoonShine\Pages\News;
 
 use App\MoonShine\Resources\ProjectResource;
-use MoonShine\Exceptions\FieldException;
-use MoonShine\Fields\Date;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Relationships\BelongsToMany;
-use MoonShine\Fields\Switcher;
-use MoonShine\Fields\Text;
-use MoonShine\Pages\Crud\IndexPage;
-use MoonShine\Components\MoonShineComponent;
-use MoonShine\Fields\Field;
+use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
+use MoonShine\Laravel\Pages\Crud\IndexPage;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\UI\Fields\Date;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
 use Throwable;
+
 
 class NewsIndexPage extends IndexPage
 {
     /**
-     * @return list<MoonShineComponent|Field>
-     * @throws FieldException
+     * @return list<ComponentContract|FieldContract>
      */
-    public function fields(): array
+    protected function fields(): iterable
     {
         return [
             Text::make('Название', 'title'),
             Date::make('Дата публикации', 'date'),
-            Switcher::make('Новость активна', 'is_active')->updateOnPreview(),
-            BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
-                ->inLine()
+            Switcher::make('Новость активна', 'active')->updateOnPreview(),
+            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                ->inLine('', true)
         ];
     }
 
     /**
-     * @return list<MoonShineComponent>
+     * @return list<ComponentContract>
      * @throws Throwable
      */
     protected function topLayer(): array
@@ -45,7 +43,7 @@ class NewsIndexPage extends IndexPage
     }
 
     /**
-     * @return list<MoonShineComponent>
+     * @return list<ComponentContract>
      * @throws Throwable
      */
     protected function mainLayer(): array
@@ -56,7 +54,7 @@ class NewsIndexPage extends IndexPage
     }
 
     /**
-     * @return list<MoonShineComponent>
+     * @return list<ComponentContract>
      * @throws Throwable
      */
     protected function bottomLayer(): array

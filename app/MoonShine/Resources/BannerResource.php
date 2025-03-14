@@ -6,19 +6,21 @@ namespace App\MoonShine\Resources;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Banner;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\TinyMce;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
-use MoonShine\Decorations\Block;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Text;
-use MoonShine\Fields\Field;
-use MoonShine\Components\MoonShineComponent;
+
+use MoonShine\Laravel\Components\Fragment;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\ID;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<Banner>
@@ -29,29 +31,58 @@ class BannerResource extends ModelResource
 
     protected string $title = 'Баннеры';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
     /**
-     * @return list<MoonShineComponent|Field>
+     * @return list<FieldContract>
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        ID::make()->sortable()->hideOnIndex(),
-                        Text::make('Заголовок', 'title'),
-                        TinyMce::make('Текст', 'content')->hideOnIndex(),
-                        Image::make('Картинка', 'image')
-                            ->dir('banners')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                            ->removable()
+            ID::make()->sortable(),
+            Text::make('Заголовок', 'title'),
+            Image::make('Картинка', 'image')
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract|FieldContract>
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            Text::make('Заголовок', 'title'),
+                            TinyMce::make('Текст', 'content'),
+                            Image::make('Картинка', 'image')
+                                ->dir('banners')
+                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                                ->removable()
+                        ])
                     ])
                 ])
             ])
+        ];
+    }
+
+    /**
+     * @return list<FieldContract>
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Заголовок', 'title'),
+            TinyMce::make('Текст', 'content'),
+            Image::make('Картинка', 'image')
         ];
     }
 
@@ -61,18 +92,8 @@ class BannerResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

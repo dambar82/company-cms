@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Post;
-
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Divider;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\File;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Text;
-use MoonShine\Fields\TinyMce;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
-use MoonShine\Decorations\Block;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Field;
-use MoonShine\Components\MoonShineComponent;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Divider;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\ID;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<Post>
@@ -30,32 +28,47 @@ class PostResource extends ModelResource
 {
     protected string $model = Post::class;
 
-    protected string $title = 'Posts';
+    protected string $title = 'Посты';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
     /**
-     * @return list<MoonShineComponent|Field>
+     * @return list<FieldContract>
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        ID::make()->sortable()->hideOnIndex(),
-                        Text::make('Заголовок', 'title'),
-                        TinyMce::make('Текст', 'text')->hideOnIndex(),
+            ID::make()->sortable(),
+            Text::make('Заголовок', 'title'), Text::make('Заголовок', 'title'),
+            Image::make('Изображения', 'images')
+                ->multiple()
+        ];
+    }
 
-                    ])
-                ])
-            ]),
-            Divider::make(),
-            Grid::make([
+    /**
+     * @return list<ComponentContract|FieldContract>
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                Grid::make([
                     Column::make([
-                        Block::make([
+                        Box::make([
+                            Text::make('Заголовок', 'title'),
+                            TinyMce::make('Текст', 'text'),
+                        ])
+                    ])
+                ]),
+                Divider::make(),
+                Grid::make([
+                    Column::make([
+                        Box::make([
                             Image::make('Изображения', 'images')
                                 ->dir('posts/images')
                                 ->multiple()
@@ -63,36 +76,49 @@ class PostResource extends ModelResource
                                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
                         ]),
                         Divider::make(),
-                        Block::make([
+                        Box::make([
                             File::make('PDF-документы', 'documents')
                                 ->dir('posts/documents')
                                 ->multiple()
                                 ->allowedExtensions(['pdf'])
-                                ->hideOnIndex()
                         ])
                     ])->columnSpan(6),
-
                     Column::make([
-                        Block::make([
+                        Box::make([
                             File::make('Аудио', 'audios')
                                 ->dir('posts/audios')
                                 ->multiple()
                                 ->allowedExtensions(['mp3'])
-                                ->hideOnIndex()
                         ]),
                         Divider::make(),
-                        Block::make([
+                        Box::make([
                             File::make('Видео', 'videos')
                                 ->dir('posts/videos')
                                 ->multiple()
                                 ->allowedExtensions(['mp4'])
-                                ->hideOnIndex()
                         ])
                     ])->columnSpan(6)
-])
+                ])
+            ])
+        ];
+    }
 
-
-
+    /**
+     * @return list<FieldContract>
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Заголовок', 'title'), Text::make('Заголовок', 'title'),
+            Image::make('Изображения', 'images')
+                ->multiple(),
+            File::make('PDF-документы', 'documents')
+                ->multiple(),
+            File::make('Аудио', 'audios')
+                ->multiple(),
+            File::make('Видео', 'videos')
+                ->multiple()
         ];
     }
 
@@ -102,18 +128,8 @@ class PostResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

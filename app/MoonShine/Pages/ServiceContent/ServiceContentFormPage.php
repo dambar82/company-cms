@@ -7,178 +7,177 @@ namespace App\MoonShine\Pages\ServiceContent;
 use App\Models\MDT\Category;
 use App\Models\MDT\Service;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentImageResource;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Collapse;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Divider;
-use MoonShine\Decorations\Grid;
-use MoonShine\Fields\Fields;
-use MoonShine\Fields\File;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Json;
-use MoonShine\Fields\Position;
-use MoonShine\Fields\Select;
-use MoonShine\Fields\Switcher;
-use MoonShine\Fields\Text;
-use MoonShine\Fields\TinyMce;
-use MoonShine\Fields\Url;
-use MoonShine\Pages\Crud\FormPage;
-use MoonShine\Components\MoonShineComponent;
-use MoonShine\Fields\Field;
+use MoonShine\Contracts\Core\DependencyInjection\FieldsContract;
+use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
+use MoonShine\Laravel\Pages\Crud\FormPage;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\Collapse;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Divider;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Components\Tabs;
+use MoonShine\UI\Components\Tabs\Tab;
+use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Position;
+use MoonShine\UI\Fields\Select;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Url;
+use Throwable;
+
 
 class ServiceContentFormPage extends FormPage
 {
     /**
-     * @return list<MoonShineComponent|Field>
-     * @throws \Throwable
+     * @return list<ComponentContract|FieldContract>
      */
-    public function fields(): array
+    protected function fields(): iterable
     {
-        $firstFormElement = [
-            ID::make()->sortable()->hideOnIndex(),
-            Column::make([
-                Block::make([
-                    Text::make('Название', 'name')->required(),
-                ]),
-            ])
-                ->columnSpan(8),
+        $fields = [
+            Grid::make([
+                ID::make(),
+                Column::make([
+                    Box::make([
+                        Text::make('Название', 'name')->required(),
+                        TinyMce::make('Описание', 'description')
+                    ])
+                ])->columnSpan(8),
+                Column::make([
+                    Box::make([
+                        Select::make('Услуга', 'service_id')
+                            ->nullable()
+                            ->options(Service::query()->get()->pluck('name', 'id')->toArray())
+                            ->reactive(function(FieldsContract  $fields, ?string $value): FieldsContract  {
+                                $fields->findByColumn('category_id')
+                                    ?->options(Category::where('service_id', $value)
+                                        ->get()
+                                        ->pluck('name', 'id')
+                                        ->toArray()
+                                    );
 
-            Column::make([
-                Block::make([
-                    URL::make('Добавить ссылку', 'link')->expansion('http'),
-                ]),
-            ])
-                ->columnSpan(4),
-        ];
-
-        $secondFormElement = [
-            Column::make([
-                Block::make([
-                    TinyMce::make('Описание', 'description')
-                        ->hideOnIndex()]),
-                Divider::make(),
-                Block::make([
-                    Image::make('Основное фото', 'image')
-                        ->dir('mdt/images')
-                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                        ->removable()
-                        ->required(),
-                    File::make('Видео', 'video')
-                        ->dir('mdt/video/videos')
-                        ->allowedExtensions(['mp4'])
-                        ->removable()
-                        ->disableDownload(),
-                    Image::make('Preview')
-                        ->dir('mdt/video/preview')
-                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                        ->removable()
-                ]),
-            ])
-                ->columnSpan(8),
-        ];
-
-        $thirdFormElement = [
-            Column::make([
-                Block::make([
-                    TinyMce::make('Описание', 'description')
-                        ->hideOnIndex()]),
-                Divider::make(),
-                Block::make([
-                    Image::make('Основное фото', 'image')
-                        ->dir('mdt/images')
-                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                        ->removable(),
-                    File::make('Видео', 'video')
-                        ->dir('mdt/video/videos')
-                        ->allowedExtensions(['mp4'])
-                        ->removable()
-                        ->disableDownload(),
-                    Image::make('Preview')
-                        ->dir('mdt/video/preview')
-                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                        ->removable()
-                ]),
-            ])
-                ->columnSpan(8),
-        ];
-
-        $fourthFormElement = [
-            Column::make([
-                Block::make([
-                    Select::make('Услуга', 'service_id')
-                        ->nullable()
-                        ->options(Service::query()->get()->pluck('name', 'id')->toArray())
-                        ->reactive(function(Fields $fields, ?string $value): Fields {
-                            return tap($fields, static fn ($fields) => $fields
-                                ->findByColumn('category_id')
-                                ?->options(Category::where('service_id', $value)
-                                    ->get()
-                                    ->pluck('name', 'id')
-                                    ->toArray())
-                            );
-                        })
-                        ->required(),
+                                return $fields;
+                            })
+                            ->required(),
+                        Divider::make(),
+                        Select::make('Категория', 'category_id')
+                            ->nullable()
+                            ->options(Category::query()->get()->pluck('name', 'id')->toArray())
+                            ->reactive()
+                            ->required(),
+                    ]),
                     Divider::make(),
-                    Select::make('Категория', 'category_id')
-                        ->nullable()
-                        ->options(Category::query()->get()->pluck('name', 'id')->toArray())
-                        ->reactive()
-                        ->required(),
-                ]),
-                Divider::make(),
-                Block::make([
-                    Switcher::make( 'Отобразить в первую очередь', 'Is_first')
-                        ->updateOnPreview(),
-                ]),
-                Divider::make(),
-                Block::make([
-                    Switcher::make( 'Скрыть', 'hidden')
-                        ->updateOnPreview()
+                    Box::make([
+                        Switcher::make( 'Отобразить в первую очередь', 'Is_first')
+                            ->updateOnPreview(),
+                    ]),
+                    Divider::make(),
+                    Box::make([
+                        Switcher::make( 'Скрыть', 'hidden')
+                            ->updateOnPreview()
+                    ])
                 ])
+                    ->columnSpan(4)
+            ]),
+            Divider::make(),
+            Box::make([
+                Column::make([
+                    Image::make('Основное фото', 'image')
+                        ->dir('mdt/images')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable()
+                        ->required($this->getResource()->getItem() === null)
+                ])->columnSpan(6),
+                Column::make([
+                    Tabs::make([
+                        Tab::make('Видео', [
+                            File::make('', 'video')
+                                ->dir('mdt/video/videos')
+                                ->allowedExtensions(['mp4'])
+                                ->removable()
+                                ->disableDownload()
+                        ]),
+                        Tab::make('Ссылка на видео', [
+                            Url::make('','link')->blank()
+                        ])
+                    ]),
+                    Image::make('Preview')
+                        ->dir('mdt/video/preview')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable()
+                ])->columnSpan(6)
             ])
-                ->columnSpan(4),
+
         ];
 
         if (!$this->getResource()->getItem()) {
-            return [
-                Grid::make(
-                    array_merge($firstFormElement,  $secondFormElement, $fourthFormElement )
-                )
-            ];
+            return $fields;
         }
 
-        return [
-            Grid::make(
-                array_merge($firstFormElement, $thirdFormElement, $fourthFormElement)
-            ),
+        return array_merge($fields, [
             Divider::make(),
             Collapse::make('Добавить фото', [
-                Block::make([
-                    Json::make('', 'images')
-                        ->asRelation(new ServiceContentImageResource())
+                Box::make([
+                    RelationRepeater::make(
+                        '',
+                        'images',
+                        resource: ServiceContentImageResource::class)
                         ->vertical()
                         ->fields([
                             Grid::make([
                                 Column::make([
-                                    Block::make([
+                                    Box::make([
                                         Position::make(),
                                         Image::make('Фото', 'image')
                                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
                                             ->dir('mdt/images')
-                                            ->removable()
-                                            ->hideOnIndex(),
+                                            ->removable(),
                                         Text::make('Название', 'name')
-                                            ->hideOnIndex()
                                             ->placeholder('Добавьте название'),
                                         TinyMce::make('Описание', 'description')
-                                            ->hideOnIndex(),
                                     ])
                                 ])
                             ])
                         ])->removable()
                 ])
             ])
+        ]);
+    }
+
+    /**
+     * @return list<ComponentContract>
+     * @throws Throwable
+     */
+    protected function topLayer(): array
+    {
+        return [
+            ...parent::topLayer()
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract>
+     * @throws Throwable
+     */
+    protected function mainLayer(): array
+    {
+        return [
+            ...parent::mainLayer()
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract>
+     * @throws Throwable
+     */
+    protected function bottomLayer(): array
+    {
+        return [
+            ...parent::bottomLayer()
         ];
     }
 }

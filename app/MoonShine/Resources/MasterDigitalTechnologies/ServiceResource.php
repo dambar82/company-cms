@@ -4,25 +4,22 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\MasterDigitalTechnologies;
 
-use App\Models\ImageGallery;
 use App\Models\MDT\Service;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Collapse;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Divider;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Json;
-use MoonShine\Fields\Slug;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
-use Throwable;
+use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
+use MoonShine\Laravel\Fields\Slug;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\Collapse;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Components\Layout\LineBreak;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Text;
 
 /**
- * @extends ModelResource<ImageGallery>
+ * @extends ModelResource<Service>
  */
 class ServiceResource extends ModelResource
 {
@@ -32,59 +29,72 @@ class ServiceResource extends ModelResource
 
     protected string $column = 'name';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return array
-     * @throws Throwable
+     * @return iterable
      */
-    public function fields(): array
+    protected function indexFields(): iterable
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('Название', 'name'),
+            Slug::make('Slug')
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function formFields(): iterable
     {
         $fields = [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        Text::make('Название', 'name')
-                            ->required()
-                            ->reactive(),
-                    ])
-                ])->columnSpan(6),
-                Column::make([
-                    Block::make([
-                        Slug::make('Slug')
-                            ->from('name')
-                            ->live()
-                            ->required()
-                            ->locked()
-                            ->separator('_'),
-                    ])
-                ])->columnSpan(6)
-            ]),
+            ID::make(),
+            Box::make([
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            Text::make('Название', 'name')
+                                ->required()
+                                ->reactive(),
+                        ])
+                    ])->columnSpan(6),
+                    Column::make([
+                        Box::make([
+                            Slug::make('Slug')
+                                ->from('name')
+                                ->live()
+                                ->required()
+                                ->locked()
+                                ->separator('_'),
+                        ])
+                    ])->columnSpan(6)
+                ])
+            ])
         ];
 
         if ($this->getItemID()) {
-                $fields = array_merge($fields, [
-                Divider::make(),
-                Block::make([
+            $fields = array_merge($fields, [
+                LineBreak::make(),
+                Box::make([
                     Collapse::make('Добавить категорию', [
-                        Json::make('Категории', 'category')
-                            ->hideOnIndex()
-                            ->asRelation(new CategoryResource())
+                        RelationRepeater::make(
+                            'Категории',
+                            'category',
+                            resource: CategoryResource::class)
                             ->fields([
                                 Column::make([
-                                    Block::make([
+                                    Box::make([
                                         Text::make('Название', 'name')->required()
                                     ]),
-                                ])
-                                    ->columnSpan(6),
+                                ])->columnSpan(6),
                                 Column::make([
-                                    Block::make([
+                                    Box::make([
                                         Text::make('Slug')->required()->locked()
                                     ])
-                                ])
-                                    ->columnSpan(6)
+                                ])->columnSpan(6)
                             ])
                             ->creatable()
                             ->removable()
@@ -97,23 +107,41 @@ class ServiceResource extends ModelResource
     }
 
     /**
+     * @return iterable
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('Название', 'name'),
+            Slug::make('Slug'),
+            RelationRepeater::make(
+                'Категории',
+                'category',
+                resource: CategoryResource::class)
+                ->fields([
+                    Column::make([
+                        Box::make([
+                            Text::make('Название', 'name')->required()
+                        ]),
+                    ])->columnSpan(6),
+                    Column::make([
+                        Box::make([
+                            Text::make('Slug')->required()->locked()
+                        ])
+                    ])->columnSpan(6)
+                ])
+        ];
+    }
+
+    /**
      * @param Service $item
      *
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

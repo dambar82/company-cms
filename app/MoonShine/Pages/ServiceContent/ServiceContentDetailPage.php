@@ -4,54 +4,87 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\ServiceContent;
 
-use App\MoonShine\Resources\MasterDigitalTechnologies\CategoryResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentImageResource;
-use MoonShine\Decorations\Grid;
-use MoonShine\Fields\File;
-use MoonShine\Fields\ID;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Json;
-use MoonShine\Fields\Position;
-use MoonShine\Fields\Relationships\BelongsTo;
-use MoonShine\Fields\Switcher;
-use MoonShine\Fields\Text;
-use MoonShine\Fields\TinyMce;
-use MoonShine\Pages\Crud\DetailPage;
-use MoonShine\Components\MoonShineComponent;
-use MoonShine\Fields\Field;
+use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
+use MoonShine\Laravel\Pages\Crud\DetailPage;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Position;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Url;
 use Throwable;
+
 
 class ServiceContentDetailPage extends DetailPage
 {
     /**
-     * @return list<MoonShineComponent|Field>
+     * @return list<ComponentContract|FieldContract>
      */
-    public function fields(): array
+    protected function fields(): iterable
     {
         return [
-            Grid::make([
-            ID::make()->sortable()->hideOnIndex(),
+            ID::make(),
             Text::make('Название', 'name')->required(),
             TinyMce::make('Описание', 'description'),
-            BelongsTo::make('Услуга', 'Service'),
-            BelongsTo::make('Категория', 'category', resource: new CategoryResource()),
-            Image::make('Фото', 'image'),
+            Image::make('Основное фото', 'image'),
             File::make('Видео', 'video'),
+            Url::make('Ссылка на видео','link')->blank(),
             Image::make('Preview'),
-            Switcher::make('В первую очередь', 'is_first')->updateOnPreview(),
-            Switcher::make( 'Скрыть', 'hidden')->updateOnPreview(),
-            Json::make('Дополнительные фото', 'images')
-                ->asRelation(new ServiceContentImageResource())
+            RelationRepeater::make(
+                'Фотографии',
+                'images',
+                resource: ServiceContentImageResource::class)
                 ->vertical()
                 ->fields([
-                    Grid::make([
+                    Box::make([
                         Position::make(),
-                        Image::make('Фото', 'image'),
-                        Text::make('Название', 'name'),
+                        Image::make('Фото', 'image')
+                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                            ->dir('mdt/images')
+                            ->removable(),
+                        Text::make('Название', 'name')
+                            ->placeholder('Добавьте название'),
                         TinyMce::make('Описание', 'description')
                     ])
                 ])
-            ])
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract>
+     * @throws Throwable
+     */
+    protected function topLayer(): array
+    {
+        return [
+            ...parent::topLayer()
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract>
+     * @throws Throwable
+     */
+    protected function mainLayer(): array
+    {
+        return [
+            ...parent::mainLayer()
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract>
+     * @throws Throwable
+     */
+    protected function bottomLayer(): array
+    {
+        return [
+            ...parent::bottomLayer()
         ];
     }
 }

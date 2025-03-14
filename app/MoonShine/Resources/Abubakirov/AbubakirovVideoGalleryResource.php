@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Abubakirov;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Models\VideoGallery;
 use App\MoonShine\Resources\ProjectResource;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\File;
-use MoonShine\Fields\Image;
-use MoonShine\Fields\Json;
-use MoonShine\Fields\Relationships\BelongsToMany;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
+use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Divider;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\Field;
+use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Json;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<VideoGallery>
@@ -31,51 +33,85 @@ class AbubakirovVideoGalleryResource extends ModelResource
 
     protected string $title = 'Видеогалереи Абубакиров';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return Field
+     * @return FieldContract
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        Text::make('Название', 'name'),
-                        Text::make('Описание', 'title'),
-                        Image::make( 'preview')
-                            ->dir('abubakirov/preview')
-                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                    ])
-                ])->columnSpan(8),
+            ID::make()->sortable(),
+            ID::make(),
+            Text::make('Название', 'name'),
+            Text::make('Описание', 'title'),
+            Image::make( 'preview'),
+            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                ->inLine('', true)
+        ];
+    }
 
-                Column::make([
-                    Block::make([
-                        BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
-                            ->hideOnIndex()
-                            ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 2))
-                            ->required(),
-                    ])
-                ])->columnSpan(4)
-            ]),
-            Block::make([
-                Json::make('Видео', 'videos')
-                    ->hideOnIndex()
-                    ->asRelation(new AbubakirovVideoResource())
-                    ->fields([
-                        File::make('', 'video')
-                            ->dir('abubakirov/video')
-                            ->allowedExtensions(['mp4'])
-                            ->disableDownload()
-                            ->hideOnIndex(),
-                        Text::make('', 'description')->placeholder('Добавьте описание')
-                    ])
-                    ->creatable()
-                    ->removable()
+    /**
+     * @return FieldContract
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            Text::make('Название', 'name'),
+                            Text::make('Описание', 'title'),
+                            Image::make( 'preview')
+                                ->dir('abubakirov/preview')
+                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ])
+                    ])->columnSpan(8),
+
+                    Column::make([
+                        Box::make([
+                            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                                ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 2))
+                                ->required(),
+                        ])
+                    ])->columnSpan(4)
+                ]),
+                Divider::make(),
+                Box::make([
+                    RelationRepeater::make(
+                        'Видео',
+                        'videos',
+                        resource: AbubakirovVideoResource::class
+                    )
+                        ->fields([
+                            File::make('', 'video')
+                                ->dir('abubakirov/video')
+                                ->allowedExtensions(['mp4'])
+                                ->disableDownload(),
+                            Text::make('', 'description')->placeholder('Добавьте описание')
+                        ])
+                        ->creatable()
+                        ->removable()
+                ])
             ])
+        ];
+    }
+
+    /**
+     * @return FieldContract
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Название', 'name'),
+            Text::make('Описание', 'title'),
+            Image::make( 'preview'),
+            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
         ];
     }
 
@@ -85,27 +121,17 @@ class AbubakirovVideoGalleryResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
     }
 
-    public function query(): Builder
+    public function modifyQueryBuilder(Builder $builder): Builder
     {
-        return parent::query()
+        return $builder
             ->join('video_gallery_project as vgp', 'video_galleries.id', '=', 'vgp.video_gallery_id')
             ->join('projects as p', 'p.id', '=', 'vgp.project_id')
             ->where('p.id', 2)
             ->select('video_galleries.*');
-    }
-
-    public function import(): ?ImportHandler
-    {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
     }
 }

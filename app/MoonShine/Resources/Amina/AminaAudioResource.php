@@ -7,18 +7,19 @@ namespace App\MoonShine\Resources\Amina;
 use App\Models\Audio;
 use App\MoonShine\Resources\ProjectResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use MoonShine\Decorations\Block;
-use MoonShine\Decorations\Column;
-use MoonShine\Decorations\Grid;
-use MoonShine\Enums\ClickAction;
-use MoonShine\Fields\Field;
-use MoonShine\Fields\File;
-use MoonShine\Fields\Relationships\BelongsToMany;
-use MoonShine\Fields\Text;
-use MoonShine\Handlers\ExportHandler;
-use MoonShine\Handlers\ImportHandler;
-use MoonShine\Resources\ModelResource;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\ClickAction;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Fields\Field;
+use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<Audio>
@@ -29,38 +30,70 @@ class AminaAudioResource extends ModelResource
 
     protected string $title = 'Аудио Амина';
 
-    protected string $sortDirection = 'ASC';
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
     /**
-     * @return Field
+     * @return FieldContract
      */
-    public function fields(): array
+    protected function indexFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Block::make([
-                        Text::make('Название', 'title'),
-                        File::make('Аудио', 'path')
-                            ->allowedExtensions(['mp3'])
-                            ->disableDownload()
-                            ->dir('amina/audio')
-                            ->hideOnIndex(),
+            ID::make()->sortable(),
+            Text::make('Название', 'title'),
+            File::make('Аудио', 'path'),
+            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                ->inLine('', true)
+        ];
+    }
 
-                    ])
-                ])->columnSpan(8),
+    /**
+     * @return FieldContract
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                Grid::make([
+                    Column::make([
+                        Box::make([
+                            ID::make(),
+                            Text::make('Название', 'title'),
+                            File::make('Аудио', 'path')
+                                ->allowedExtensions(['mp3'])
+                                ->disableDownload()
+                                ->dir('amina/audio')
+                                ->required($this->isCreateFormPage())
+                        ])
+                    ])->columnSpan(8),
 
-                Column::make([
-                    Block::make([
-                        BelongsToMany::make('Проект', 'projects', resource: new ProjectResource())
-                            ->hideOnIndex()
-                            ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 1))
-                            ->required()
-                    ])
-                ])->columnSpan(4)
+                    Column::make([
+                        Box::make([
+                            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                                ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', 1))
+                                ->required()
+                        ])
+                    ])->columnSpan(4)
+                ])
             ])
+        ];
+    }
+
+    /**
+     * @return FieldContract
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('Название', 'title'),
+            File::make('Аудио', 'path')
+                ->dir('amina/audio'),
+            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
+                ->inLine('', true)
         ];
     }
 
@@ -70,18 +103,17 @@ class AminaAudioResource extends ModelResource
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
      */
-    public function rules(Model $item): array
+    protected function rules(mixed $item): array
     {
         return [];
     }
 
-    public function import(): ?ImportHandler
+    public function modifyQueryBuilder(Builder $builder): Builder
     {
-        return null;
-    }
-
-    public function export(): ?ExportHandler
-    {
-        return null;
+        return $builder
+            ->join('audio_project as ap', 'audios.id', '=', 'ap.audio_id')
+            ->join('projects as p', 'p.id', '=', 'ap.project_id')
+            ->where('p.id', 1)
+            ->select('audios.*');
     }
 }
