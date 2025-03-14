@@ -7,7 +7,6 @@ namespace App\MoonShine\Resources\Amina;
 use App\Models\News;
 use App\MoonShine\Resources\ProjectResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\ClickAction;
@@ -44,7 +43,7 @@ class AminaNewsResource extends ModelResource
     protected ?PageType $redirectAfterSave = PageType::INDEX;
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function indexFields(): iterable
     {
@@ -63,7 +62,7 @@ class AminaNewsResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function formFields(): iterable
     {
@@ -110,7 +109,7 @@ class AminaNewsResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function detailFields(): iterable
     {

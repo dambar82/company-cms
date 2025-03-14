@@ -7,7 +7,6 @@ namespace App\MoonShine\Resources\Abubakirov;
 use App\Models\ImageGallery;
 use App\MoonShine\Resources\ProjectResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
 use MoonShine\Laravel\Resources\ModelResource;
@@ -20,7 +19,6 @@ use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Fields\Field;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
-use MoonShine\UI\Fields\Json;
 use MoonShine\UI\Fields\Text;
 
 /**
@@ -37,7 +35,7 @@ class AbubakirovImageGalleryResource extends ModelResource
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function indexFields(): iterable
     {
@@ -52,7 +50,7 @@ class AbubakirovImageGalleryResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function formFields(): iterable
     {
@@ -85,6 +83,7 @@ class AbubakirovImageGalleryResource extends ModelResource
                         resource: AbubakirovImageResource::class
                     )
                         ->fields([
+                            ID::make(),
                             Image::make('', 'image')
                                 ->dir('abubakirov/img')
                                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
@@ -99,7 +98,7 @@ class AbubakirovImageGalleryResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function detailFields(): iterable
     {

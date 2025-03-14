@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\MasterDigitalTechnologies;
 
 use App\Models\MDT\ServiceContentImage;
-use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\ID;
@@ -20,7 +19,7 @@ class ServiceContentImageResource extends ModelResource
     protected string $title = 'ServiceContentImages';
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function indexFields(): iterable
     {
@@ -30,7 +29,7 @@ class ServiceContentImageResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function formFields(): iterable
     {
@@ -42,7 +41,7 @@ class ServiceContentImageResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function detailFields(): iterable
     {

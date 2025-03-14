@@ -75,7 +75,7 @@ class ServiceResource extends ModelResource
             ])
         ];
 
-        if ($this->getItemID()) {
+        if ($this->isUpdateFormPage()) {
             $fields = array_merge($fields, [
                 LineBreak::make(),
                 Box::make([
@@ -87,6 +87,7 @@ class ServiceResource extends ModelResource
                             ->fields([
                                 Column::make([
                                     Box::make([
+                                        ID::make(),
                                         Text::make('Название', 'name')->required()
                                     ]),
                                 ])->columnSpan(6),
@@ -120,6 +121,7 @@ class ServiceResource extends ModelResource
                 'category',
                 resource: CategoryResource::class)
                 ->fields([
+                    ID::make(),
                     Column::make([
                         Box::make([
                             Text::make('Название', 'name')->required()

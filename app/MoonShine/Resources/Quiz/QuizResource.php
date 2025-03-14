@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Quiz;
 
-use App\Models\Quiz;
+use App\Models\Quiz\Quiz;
 use App\MoonShine\Resources\ProjectResource;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Fields\Relationships\RelationRepeater;

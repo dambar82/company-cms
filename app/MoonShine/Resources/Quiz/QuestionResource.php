@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Quiz;
 
-use App\Models\Question;
-use App\Models\Quiz;
+use App\Models\Quiz\Question;
+use App\Models\Quiz\Quiz;
 use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\ClickAction;
@@ -18,6 +18,7 @@ use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Fields\Checkbox;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Position;
 use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Text;
 
@@ -77,7 +78,7 @@ class QuestionResource extends ModelResource
             ])
         ];
 
-        if ($this->getItem()) {
+        if ($this->isUpdateFormPage()) {
             $fields = array_merge($fields, [
                 Divider::make(),
                 Box::make([
@@ -86,13 +87,13 @@ class QuestionResource extends ModelResource
                         'answer',
                         resource: AnswerResource::class)
                         ->fields([
+                            ID::make(),
                             Text::make('Ответ', 'answer')->placeholder('Добавьте текст с ответом'),
                             Checkbox::make('Ответ верный', 'correct_answer')
                         ])
                         ->creatable()
                         ->removable()
                 ])
-
             ]);
         }
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Quiz;
 
-use App\Models\Quiz;
-use App\Models\Result;
+use App\Models\Quiz\Quiz;
+use App\Models\Quiz\Result;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\PageType;

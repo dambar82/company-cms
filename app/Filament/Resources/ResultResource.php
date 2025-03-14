@@ -3,14 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ResultResource\Pages;
-use App\Models\Quiz;
-use App\Models\Result;
+use App\Models\Quiz\Quiz;
+use App\Models\Quiz\Result;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Forms;
 
 class ResultResource extends Resource
 {

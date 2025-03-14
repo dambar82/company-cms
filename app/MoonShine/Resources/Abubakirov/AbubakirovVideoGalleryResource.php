@@ -38,7 +38,7 @@ class AbubakirovVideoGalleryResource extends ModelResource
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function indexFields(): iterable
     {
@@ -54,7 +54,7 @@ class AbubakirovVideoGalleryResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function formFields(): iterable
     {
@@ -88,6 +88,7 @@ class AbubakirovVideoGalleryResource extends ModelResource
                         resource: AbubakirovVideoResource::class
                     )
                         ->fields([
+                            ID::make(),
                             File::make('', 'video')
                                 ->dir('abubakirov/video')
                                 ->allowedExtensions(['mp4'])

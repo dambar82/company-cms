@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Quiz;
 
+use App\Models\Project;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

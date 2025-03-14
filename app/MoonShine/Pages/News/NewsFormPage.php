@@ -68,7 +68,6 @@ class NewsFormPage extends FormPage
             $formFields = array_merge($formFields, [
                 ActionButton::make('Добавить текст')
                     ->method('addTextBlock'),
-
                 Divider::make(),
                 Collapse::make('Добавить контент', [
                     Box::make([

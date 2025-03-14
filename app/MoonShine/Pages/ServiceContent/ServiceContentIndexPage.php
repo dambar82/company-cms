@@ -54,7 +54,6 @@ class ServiceContentIndexPage extends IndexPage
             Switcher::make( 'Скрыть', 'hidden')
                 ->updateOnPreview(),
         ];
-
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Quiz;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;

@@ -131,7 +131,7 @@ class ServiceContentFormPage extends FormPage
                             Grid::make([
                                 Column::make([
                                     Box::make([
-                                        Position::make(),
+                                        ID::make(),
                                         Image::make('Фото', 'image')
                                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
                                             ->dir('mdt/images')

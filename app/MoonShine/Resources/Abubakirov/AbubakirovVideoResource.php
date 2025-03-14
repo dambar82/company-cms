@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\Abubakirov;
 
 use App\Models\Video;
-use MoonShine\Contracts\UI\FieldContract;
+
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\ID;
@@ -20,7 +20,7 @@ class AbubakirovVideoResource extends ModelResource
     protected string $title = 'AbubakirovVideos';
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function indexFields(): iterable
     {
@@ -30,7 +30,7 @@ class AbubakirovVideoResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function formFields(): iterable
     {
@@ -42,7 +42,7 @@ class AbubakirovVideoResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function detailFields(): iterable
     {

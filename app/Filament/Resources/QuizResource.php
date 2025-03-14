@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\QuizResource\Pages;
-use App\Models\Quiz;
+use App\Models\Quiz\Quiz;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;

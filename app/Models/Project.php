@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Quiz\Quiz;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

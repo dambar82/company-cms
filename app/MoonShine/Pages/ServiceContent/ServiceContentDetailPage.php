@@ -42,6 +42,7 @@ class ServiceContentDetailPage extends DetailPage
                 ->vertical()
                 ->fields([
                     Box::make([
+                        ID::make(),
                         Position::make(),
                         Image::make('Фото', 'image')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])

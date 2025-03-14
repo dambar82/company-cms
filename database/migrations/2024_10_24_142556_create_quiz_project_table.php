@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Project;
-use App\Models\Quiz;
+use App\Models\Quiz\Quiz;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
