@@ -26,6 +26,8 @@ use MoonShine\UI\Fields\Text;
  */
 class AminaAudioResource extends ModelResource
 {
+    protected bool $stickyTable = true;
+
     protected string $model = Audio::class;
 
     protected string $title = 'Аудио Амина';

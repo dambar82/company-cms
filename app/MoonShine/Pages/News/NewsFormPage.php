@@ -7,22 +7,30 @@ namespace App\MoonShine\Pages\News;
 use App\MoonShine\Resources\News\NewsContentResource;
 use App\MoonShine\Resources\ProjectResource;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
+use MoonShine\Laravel\Fields\Relationships\HasMany;
+use MoonShine\Laravel\Fields\Relationships\HasOne;
 use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
 use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Support\DTOs\AsyncCallback;
 use MoonShine\TinyMce\Fields\TinyMce;
 use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\ActionGroup;
 use MoonShine\UI\Components\Collapse;
+use MoonShine\UI\Components\FormBuilder;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Div;
 use MoonShine\UI\Components\Layout\Divider;
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\Hidden;
+use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
@@ -33,8 +41,6 @@ use Throwable;
 
 class NewsFormPage extends FormPage
 {
-    public array $fields = [];
-
     /**
      * @return list<ComponentContract|FieldContract>
      * @throws Throwable
@@ -66,111 +72,56 @@ class NewsFormPage extends FormPage
 
         if($this->getResource()->getItem()) {
             $formFields = array_merge($formFields, [
-                ActionButton::make('Добавить текст')
-                    ->method('addTextBlock'),
                 Divider::make(),
-                Collapse::make('Добавить контент', [
-                    Box::make([
-                        RelationRepeater::make(
-                            '',
-                            'contents',
-                            resource: NewsContentResource::class)
-                            ->fields([
-                                Collapse::make('Текст', [
-                                    TinyMce::make('', 'content')
-                                ]),
-                                Collapse::make('Фото', [
-                                    Image::make('Фото', 'image')
-                                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                                        ->dir('news/images')
-                                        ->removable(),
-                                ]),
-                                Collapse::make('Видео', [
-                                    Tabs::make([
-                                        Tab::make('Видео', [
-                                            File::make('Видео', 'video')
-                                                ->allowedExtensions(['mp4'])
-                                                ->disableDownload()
-                                                ->dir('news/videos')
-                                                ->removable(),
-                                        ]),
-                                        Tab::make('Ссылка на видео', [
-                                            Url::make('Ссылка на видео','link')->blank()
-                                        ])
-                                    ])
-                                ])
-                            ])
-                            ->removable()
-                            ->vertical()->creatable(limit: 5, button: ActionButton::make('New', '#')->showInDropdown())
-                    ])
-                ])
+                HasMany::make(
+                    'Контент',
+                    'contents',
+                     resource: NewsContentResource::class
+                )
+                    ->fields([
+                        ID::make(),
+                        TinyMce::make('Текст', 'text'),
+                        Image::make('Фото', 'image')
+                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                            ->dir('news/images')
+                            ->removable(),
+                        File::make('Видео', 'video')
+                            ->allowedExtensions(['mp4'])
+                            ->disableDownload()
+                            ->dir('news/videos')
+                            ->removable(),
+                        Url::make('Ссылка на видео','link')
+                    ]),
+                Div::make()->customAttributes([
+                    'id' => 'add-inputs'
+                ]),
+                Divider::make(),
+                ActionGroup::make([
+                    ActionButton::make('Добавить текст')
+                        ->method(
+                            'addText',
+                            ['key' => 'text[]'],
+                            callback: AsyncCallback::with(afterResponse: 'myResponse'),
+                            resource: $this->getResource()
+                        )->secondary(),
+                    ActionButton::make('Добавить фото')
+                        ->method(
+                            'addImage',
+                            ['key' => 'name[]'],
+                            callback: AsyncCallback::with(afterResponse: 'myResponse'),
+                            resource: $this->getResource()
+                        )->secondary(),
+                    ActionButton::make('Добавить видео')
+                        ->method(
+                            'addVideo',
+                            ['key' => 'name[]'],
+                            callback: AsyncCallback::with(afterResponse: 'myResponse'),
+                            resource: $this->getResource()
+                        )->secondary(),
+                ]),
             ]);
         }
-        $this->saveFields($formFields);
 
-        return $this->fields;
-    }
-
-    /**
-     * @return list<ComponentContract>
-     * @throws Throwable
-     */
-    protected function topLayer(): array
-    {
-        return [
-            ...parent::topLayer()
-        ];
-    }
-
-    /**
-     * @return list<ComponentContract>
-     * @throws Throwable
-     */
-    protected function mainLayer(): array
-    {
-        return [
-            ...parent::mainLayer()
-        ];
-    }
-
-    /**
-     * @return list<ComponentContract>
-     * @throws Throwable
-     */
-    protected function bottomLayer(): array
-    {
-        return [
-            ...parent::bottomLayer()
-        ];
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function saveFields($fields): void
-    {
-        $this->fields = $fields;
-    }
-
-    public function addTextBlock()
-    {
-        return [
-            Collapse::make('Добавить текст', [
-                Box::make([
-                    RelationRepeater::make(
-                        '',
-                        'contents',
-                        resource: NewsContentResource::class
-                    )
-                        ->fields([
-                            Collapse::make('Текст', [
-                                TinyMce::make('', 'content')
-                            ])
-                        ])
-                        ->removable()
-                        ->creatable(false)
-                ])
-            ])
-        ];
+        return $formFields;
     }
 }

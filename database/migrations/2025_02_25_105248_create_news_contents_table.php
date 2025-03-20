@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('news_contents', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(News::class);
-            $table->text('content');
+            $table->text('text');
             $table->timestamps();
         });
     }

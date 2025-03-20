@@ -35,7 +35,7 @@ class ServiceContentResource extends ModelResource
 
     protected ?PageType $redirectAfterSave = PageType::INDEX;
 
-    protected int $itemsPerPage = 10;
+    protected bool $stickyTable = true;
 
     /**
      * @return Page

@@ -22,6 +22,8 @@ use MoonShine\UI\Fields\Textarea;
  */
 class RequestResource extends ModelResource
 {
+    protected bool $stickyTable = true;
+
     protected string $model = Request::class;
 
     protected string $title = 'Заявки';
@@ -97,9 +99,11 @@ class RequestResource extends ModelResource
     protected function activeActions(): ListOf
     {
         return parent::activeActions()
-            ->except(Action::UPDATE)
-            ->except(Action::CREATE)
-            ->except(Action::DELETE)
-            ->except(Action::MASS_DELETE);
+            ->except(
+        Action::UPDATE,
+            Action::CREATE,
+            Action::DELETE,
+            Action::MASS_DELETE
+        );
     }
 }

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('news_contents', function (Blueprint $table) {
-        $table->text('content')->nullable()->change();
-        $table->string('image')->nullable()->after('content');
+        $table->text('text')->nullable()->change();
+        $table->string('image')->nullable()->after('text');
         $table->string('video')->nullable()->after('image');
         $table->string('link')->nullable()->after('video');
         });

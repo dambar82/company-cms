@@ -35,6 +35,8 @@ use MoonShine\UI\Fields\Text;
  */
 class AminaNewsResource extends ModelResource
 {
+    protected bool $stickyTable = true;
+
     protected string $model = News::class;
 
     protected string $title = 'Новости Амина';

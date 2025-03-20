@@ -5,19 +5,42 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\News;
 
 use App\Models\News;
+use App\Models\NewsContent;
 use App\MoonShine\Pages\News\NewsDetailPage;
 use App\MoonShine\Pages\News\NewsFormPage;
 use App\MoonShine\Pages\News\NewsIndexPage;
+use Illuminate\Support\Facades\Storage;
+use MoonShine\Laravel\Http\Responses\MoonShineJsonResponse;
+use MoonShine\Laravel\MoonShineRequest;
 use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\DTOs\AsyncCallback;
 use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\Support\Enums\SortDirection;
-
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Div;
+use MoonShine\UI\Components\Layout\Divider;
+use MoonShine\UI\Components\Layout\Flex;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Components\Layout\LineBreak;
+use MoonShine\UI\Components\Tabs;
+use MoonShine\UI\Components\Tabs\Tab;
+use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Json;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Url;
+use Illuminate\Http\File as Load;
 /**
  * @extends ModelResource<News, NewsIndexPage, NewsFormPage, NewsDetailPage>
  */
 class NewsResource extends ModelResource
 {
+    protected bool $stickyTable = true;
+
     protected string $model = News::class;
 
     protected string $title = 'Новости';
@@ -26,7 +49,7 @@ class NewsResource extends ModelResource
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
-    protected ?PageType $redirectAfterSave = PageType::INDEX;
+    protected ?PageType $redirectAfterSave = PageType::FORM;
 
     /**
      * @return array
@@ -40,14 +63,134 @@ class NewsResource extends ModelResource
         ];
     }
 
-    /**
-     * @param News $item
-     *
-     * @return array<string, string[]|string>
-     * @see https://laravel.com/docs/validation#available-validation-rules
-     */
-    protected function rules(mixed $item): array
+    public function addText(MoonShineRequest $request)
     {
-        return [];
+        $data = $request->validate([
+            'key' => ['string', 'required']
+        ]);
+        return MoonShineJsonResponse::make()->html((string)
+            Div::make([
+                Box::make([
+                    Flex::make([
+                        TinyMce::make('Текст', $data['key']),
+                        ActionButton::make('')->icon('trash')
+                            ->error()
+                            ->onClick(fn() => 'deleteElement()')
+                    ])->itemsAlign('end')
+                ]),
+                LineBreak::make()
+            ])
+        );
+    }
+    public function addImage(MoonShineRequest $request)
+    {
+        $data = $request->validate([
+            'key' => ['string', 'required']
+        ]);
+        return MoonShineJsonResponse::make()->html((string)
+            Div::make([
+                Box::make([
+                    Flex::make([
+                        Image::make('Фото', $data['key'])
+                            ->allowedExtensions(['png', 'jpg', 'jpeg']),
+                        ActionButton::make('')
+                            ->icon('trash')
+                            ->error()
+                            ->onClick(fn() => 'deleteElement()')
+                    ])->itemsAlign('end'),
+                ]),
+                LineBreak::make()
+            ])
+        );
+    }
+
+    public function addVideo(MoonShineRequest $request)
+    {
+        $data = $request->validate([
+            'key' => ['string', 'required']
+        ]);
+        return MoonShineJsonResponse::make()->html((string)
+            Div::make([
+                Box::make([
+                        Flex::make([
+                                    File::make('Видео', 'video[]')
+                                        ->allowedExtensions(['mp4']),
+                                    Url::make('Ссылка на видео','link[]')->blank(),
+                            ActionButton::make('')
+                                ->icon('trash')
+                                ->error()
+                                ->onClick(fn() => 'deleteElement()')
+                        ])
+                        ->justifyAlign('between')
+                        ->itemsAlign('end')
+                ]),
+                LineBreak::make()
+            ])
+        );
+    }
+
+    protected function afterUpdated(mixed $item): mixed
+    {
+        if(!empty(request()->input('text'))) {
+            $texts = request()->input('text');
+
+            foreach ($texts as $text) {
+                NewsContent::create([
+                    'news_id' => $this->getItemID(),
+                    'text' => $text
+                ]);
+            }
+        }
+
+        if (!empty($_FILES['name']['tmp_name'])) {
+            foreach ($_FILES['name']['tmp_name'] as $key => $tmp_name) {
+                if ($_FILES['name']['error'][$key] === UPLOAD_ERR_OK) {
+                    $originalName = $_FILES['name']['name'][$key];
+
+                    // Создаем новое имя для сохранения
+                    $filename = time() . '_' . $originalName;
+
+                    Storage::putFileAs('public/news/images', new Load($tmp_name), $filename);
+
+                    NewsContent::create([
+                        'news_id' => $this->getItemID(),
+                        'image' => 'news/images/' . $filename
+                    ]);
+                }
+            }
+        }
+
+        if (!empty($_FILES['video']['tmp_name'])) {
+            foreach ($_FILES['video']['tmp_name'] as $key => $tmp_name) {
+                if ($_FILES['video']['error'][$key] === UPLOAD_ERR_OK) {
+                    $originalName = $_FILES['video']['name'][$key];
+
+                    // Создаем новое имя для сохранения
+                    $filename = time() . '_' . $originalName;
+
+                    Storage::putFileAs('public/news/videos', new Load($tmp_name), $filename);
+
+                    NewsContent::create([
+                        'news_id' => $this->getItemID(),
+                        'video' => 'news/videos/' . $filename
+                    ]);
+                }
+            }
+        }
+
+        if (!empty(request()->input('link'))) {
+            $links = request()->input('link');
+
+            foreach ($links as $link) {
+                if ($link != null) {
+                    NewsContent::create([
+                        'news_id' => $this->getItemID(),
+                        'link' => $link
+                    ]);
+                }
+            }
+        }
+
+        return $item;
     }
 }

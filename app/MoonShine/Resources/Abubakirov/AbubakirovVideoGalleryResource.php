@@ -27,6 +27,8 @@ use MoonShine\UI\Fields\Text;
  */
 class AbubakirovVideoGalleryResource extends ModelResource
 {
+    protected bool $stickyTable = true;
+
     protected string $model = VideoGallery::class;
 
     protected string $title = 'Видеогалереи Абубакиров';

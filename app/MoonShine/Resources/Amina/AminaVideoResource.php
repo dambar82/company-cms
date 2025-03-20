@@ -7,17 +7,19 @@ namespace App\MoonShine\Resources\Amina;
 use App\Models\VideoGallery;
 use App\MoonShine\Resources\ProjectResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use MoonShine\Contracts\UI\ActionButtonContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Attributes\SearchUsingFullText;
 use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\Support\Enums\SortDirection;
+use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
-use MoonShine\UI\Fields\Field;
 use MoonShine\UI\Fields\File;
 use MoonShine\UI\Fields\Hidden;
 use MoonShine\UI\Fields\ID;
@@ -30,6 +32,10 @@ use MoonShine\UI\Fields\Url;
  */
 class AminaVideoResource extends ModelResource
 {
+    protected bool $stickyTable = true;
+
+    protected bool $columnSelection = true;
+
     protected string $model = VideoGallery::class;
 
     protected string $title = 'Видео Амина';

@@ -8,6 +8,7 @@ use App\Models\MDT\Category;
 use App\Models\MDT\Service;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentImageResource;
 use MoonShine\Contracts\Core\DependencyInjection\FieldsContract;
+use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
@@ -123,7 +124,8 @@ class ServiceContentFormPage extends FormPage
                     RelationRepeater::make(
                         '',
                         'images',
-                        resource: ServiceContentImageResource::class)
+                        resource: ServiceContentImageResource::class
+                    )
                         ->vertical()
                         ->fields([
                             Grid::make([
