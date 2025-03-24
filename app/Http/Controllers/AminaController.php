@@ -10,10 +10,11 @@ use App\Models\AminaFeedback;
 use App\Models\Audio;
 use App\Models\News;
 use App\Models\VideoGallery;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @OA\Info(
@@ -233,22 +234,49 @@ class AminaController extends Controller
 
     public function addFeedback(Request $request): JsonResponse
     {
-        $feedbackData = $request->validate([
-            'text' => 'string|min:10|max:255',
-            'image' => 'file|mimes:jpg,jpeg,png,svg|max:2000',
-            'organization' => 'nullable|string|max:255',
-            'private_person' => 'nullable|boolean'
-        ]);
+        try {
+            $validated = $request->validate([
+                'text' => 'required|string|min:10|max:255',
+                'image' => 'required|file|mimes:jpg,jpeg,png,svg|max:2000',
+                'organization' => 'nullable|string|max:255',
+                'private_person' => 'nullable|boolean'
+            ]);
 
-        if (!$this->checkForbiddenWord($feedbackData['text'])) {
-            return response()->json('Вы используете не допустимые слова. Измените текст и повторите попытку.');
+            if (!$this->checkForbiddenWord($validated['text'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Текст содержит запрещенные слова. Пожалуйста, измените текст и попробуйте снова.'
+                ], 422);
+            }
+
+            $image = $request->file('image');
+            $path = $image->store('amina/feedbacks', 'public');
+
+            AminaFeedback::create([
+                'text' => $validated['text'],
+                'image' => $path,
+                'organization' => $validated['organization'] ?? null,
+                'private_person' => $validated['private_person'] ?? false
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Отзыв успешно добавлен',
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка валидации',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Произошла ошибка при добавлении отзыва',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $path = Storage::putFile('amina/feedbacks', $request->file('image'), 'public');
-        $feedbackData['image'] = $path;
-
-         AminaFeedback::create($feedbackData);
-
-         return response()->json('Отзыв успешно добавлен');
     }
 }
