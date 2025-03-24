@@ -7,6 +7,7 @@ namespace App\MoonShine\Layouts;
 use App\MoonShine\Resources\Abubakirov\AbubakirovImageGalleryResource;
 use App\MoonShine\Resources\Abubakirov\AbubakirovVideoGalleryResource;
 use App\MoonShine\Resources\Amina\AminaAudioResource;
+use App\MoonShine\Resources\Amina\AminaFeedbackResource;
 use App\MoonShine\Resources\Amina\AminaNewsResource;
 use App\MoonShine\Resources\Amina\AminaVideoResource;
 use App\MoonShine\Resources\BannerResource;
@@ -50,6 +51,7 @@ final class MoonShineLayout extends CompactLayout
                 MenuItem::make('Новости', AminaNewsResource::class)->icon('newspaper'),
                 MenuItem::make('Аудио', AminaAudioResource::class)->icon('speaker-wave'),
                 MenuItem::make('Видео', AminaVideoResource::class)->icon('videcamera'),
+                MenuItem::make('Отзывы', AminaFeedbackResource::class)->icon('pencil-square')
             ])->icon('s.inbox-stack'),
             MenuGroup::make('Мастер Цифровых Технологий', [
                 MenuItem::make('Услуги', ServiceResource::class)->icon('wrench-screwdriver'),
@@ -70,6 +72,7 @@ final class MoonShineLayout extends CompactLayout
             MenuItem::make('Страницы', PageResource::class)->icon('book-open'),
             MenuDivider::make(),
             MenuItem::make('Посты', PostResource::class)->icon('arrow-up-on-square-stack'),
+            MenuItem::make('AminaFeedbacks', AminaFeedbackResource::class),
         ];
     }
 

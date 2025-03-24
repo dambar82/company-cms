@@ -21,7 +21,7 @@ class MoonShineServiceProvider extends ServiceProvider
         $core->autoload();
 
         moonShineAssets()->add([
-            new Js(Vite::asset('resources/js/app.js')),
+            new Js(Vite::asset('resources/js/app.js'))
         ]);
     }
 }

@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Resources\AudioResource;
 use App\Http\Resources\NewsResource;
 use App\Http\Resources\VideoGalleryResources;
+use App\Http\Traits\CheckForbiddenWordTrait;
+use App\Models\AminaFeedback;
 use App\Models\Audio;
 use App\Models\News;
 use App\Models\VideoGallery;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\Info(
@@ -18,6 +23,8 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
  */
 class AminaController extends Controller
 {
+    use CheckForbiddenWordTrait;
+
     /**
      * @OA\Get(
      *     path="/api/amina/audios",
@@ -222,5 +229,26 @@ class AminaController extends Controller
         })->findOrFail($id);
 
         return new VideoGalleryResources($videoGallery);
+    }
+
+    public function addFeedback(Request $request): JsonResponse
+    {
+        $feedbackData = $request->validate([
+            'text' => 'string|min:10|max:255',
+            'image' => 'file|mimes:jpg,jpeg,png,svg|max:2000',
+            'organization' => 'nullable|string|max:255',
+            'private_person' => 'nullable|boolean'
+        ]);
+
+        if (!$this->checkForbiddenWord($feedbackData['text'])) {
+            return response()->json('Вы используете не допустимые слова. Измените текст и повторите попытку.');
+        }
+
+        $path = Storage::putFile('amina/feedbacks', $request->file('image'), 'public');
+        $feedbackData['image'] = $path;
+
+         AminaFeedback::create($feedbackData);
+
+         return response()->json('Отзыв успешно добавлен');
     }
 }
