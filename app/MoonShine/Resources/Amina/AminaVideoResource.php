@@ -24,7 +24,9 @@ use MoonShine\UI\Fields\File;
 use MoonShine\UI\Fields\Hidden;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
 use MoonShine\UI\Fields\Url;
 
 /**
@@ -56,7 +58,8 @@ class AminaVideoResource extends ModelResource
             Text::make('Название', 'name'),
             Image::make( 'preview'),
             BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true)
+                ->inLine('', true),
+            Switcher::make('Опубликовано', 'is_published')->updateOnPreview()
         ];
     }
 
@@ -73,7 +76,7 @@ class AminaVideoResource extends ModelResource
                             ID::make(),
                             Text::make('Название', 'name')
                                 ->required(),
-                            Text::make('Описание', 'title')
+                            Textarea::make('Описание', 'title')
                                 ->required(),
                         ])
                     ])->columnSpan(8),
@@ -95,7 +98,8 @@ class AminaVideoResource extends ModelResource
                                 Tab::make('Ссылка на видео', [
                                     Url::make('','link')->blank()
                                 ])
-                            ])
+                            ]),
+                            Switcher::make('Опубликовано', 'is_published')->updateOnPreview()
                         ])
                     ])->columnSpan(4)
                 ])
@@ -115,7 +119,8 @@ class AminaVideoResource extends ModelResource
             Image::make( 'preview'),
             File::make('Видео', 'video'),
             BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true)
+                ->inLine('', true),
+            Switcher::make('Опубликовано', 'is_published')->updateOnPreview()
         ];
     }
 
