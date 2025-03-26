@@ -134,12 +134,11 @@ class NewsResource extends ModelResource
 
     public function createContent(string $itemId, string $field, string $value): void
     {
-        $newsContent = NewsContent::where('news_id', $itemId)->latest()->first();
-        $position = $newsContent ? $newsContent->position + 1 : 1;
+        $position = NewsContent::where('news_id', $itemId)->max('position');
 
         NewsContent::create([
             'news_id' => $this->getItemID(),
-            'position' => $position,
+            'position' => $position ? $position + 1 : 1,
             $field => $value
         ]);
     }
