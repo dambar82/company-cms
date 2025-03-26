@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('amina_feedback', function (Blueprint $table) {
             $table->id();
+            $table->string('creator');
+            $table->string('job_title')->nullable();
+            $table->string('region');
+            $table->string('fio');
+            $table->string('email');
             $table->string('text');
             $table->string('image')->nullable();
-            $table->string('organization')->nullable();
-            $table->boolean('private_person')->default(false);
             $table->timestamps();
         });
     }

@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\Amina;
 
 use App\Models\AminaFeedback;
-use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\ClickAction;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Grid;
-use MoonShine\UI\Components\Layout\LineBreak;
-use MoonShine\UI\Fields\Checkbox;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Text;
@@ -30,7 +27,7 @@ class AminaFeedbackResource extends ModelResource
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function indexFields(): iterable
     {
@@ -38,13 +35,16 @@ class AminaFeedbackResource extends ModelResource
             ID::make()->sortable(),
             Textarea::make('Отзыв', 'text'),
             Image::make('Картинка', 'image'),
-            Textarea::make('Организация', 'organization'),
-            Checkbox::make('Частное лицо', 'private_person')
+            Text::make('Создатель', 'creator'),
+            Text::make('Должность', 'job_title'),
+            Text::make('Регион', 'region'),
+            Text::make('ФИО', 'fio'),
+            Text::make('Email')
         ];
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function formFields(): iterable
     {
@@ -60,11 +60,11 @@ class AminaFeedbackResource extends ModelResource
                     ])->columnSpan(8),
                     Column::make([
                         Box::make([
-                            Textarea::make('Организация', 'organization')
-                                ->showWhen('private_person', 0),
-                            Checkbox::make('Частное лицо', 'private_person')
-                                ->disabled()
-                                ->showWhen('organization', '')
+                           Text::make('Создатель', 'creator'),
+                           Text::make('Должность', 'job_title'),
+                           Text::make('Регион', 'region'),
+                           Text::make('ФИО', 'fio'),
+                           Text::make('Email')
                         ])
                     ])->columnSpan(4)
                 ])
@@ -73,7 +73,7 @@ class AminaFeedbackResource extends ModelResource
     }
 
     /**
-     * @return FieldContract
+     * @return iterable
      */
     protected function detailFields(): iterable
     {
@@ -82,8 +82,11 @@ class AminaFeedbackResource extends ModelResource
             ID::make()->sortable(),
             Textarea::make('Отзыв', 'text'),
             Image::make('Картинка', 'image'),
-            Textarea::make('Организация', 'organization'),
-            Checkbox::make('Частное лицо', 'private_person')
+            Text::make('Создатель', 'creator'),
+            Text::make('Должность', 'job_title'),
+            Text::make('Регион', 'region'),
+            Text::make('ФИО', 'fio'),
+            Text::make('Email')
         ];
     }
 

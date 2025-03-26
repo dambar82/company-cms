@@ -24,6 +24,9 @@ Route::prefix('amina')->group( function () {
     Route::get('video', [AminaController::class, 'getVideos']);
     Route::get('video/{id}', [AminaController::class, 'getVideo']);
     Route::post('add_feedback', [AminaController::class, 'addFeedback']);
+    Route::get('new_feedbacks', [AminaController::class, 'getNewFeedbacks']);
+    Route::get('old_feedbacks', [AminaController::class, 'getOldFeedbacks']);
+    Route::get('image_feedbacks', [AminaController::class, 'getImageFeedbacks']);
 });
 
 Route::prefix('abubakirov')->group( function () {

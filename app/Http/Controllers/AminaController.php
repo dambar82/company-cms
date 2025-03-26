@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AminaFeedbackResource;
 use App\Http\Resources\AudioResource;
 use App\Http\Resources\NewsResource;
 use App\Http\Resources\VideoGalleryResources;
@@ -235,14 +236,17 @@ class AminaController extends Controller
     public function addFeedback(Request $request): JsonResponse
     {
         try {
-            $validated = $request->validate([
+            $feedback = $request->validate([
+                'creator' => 'required|string',
+                'job_title' => 'nullable|string|max:60',
+                'region' => 'required|string|max:20|min:3',
+                'fio' => 'required|string|max:20|min:3',
+                'email' => 'required|email|max:20|min:6',
                 'text' => 'required|string|min:10|max:255',
                 'image' => 'required|file|mimes:jpg,jpeg,png,svg|max:2000',
-                'organization' => 'nullable|string|max:255',
-                'private_person' => 'nullable|boolean'
             ]);
 
-            if (!$this->checkForbiddenWord($validated['text'])) {
+            if (!$this->checkForbiddenWord($feedback['text'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Текст содержит запрещенные слова. Пожалуйста, измените текст и попробуйте снова.'
@@ -253,10 +257,13 @@ class AminaController extends Controller
             $path = $image->store('amina/feedbacks', 'public');
 
             AminaFeedback::create([
-                'text' => $validated['text'],
-                'image' => $path,
-                'organization' => $validated['organization'] ?? null,
-                'private_person' => $validated['private_person'] ?? false
+                'creator' => $feedback['creator'],
+                'job_title' => $feedback['job_title'],
+                'region' => $feedback['region'],
+                'fio' => $feedback['fio'],
+                'email' => $feedback['email'],
+                'text' => $feedback['text'],
+                'image' => $path
             ]);
 
             return response()->json([
@@ -278,5 +285,20 @@ class AminaController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function getNewFeedbacks(): AnonymousResourceCollection
+    {
+        return AminaFeedbackResource::collection(AminaFeedback::all()->sortDesc());
+    }
+
+    public function getOldFeedbacks(): AnonymousResourceCollection
+    {
+        return AminaFeedbackResource::collection(AminaFeedback::all());
+    }
+
+    public function getImageFeedbacks(): AnonymousResourceCollection
+    {
+        return AminaFeedbackResource::collection(AminaFeedback::orderByRaw('image IS NULL, image')->get());
     }
 }
