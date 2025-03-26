@@ -1,4 +1,4 @@
-//import './bootstrap';
+import './bootstrap';
 
 document.addEventListener("moonshine:init", () => {
     MoonShine.onCallback('myResponse', function(data, messageType, component) {
@@ -7,5 +7,7 @@ document.addEventListener("moonshine:init", () => {
 })
 
 function deleteElement() {
-   console.log('test')
+   console.log('test');
+    document.getElementById('add-inputs').addEventListener('click', deleteElement);
 }
+console.log('test');

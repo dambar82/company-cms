@@ -8,8 +8,6 @@ use App\MoonShine\Resources\News\NewsContentResource;
 use App\MoonShine\Resources\ProjectResource;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Fields\Relationships\HasMany;
-use MoonShine\Laravel\Fields\Relationships\HasOne;
-use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
 use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
@@ -18,20 +16,17 @@ use MoonShine\Support\DTOs\AsyncCallback;
 use MoonShine\TinyMce\Fields\TinyMce;
 use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\ActionGroup;
-use MoonShine\UI\Components\Collapse;
-use MoonShine\UI\Components\FormBuilder;
+use MoonShine\UI\Components\Icon;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Div;
 use MoonShine\UI\Components\Layout\Divider;
 use MoonShine\UI\Components\Layout\Grid;
-use MoonShine\UI\Components\Tabs;
-use MoonShine\UI\Components\Tabs\Tab;
+use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\File;
-use MoonShine\UI\Fields\Hidden;
-use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Preview;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Textarea;
@@ -79,7 +74,8 @@ class NewsFormPage extends FormPage
                      resource: NewsContentResource::class
                 )
                     ->fields([
-                        ID::make(),
+                        Preview::make(formatted: static fn() => Icon::make('bars-4')),
+                        Text::make('Позиция', 'position'),
                         TinyMce::make('Текст', 'text'),
                         Image::make('Фото', 'image')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
@@ -91,7 +87,9 @@ class NewsFormPage extends FormPage
                             ->dir('news/videos')
                             ->removable(),
                         Url::make('Ссылка на видео','link')
-                    ]),
+                    ])->modifyTable(fn(TableBuilder $table, bool $preview) => $preview ? $table : $table
+                        ->reorderable(url: '/news_content_reorder/' . $this->getResource()->getItemID(), key: 'id', group: 'group-name')),
+
                 Div::make()->customAttributes([
                     'id' => 'add-inputs'
                 ]),
@@ -118,7 +116,7 @@ class NewsFormPage extends FormPage
                             callback: AsyncCallback::with(afterResponse: 'myResponse'),
                             resource: $this->getResource()
                         )->secondary(),
-                ]),
+                ])
             ]);
         }
 

@@ -11,10 +11,10 @@ use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\SortDirection;
 use MoonShine\Support\ListOf;
 use MoonShine\TinyMce\Fields\TinyMce;
-use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\File;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Url;
 
 /**
@@ -22,6 +22,8 @@ use MoonShine\UI\Fields\Url;
  */
 class NewsContentResource extends ModelResource
 {
+    protected string $title = 'Контент';
+
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
     protected bool $stickyTable = true;
@@ -30,7 +32,7 @@ class NewsContentResource extends ModelResource
 
     protected string $model = NewsContent::class;
 
-    protected string $title = 'NewsContents';
+    protected string $sortColumn = 'position';
 
     /**
      * @return iterable
@@ -39,39 +41,7 @@ class NewsContentResource extends ModelResource
     {
         return [
             ID::make()->sortable(),
-        ];
-    }
-
-    /**
-     * @return iterable
-     */
-    protected function formFields(): iterable
-    {
-        return [
-            Box::make([
-                ID::make(),
-                TinyMce::make('Текст', 'text'),
-                Image::make('Фото', 'image')
-                    ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                    ->dir('news/images')
-                    ->removable(),
-                File::make('Видео', 'video')
-                    ->allowedExtensions(['mp4'])
-                    ->disableDownload()
-                    ->dir('news/videos')
-                    ->removable(),
-                Url::make('Ссылка на видео','link')
-            ])
-        ];
-    }
-
-    /**
-     * @return iterable
-     */
-    protected function detailFields(): iterable
-    {
-        return [
-            ID::make(),
+            Text::make('Позиция', 'position'),
             TinyMce::make('Текст', 'text'),
             Image::make('Фото', 'image')
                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
@@ -83,6 +53,30 @@ class NewsContentResource extends ModelResource
                 ->dir('news/videos')
                 ->removable(),
             Url::make('Ссылка на видео','link')
+                ->blank()
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Позиция', 'position'),
+            TinyMce::make('Текст', 'text'),
+            Image::make('Фото', 'image')
+                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                ->dir('news/images')
+                ->removable(),
+            File::make('Видео', 'video')
+                ->allowedExtensions(['mp4'])
+                ->disableDownload()
+                ->dir('news/videos')
+                ->removable(),
+            Url::make('Ссылка на видео','link')
+                ->blank()
         ];
     }
 
@@ -95,5 +89,16 @@ class NewsContentResource extends ModelResource
     protected function rules(mixed $item): array
     {
         return [];
+    }
+
+    protected function search(): array
+    {
+        return ['id', 'text', 'link'];
+    }
+
+    protected function activeActions(): ListOf
+    {
+        return parent::activeActions()
+            ->except(Action::MASS_DELETE);
     }
 }

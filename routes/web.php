@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ReorderController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     echo 'Start Page';
 });
+
+Route::post('/news_content_reorder/{itemId}', [ReorderController::class, 'newsContentReorder']);
