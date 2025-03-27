@@ -36,6 +36,7 @@ class AminaFeedbackResource extends ModelResource
             Textarea::make('Отзыв', 'text'),
             Image::make('Картинка', 'image'),
             Text::make('Создатель', 'creator'),
+            Text::make('Организация', 'organization'),
             Text::make('Должность', 'job_title'),
             Text::make('Регион', 'region'),
             Text::make('ФИО', 'fio'),
@@ -61,6 +62,7 @@ class AminaFeedbackResource extends ModelResource
                     Column::make([
                         Box::make([
                            Text::make('Создатель', 'creator'),
+                           Text::make('Организация', 'organization'),
                            Text::make('Должность', 'job_title'),
                            Text::make('Регион', 'region'),
                            Text::make('ФИО', 'fio'),
@@ -83,6 +85,7 @@ class AminaFeedbackResource extends ModelResource
             Textarea::make('Отзыв', 'text'),
             Image::make('Картинка', 'image'),
             Text::make('Создатель', 'creator'),
+            Text::make('Организация', 'organization'),
             Text::make('Должность', 'job_title'),
             Text::make('Регион', 'region'),
             Text::make('ФИО', 'fio'),
