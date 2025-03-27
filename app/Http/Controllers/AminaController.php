@@ -119,19 +119,21 @@ class AminaController extends Controller
             ->where('images', '<>', '[]')
             ->orderBy('created_at', 'desc')
             ->get();
-
+    
         $newsWithoutImages = News::query()
             ->whereHas('projects', function ($query) {
                 $query->where('project_id', 1);
             })
-            ->where('active', true)
-            ->whereNull('images')
-            ->orWhere('images', '=', '[]')
+            ->where('active', true) // Изменено
+            ->where(function ($query) {
+                $query->whereNull('images')
+                      ->orWhere('images', '=', '[]');
+            })
             ->orderBy('created_at', 'desc')
             ->get();
-
+    
         $allNews = $newsWithImages->merge($newsWithoutImages);
-
+    
         return NewsResource::collection($allNews);
     }
 
@@ -233,6 +235,42 @@ class AminaController extends Controller
         return new VideoGalleryResources($videoGallery);
     }
 
+        /**
+     * @OA\Post(
+     *     path="/api/amina/add_feedback",
+     *     summary="Добавление отзыва",
+     *     description="Метод позволяет пользователю добавить отзыв с текстом и изображением.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"creator", "region", "fio", "email", "text", "image"},
+     *             @OA\Property(property="creator", type="string", example="Создатель"),
+     *             @OA\Property(property="organization", type="string", example="Организация"),
+     *             @OA\Property(property="job_title", type="string", example="Должность"),
+     *             @OA\Property(property="region", type="string", example="Казань"),
+     *             @OA\Property(property="fio", type="string", example="Иванов Иван Иванович"),
+     *             @OA\Property(property="email", type="string", example="user@example.com"),
+     *             @OA\Property(property="text", type="string", example="Текст отзыва"),
+     *             @OA\Property(property="image", type="string", format="binary", description="Картинка")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Отзыв успешно добавлен",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Ошибка валидации",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Ошибка при добавлении отзыва",
+     *         @OA\JsonContent()
+     *     )
+     * )
+     */
     public function addFeedback(Request $request): JsonResponse
     {
         try {
@@ -288,16 +326,70 @@ class AminaController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/amina/new_feedbacks",
+     *     tags={"Amina"},
+     *     summary="Выводит сначала новые отзывы",
+     *     description="Returns a collection of feedback filtered by project ID 1.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="No news found for the specified project",
+     *         @OA\JsonContent()
+     *     ),
+     * )
+     */
     public function getNewFeedbacks(): AnonymousResourceCollection
     {
         return AminaFeedbackResource::collection(AminaFeedback::all()->sortDesc());
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/amina/old_feedbacks",
+     *     tags={"Amina"},
+     *     summary="Выводит сначала старые отзывы",
+     *     description="Returns a collection of feedback filtered by project ID 1.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="No news found for the specified project",
+     *         @OA\JsonContent()
+     *     ),
+     * )
+     */
     public function getOldFeedbacks(): AnonymousResourceCollection
     {
         return AminaFeedbackResource::collection(AminaFeedback::all());
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/amina/image_feedbacks",
+     *     tags={"Amina"},
+     *     summary="Выводит сначала отзывы с картинками",
+     *     description="Returns a collection of feedback filtered by project ID 1.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="No news found for the specified project",
+     *         @OA\JsonContent()
+     *     ),
+     * )
+     */
     public function getImageFeedbacks(): AnonymousResourceCollection
     {
         return AminaFeedbackResource::collection(AminaFeedback::orderByRaw('image IS NULL, image')->get());

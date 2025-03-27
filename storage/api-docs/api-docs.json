@@ -360,6 +360,176 @@
                 }
             }
         },
+        "/api/amina/add_feedback": {
+            "post": {
+                "summary": "Добавление отзыва",
+                "description": "Метод позволяет пользователю добавить отзыв с текстом и изображением.",
+                "operationId": "a3bf0d1e80bae4baf03bbbaaa16c9f95",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "creator",
+                                    "region",
+                                    "fio",
+                                    "email",
+                                    "text",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "creator": {
+                                        "type": "string",
+                                        "example": "Создатель"
+                                    },
+                                    "organization": {
+                                        "type": "string",
+                                        "example": "Организация"
+                                    },
+                                    "job_title": {
+                                        "type": "string",
+                                        "example": "Должность"
+                                    },
+                                    "region": {
+                                        "type": "string",
+                                        "example": "Казань"
+                                    },
+                                    "fio": {
+                                        "type": "string",
+                                        "example": "Иванов Иван Иванович"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Текст отзыва"
+                                    },
+                                    "image": {
+                                        "description": "Картинка",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Отзыв успешно добавлен",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка валидации",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка при добавлении отзыва",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/amina/new_feedbacks": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Выводит сначала новые отзывы",
+                "description": "Returns a collection of feedback filtered by project ID 1.",
+                "operationId": "984fc08ad0d3f3f4dce80d450e76f3d9",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No news found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/amina/old_feedbacks": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Выводит сначала старые отзывы",
+                "description": "Returns a collection of feedback filtered by project ID 1.",
+                "operationId": "e76020179d6426d455065776d0ac7990",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No news found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/amina/image_feedbacks": {
+            "get": {
+                "tags": [
+                    "Amina"
+                ],
+                "summary": "Выводит сначала отзывы с картинками",
+                "description": "Returns a collection of feedback filtered by project ID 1.",
+                "operationId": "8316d986c2465f996c2bdbbaef8c5e51",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No news found for the specified project",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/master_dig_tech/services": {
             "get": {
                 "tags": [
