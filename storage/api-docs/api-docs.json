@@ -226,14 +226,14 @@
                 }
             }
         },
-        "/api/amina/news": {
+        "/api/amina/songs": {
             "get": {
                 "tags": [
                     "Amina"
                 ],
-                "summary": "Все новости",
-                "description": "Returns a collection of news articles filtered by project ID 1, including articles with and without images.",
-                "operationId": "1f654b123bb56d589d789c1b4b248ae6",
+                "summary": "Все песни",
+                "description": "Returns a collection of songs.",
+                "operationId": "41e98f9499b9194fb6db5fb8c7dbc663",
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -244,7 +244,7 @@
                         }
                     },
                     "404": {
-                        "description": "No news found for the specified project",
+                        "description": "No songs found",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -254,19 +254,19 @@
                 }
             }
         },
-        "/api/amina/news/{id}": {
+        "/api/amina/songs/{id}": {
             "get": {
                 "tags": [
                     "Amina"
                 ],
-                "summary": "Новость по ID",
-                "description": "Returns a news article for the specified ID.",
-                "operationId": "0e8023c9c7b05c7e1f4810abc4abb190",
+                "summary": "Песня по ID",
+                "description": "Returns a song for the specified ID.",
+                "operationId": "4dec4ce403fe201b07d937170ffa6c0e",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the news article",
+                        "description": "ID of the song",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -283,7 +283,7 @@
                         }
                     },
                     "404": {
-                        "description": "News record not found",
+                        "description": "Song record not found",
                         "content": {
                             "application/json": {
                                 "schema": {}

@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\AminaFeedbackResource;
 use App\Http\Resources\AudioResource;
-use App\Http\Resources\NewsResource;
+use App\Http\Resources\AminaSongResource;
 use App\Http\Resources\VideoGalleryResources;
 use App\Http\Traits\CheckForbiddenWordTrait;
 use App\Models\AminaFeedback;
 use App\Models\Audio;
-use App\Models\News;
+use App\Models\AminaSong;
 use App\Models\VideoGallery;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -92,10 +92,10 @@ class AminaController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/amina/news",
+     *     path="/api/amina/songs",
      *     tags={"Amina"},
-     *     summary="Все новости",
-     *     description="Returns a collection of news articles filtered by project ID 1, including articles with and without images.",
+     *     summary="Все песни",
+     *     description="Returns a collection of songs.",
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
@@ -103,51 +103,29 @@ class AminaController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="No news found for the specified project",
+     *         description="No songs found",
      *         @OA\JsonContent()
      *     ),
      * )
      */
-    public function getAllNews(): AnonymousResourceCollection
-    {
-        $newsWithImages = News::query()
-            ->whereHas('projects', function ($query) {
-                $query->where('project_id', 1);
-            })
-            ->where('active', true)
-            ->whereNotNull('images')
-            ->where('images', '<>', '[]')
-            ->orderBy('created_at', 'desc')
-            ->get();
-    
-        $newsWithoutImages = News::query()
-            ->whereHas('projects', function ($query) {
-                $query->where('project_id', 1);
-            })
-            ->where('active', true) // Изменено
-            ->where(function ($query) {
-                $query->whereNull('images')
-                      ->orWhere('images', '=', '[]');
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
-    
-        $allNews = $newsWithImages->merge($newsWithoutImages);
-    
-        return NewsResource::collection($allNews);
+    public function getAllSongs(): AnonymousResourceCollection
+    {    
+        $songs = AminaSong::where('active', 1)->get();
+
+        return AminaSongResource::collection($songs);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/amina/news/{id}",
+     *     path="/api/amina/songs/{id}",
      *     tags={"Amina"},
-     *     summary="Новость по ID",
-     *     description="Returns a news article for the specified ID.",
+     *     summary="Песня по ID",
+     *     description="Returns a song for the specified ID.",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of the news article",
+     *         description="ID of the song",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
@@ -157,19 +135,14 @@ class AminaController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="News record not found",
+     *         description="Song record not found",
      *         @OA\JsonContent()
      *     )
      * )
      */
-    public function getNews(int $id): NewsResource
+    public function getSong(int $id): AminaSongResource
     {
-        $news = News::query()
-            ->whereHas('projects', function ($query) {
-            $query->where('project_id', 1);
-        })->findOrFail($id);
-
-        return new NewsResource($news);
+        return new AminaSongResource(AminaSong::find($id));
     }
 
     /**

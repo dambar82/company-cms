@@ -28,6 +28,7 @@ use MoonShine\MenuManager\MenuDivider;
 use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
 use MoonShine\UI\Components\{Layout\Layout};
+use App\MoonShine\Resources\Amina\AminaSongResource;
 
 final class MoonShineLayout extends CompactLayout
 {
@@ -48,7 +49,7 @@ final class MoonShineLayout extends CompactLayout
                 MenuItem::make('Видеогалереи', AbubakirovVideoGalleryResource::class)->icon('videcamera'),
             ])->icon('s.inbox-stack'),
             MenuGroup::make('Амина', [
-                MenuItem::make('Новости', AminaNewsResource::class)->icon('newspaper'),
+                MenuItem::make('Песни', AminaSongResource::class)->icon('musical-note'),
                 MenuItem::make('Аудио', AminaAudioResource::class)->icon('speaker-wave'),
                 MenuItem::make('Видео', AminaVideoResource::class)->icon('videcamera'),
                 MenuItem::make('Отзывы', AminaFeedbackResource::class)->icon('pencil-square')
