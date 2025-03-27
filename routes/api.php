@@ -27,6 +27,7 @@ Route::prefix('amina')->group( function () {
     Route::get('new_feedbacks', [AminaController::class, 'getNewFeedbacks']);
     Route::get('old_feedbacks', [AminaController::class, 'getOldFeedbacks']);
     Route::get('image_feedbacks', [AminaController::class, 'getImageFeedbacks']);
+    Route::get('districts', [AminaController::class, 'getDistricts']);
 });
 
 Route::prefix('abubakirov')->group( function () {

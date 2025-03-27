@@ -368,4 +368,12 @@ class AminaController extends Controller
     {
         return AminaFeedbackResource::collection(AminaFeedback::orderByRaw('image IS NULL, image')->get());
     }
+
+    /**
+     * @return array
+     */
+    public function getDistricts(): array
+    {
+        return District::all()->toArray();
+    }
 }
