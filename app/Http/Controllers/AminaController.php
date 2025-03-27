@@ -375,6 +375,6 @@ class AminaController extends Controller
      */
     public function getDistricts(): array
     {
-        return District::all()->toArray();
+        return District::all()->select('title')->toArray();
     }
 }
