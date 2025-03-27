@@ -362,6 +362,9 @@
         },
         "/api/amina/add_feedback": {
             "post": {
+                "tags": [
+                    "Amina"
+                ],
                 "summary": "Добавление отзыва",
                 "description": "Метод позволяет пользователю добавить отзыв с текстом и изображением.",
                 "operationId": "a3bf0d1e80bae4baf03bbbaaa16c9f95",

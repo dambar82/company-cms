@@ -238,6 +238,7 @@ class AminaController extends Controller
         /**
      * @OA\Post(
      *     path="/api/amina/add_feedback",
+     *     tags={"Amina"},
      *     summary="Добавление отзыва",
      *     description="Метод позволяет пользователю добавить отзыв с текстом и изображением.",
      *     @OA\RequestBody(
