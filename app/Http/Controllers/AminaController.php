@@ -238,6 +238,7 @@ class AminaController extends Controller
         try {
             $feedback = $request->validate([
                 'creator' => 'required|string',
+                'organization' => 'nullable|string|max:60',
                 'job_title' => 'nullable|string|max:60',
                 'region' => 'required|string|max:20|min:3',
                 'fio' => 'required|string|max:20|min:3',

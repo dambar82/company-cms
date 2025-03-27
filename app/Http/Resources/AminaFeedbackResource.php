@@ -15,10 +15,14 @@ class AminaFeedbackResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'creator' => $this->creator,
+            'organization' => $this->organization,
+            'job_title' => $this->job_title,
+            'region' => $this->region,
+            'fio' => $this->fio,
+            'email' => $this->email,
             'text' => $this->text,
             'image' => $this->image,
-            'organization' => $this->organization,
-            'private_person' => $this->private_person,
         ];
     }
 }
