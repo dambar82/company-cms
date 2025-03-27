@@ -18,7 +18,7 @@ class AminaSongResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'image' => $this->image,
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
         ];
     }
 }
