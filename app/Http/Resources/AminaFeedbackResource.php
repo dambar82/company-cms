@@ -22,7 +22,7 @@ class AminaFeedbackResource extends JsonResource
             'fio' => $this->fio,
             'email' => $this->email,
             'text' => $this->text,
-            'image' => $this->image,
+            'images' => $this->images != null ? array_map(fn($file) => asset('storage') .'/'. $file  , $this->images) : null,
         ];
     }
 }

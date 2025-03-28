@@ -34,7 +34,9 @@ class AminaFeedbackResource extends ModelResource
         return [
             ID::make()->sortable(),
             Textarea::make('Отзыв', 'text'),
-            Image::make('Картинка', 'image'),
+            Image::make('Картинка', 'images')
+                ->dir('amina/feedbacks')
+                ->multiple(),
             Text::make('Создатель', 'creator'),
             Text::make('Организация', 'organization'),
             Text::make('Должность', 'job_title'),
@@ -56,7 +58,9 @@ class AminaFeedbackResource extends ModelResource
                     Column::make([
                         Box::make([
                             Textarea::make('Отзыв', 'text'),
-                            Image::make('Картинка', 'image')
+                            Image::make('Картинка', 'images')
+                                ->dir('amina/feedbacks')
+                                ->multiple()
                     ])
                     ])->columnSpan(8),
                     Column::make([
@@ -66,7 +70,10 @@ class AminaFeedbackResource extends ModelResource
                            Text::make('Должность', 'job_title'),
                            Text::make('Регион', 'region'),
                            Text::make('ФИО', 'fio'),
-                           Text::make('Email')
+                           Text::make('Email'),
+                            Image::make('Картинка', 'images')
+                                ->dir('amina/feedbacks')
+                                ->multiple()
                         ])
                     ])->columnSpan(4)
                 ])
@@ -83,7 +90,9 @@ class AminaFeedbackResource extends ModelResource
             ID::make(),
             ID::make()->sortable(),
             Textarea::make('Отзыв', 'text'),
-            Image::make('Картинка', 'image'),
+            Image::make('Картинка', 'images')
+                ->dir('amina/feedbacks')
+                ->multiple(),
             Text::make('Создатель', 'creator'),
             Text::make('Организация', 'organization'),
             Text::make('Должность', 'job_title'),

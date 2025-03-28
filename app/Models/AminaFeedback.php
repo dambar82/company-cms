@@ -14,6 +14,10 @@ class AminaFeedback extends Model
         'fio',
         'email',
         'text',
-        'image'
+        'images'
+    ];
+
+    protected $casts = [
+        'images' => 'array'
     ];
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('fio');
             $table->string('email');
             $table->string('text');
-            $table->string('image')->nullable();
+            $table->string('images')->nullable();
             $table->timestamps();
         });
     }

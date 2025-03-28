@@ -259,7 +259,8 @@ class AminaController extends Controller
                 'fio' => 'required|string|max:20|min:3',
                 'email' => 'required|email|max:20|min:6',
                 'text' => 'required|string|min:10|max:255',
-                'image' => 'required|file|mimes:jpg,jpeg,png,svg|max:2000',
+                'images' => 'nullable|array',
+                'images*' => 'required|file|mimes:jpg,jpeg,png,svg|max:2048',
             ]);
 
             if (!$this->checkForbiddenWord($feedback['text'])) {
@@ -269,17 +270,26 @@ class AminaController extends Controller
                 ], 422);
             }
 
-            $image = $request->file('image');
-            $path = $image->store('amina/feedbacks', 'public');
+            if ($request->hasFile('images')) {
+                $images = [];
+
+                foreach ($request->file('images') as $image) {
+                    if ($image->isValid()) {
+                        $image = $image->store('amina/feedbacks', 'public');
+                        $images[] = $image;
+                    }
+                }
+            }
 
             AminaFeedback::create([
                 'creator' => $feedback['creator'],
+                'organization' => $feedback['organization'],
                 'job_title' => $feedback['job_title'],
                 'region' => $feedback['region'],
                 'fio' => $feedback['fio'],
                 'email' => $feedback['email'],
                 'text' => $feedback['text'],
-                'image' => $path
+                'images' => $images
             ]);
 
             return response()->json([

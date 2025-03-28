@@ -52,6 +52,7 @@ final class MoonShineLayout extends CompactLayout
                 MenuItem::make('Песни', AminaSongResource::class)->icon('musical-note'),
                 MenuItem::make('Аудио', AminaAudioResource::class)->icon('speaker-wave'),
                 MenuItem::make('Видео', AminaVideoResource::class)->icon('videcamera'),
+                MenuItem::make('Новости', AminaNewsResource::class)->icon('newspaper'),
                 MenuItem::make('Отзывы', AminaFeedbackResource::class)->icon('pencil-square')
             ])->icon('s.inbox-stack'),
             MenuGroup::make('Мастер Цифровых Технологий', [
