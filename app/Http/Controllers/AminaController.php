@@ -251,7 +251,7 @@ class AminaController extends Controller
     public function addFeedback(Request $request): JsonResponse
     {
         try {
-            $feedback = $request->validate([
+            $validated = $request->validate([
                 'creator' => 'required|string',
                 'organization' => 'nullable|string|max:60',
                 'job_title' => 'nullable|string|max:60',
@@ -260,37 +260,30 @@ class AminaController extends Controller
                 'email' => 'required|email|max:40|min:6',
                 'text' => 'required|string|min:10|max:255',
                 'images' => 'nullable|array',
-                'images*' => 'required|file|mimes:jpg,jpeg,png,svg|max:2048',
+                'images.*' => 'required|file|mimes:jpg,jpeg,png,svg|max:2048'
             ]);
 
-            if (!$this->checkForbiddenWord($feedback['text'])) {
+            if (!$this->checkForbiddenWord($validated['text'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Текст содержит запрещенные слова. Пожалуйста, измените текст и попробуйте снова.'
                 ], 422);
             }
 
+            $images = [];
             if ($request->hasFile('images')) {
-                $images = [];
-
                 foreach ($request->file('images') as $image) {
                     if ($image->isValid()) {
-                        $image = $image->store('amina/feedbacks', 'public');
-                        $images[] = $image;
+                        $path = $image->store('amina/feedbacks', 'public');
+                        $images[] = $path;
                     }
                 }
             }
 
-            AminaFeedback::create([
-                'creator' => $feedback['creator'],
-                'organization' => $feedback['organization'],
-                'job_title' => $feedback['job_title'],
-                'region' => $feedback['region'],
-                'fio' => $feedback['fio'],
-                'email' => $feedback['email'],
-                'text' => $feedback['text'],
-                'images' => $images
-            ]);
+            $feedbackData = $validated;
+            $feedbackData['images'] = !empty($images) ? json_encode($images) : null;
+
+            AminaFeedback::create($feedbackData);
 
             return response()->json([
                 'success' => true,
