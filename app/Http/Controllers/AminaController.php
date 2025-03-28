@@ -372,7 +372,7 @@ class AminaController extends Controller
      */
     public function getImageFeedbacks(): AnonymousResourceCollection
     {
-        return AminaFeedbackResource::collection(AminaFeedback::orderByRaw('image IS NULL, image')->get());
+        return AminaFeedbackResource::collection(AminaFeedback::orderByRaw('images IS NULL, images')->get());
     }
 
     /**
