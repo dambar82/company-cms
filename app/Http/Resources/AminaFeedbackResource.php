@@ -24,6 +24,7 @@ class AminaFeedbackResource extends JsonResource
             'email' => $this->email,
             'text' => $this->text,
             'images' => $this->images != null ? array_map(fn($file) => asset('storage') .'/'. $file  , $this->images) : null,
+            'date' => $this->created_at->format('d/m/Y'),
         ];
     }
 }
