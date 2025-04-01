@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('region');
             $table->string('fio');
             $table->string('email');
-            $table->string('text');
+            $table->text('text');
             $table->string('images')->nullable();
             $table->timestamps();
         });

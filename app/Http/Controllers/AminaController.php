@@ -258,7 +258,7 @@ class AminaController extends Controller
                 'region' => 'required|string|max:20|min:3',
                 'fio' => 'required|string|max:40|min:3',
                 'email' => 'required|email|max:40|min:6',
-                'text' => 'required|string|min:10|max:255',
+                'text' => 'required|string|min:10|max:1000',
                 'images' => 'nullable|array',
                 'images.*' => 'required|file|mimes:jpg,jpeg,png,svg|max:2048'
             ]);
