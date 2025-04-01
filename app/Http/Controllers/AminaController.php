@@ -251,7 +251,7 @@ class AminaController extends Controller
     public function addFeedback(Request $request): JsonResponse
     {
         try {
-            $validated = $request->validate([
+            $feedbackData = $request->validate([
                 'creator' => 'required|string',
                 'organization' => 'nullable|string|max:60',
                 'job_title' => 'nullable|string|max:60',
@@ -263,7 +263,7 @@ class AminaController extends Controller
                 'images.*' => 'required|file|mimes:jpg,jpeg,png,svg|max:2048'
             ]);
 
-            if (!$this->checkForbiddenWord($validated['text'])) {
+            if (!$this->checkForbiddenWord($feedbackData['text'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Текст содержит запрещенные слова. Пожалуйста, измените текст и попробуйте снова.'
@@ -280,8 +280,7 @@ class AminaController extends Controller
                 }
             }
 
-            $feedbackData = $validated;
-            $feedbackData['images'] = !empty($images) ? json_encode($images) : null;
+            $feedbackData['images'] = !empty($images) ? $images : null;
 
             AminaFeedback::create($feedbackData);
 
