@@ -61,7 +61,7 @@ final class MoonShineLayout extends CompactLayout
                 MenuItem::make('Заявки', RequestResource::class)->icon('inbox-arrow-down'),
             ])->icon('s.inbox-stack'),
             MenuDivider::make(),
-            MenuItem::make('Новости', NewsResource::class)->icon('newspaper'),
+            MenuItem::make('Все новости', NewsResource::class)->icon('s.newspaper'),
             MenuDivider::make(),
             MenuGroup::make('Викторины', [
                 MenuItem::make('Викторины', QuizResource::class)->icon('academic-cap'),

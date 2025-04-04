@@ -11,6 +11,7 @@ use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\SortDirection;
 use MoonShine\Support\ListOf;
 use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\File;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
@@ -60,6 +61,37 @@ class NewsContentResource extends ModelResource
     /**
      * @return iterable
      */
+    protected function formFields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                TinyMce::make('Текст', 'text')
+                    ->showWhen('text', '!=', ''),
+                Image::make('Фото', 'image')
+                    ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                    ->dir('news/images')
+                    ->removable()
+                    ->canSee(function (Image $field) {
+                        return $field->toValue() !== null;
+                    }),
+                File::make('Видео', 'video')
+                    ->allowedExtensions(['mp4'])
+                    ->disableDownload()
+                    ->dir('news/videos')
+                    ->removable()
+                    ->canSee(function (File $field) {
+                        return $field->toValue() !== null;
+                    }),
+                Url::make('Ссылка на видео','link')
+                    ->showWhen('link', '!=', '')
+            ])
+        ];
+    }
+
+    /**
+     * @return iterable
+     */
     protected function detailFields(): iterable
     {
         return [
@@ -99,6 +131,6 @@ class NewsContentResource extends ModelResource
     protected function activeActions(): ListOf
     {
         return parent::activeActions()
-            ->except(Action::MASS_DELETE);
+            ->except(Action::MASS_DELETE, Action::VIEW);
     }
 }

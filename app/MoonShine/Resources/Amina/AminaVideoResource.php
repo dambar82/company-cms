@@ -57,8 +57,6 @@ class AminaVideoResource extends ModelResource
             ID::make()->sortable(),
             Text::make('Название', 'name'),
             Image::make( 'preview'),
-            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true),
             Switcher::make('Опубликовано', 'is_published')->updateOnPreview()
         ];
     }
@@ -118,8 +116,6 @@ class AminaVideoResource extends ModelResource
             Text::make('Описание', 'title'),
             Image::make( 'preview'),
             File::make('Видео', 'video'),
-            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true),
             Switcher::make('Опубликовано', 'is_published')->updateOnPreview()
         ];
     }

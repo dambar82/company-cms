@@ -46,9 +46,7 @@ class AminaAudioResource extends ModelResource
         return [
             ID::make()->sortable(),
             Text::make('Название', 'title'),
-            File::make('Аудио', 'path'),
-            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true)
+            File::make('Аудио', 'path')
         ];
     }
 
@@ -91,9 +89,7 @@ class AminaAudioResource extends ModelResource
             ID::make()->sortable(),
             Text::make('Название', 'title'),
             File::make('Аудио', 'path')
-                ->dir('amina/audio'),
-            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true)
+                ->dir('amina/audio')
         ];
     }
 

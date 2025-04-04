@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Pages\News;
+namespace App\MoonShine\Pages\AminaNews;
 
 use App\MoonShine\Resources\News\NewsContentResource;
 use App\MoonShine\Resources\ProjectResource;
@@ -22,7 +22,7 @@ use MoonShine\UI\Fields\Url;
 use Throwable;
 
 
-class NewsDetailPage extends DetailPage
+class AminaNewsDetailPage extends DetailPage
 {
     /**
      * @return list<ComponentContract|FieldContract>
@@ -35,9 +35,7 @@ class NewsDetailPage extends DetailPage
             TinyMce::make('Текст новости', 'meta_description'),
             Date::make('Дата публикации', 'date'),
             Switcher::make('Новость активна', 'is_active')->updateOnPreview(),
-            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true),
-            HasMany::make('Контент', 'contents', resource: NewsContentResource::class)
+            HasMany::make('Текст', 'contents', resource: NewsContentResource::class)
                 ->fields([
                     TinyMce::make('Текст', 'content'),
                     Image::make('Фото', 'image'),

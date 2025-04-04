@@ -4,34 +4,33 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Amina;
 
+use App\MoonShine\Pages\AminaNews\AminaNewsDetailPage;
 use App\Models\News;
-use App\MoonShine\Resources\ProjectResource;
+use App\Models\NewsContent;
+use App\MoonShine\Pages\AminaNews\AminaNewsFormPage;
+use App\MoonShine\Pages\AminaNews\AminaNewsIndexPage;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
+use Illuminate\Http\File as Load;
+use Illuminate\Support\Facades\Storage;
+use MoonShine\Laravel\Http\Responses\MoonShineJsonResponse;
+use MoonShine\Laravel\MoonShineRequest;
+use MoonShine\Laravel\Pages\Page;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\Support\Enums\SortDirection;
 use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Layout\Box;
-use MoonShine\UI\Components\Layout\Column;
-use MoonShine\UI\Components\Layout\Divider;
-use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Components\Layout\Div;
+use MoonShine\UI\Components\Layout\Flex;
 use MoonShine\UI\Components\Layout\LineBreak;
-use MoonShine\UI\Components\Tabs;
-use MoonShine\UI\Components\Tabs\Tab;
-use MoonShine\UI\Fields\Hidden;
-use MoonShine\UI\Fields\Url;
-use MoonShine\UI\Fields\Date;
-use MoonShine\UI\Fields\Field;
 use MoonShine\UI\Fields\File;
-use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
-use MoonShine\UI\Fields\Switcher;
-use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Url;
 
 /**
- * @extends ModelResource<News>
+ * @extends ModelResource<AminaNewsResource, AminaNewsIndexPage, AminaNewsFormPage, AminaNewsDetailPage>
  */
 class AminaNewsResource extends ModelResource
 {
@@ -45,106 +44,166 @@ class AminaNewsResource extends ModelResource
 
     protected ?ClickAction $clickAction = ClickAction::EDIT;
 
-    protected ?PageType $redirectAfterSave = PageType::INDEX;
+    protected ?PageType $redirectAfterSave = PageType::FORM;
 
     /**
-     * @return iterable
+     * @return Page
      */
-    protected function indexFields(): iterable
+    protected function pages(): array
     {
         return [
-            ID::make()->sortable(),
-            Text::make('Название', 'title'),
-            Image::make('Фотографии', 'images')
-                ->dir('news/images')
-                ->multiple(),
-            Date::make('Дата публикации', 'date'),
-            Switcher::make('Новость активна', 'active')
-                ->updateOnPreview(),
-            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true)
+            AminaNewsIndexPage::class,
+            AminaNewsFormPage::class,
+            AminaNewsDetailPage::class,
         ];
     }
 
-    /**
-     * @return iterable
-     */
-    protected function formFields(): iterable
+    public function addText(MoonShineRequest $request): MoonShineJsonResponse
     {
-        return [
+        $data = $request->validate([
+            'key' => ['string', 'required']
+        ]);
+        return MoonShineJsonResponse::make()->html((string)
+        Div::make([
             Box::make([
-                Grid::make([
-                    Column::make([
-                        Box::make([
-                            ID::make(),
-                            Text::make('Название', 'title')
-                                ->required(),
-                            TinyMce::make('Текст новости', 'content'),
-                            Hidden::make('project')->setValue(1)
-                        ])
-                    ])->columnSpan(8),
-                    Column::make([
-                        Box::make([
-                            Date::make('Дата публикации', 'date')->required(),
-                            Divider::make(),
-                            Switcher::make('Новость активна', 'active')->updateOnPreview(),
-                            Divider::make(),
-                            Image::make('Фотографии', 'images')
-                                ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                                ->dir('news/images')
-                                ->multiple()
-                                ->removable(),
-                            Divider::make(),
-                            Tabs::make([
-                                Tab::make('Видео', [
-                                    File::make('', 'video')
-                                        ->allowedExtensions(['mp4'])
-                                        ->disableDownload()
-                                        ->dir('news/video')
-                                        ->removable()
-                                ]),
-                                Tab::make('Ссылка на видео', [
-                                    Url::make('','link_to_video')->blank()
-                                ])
-                            ])
-                        ])
-                    ])->columnSpan(4)
+                Flex::make([
+                    TinyMce::make('Текст', $data['key']),
+                    ActionButton::make('')->icon('trash')
+                        ->error()
+                        ->onClick(fn() => 'deleteElement()')
+                    //   ->onClick(fn() => "alert('Пример')", 'prevent')
+                ])->itemsAlign('end')
+            ]),
+            LineBreak::make()
+        ])
+        );
+    }
+    public function addImage(MoonShineRequest $request): MoonShineJsonResponse
+    {
+        $data = $request->validate([
+            'key' => ['string', 'required']
+        ]);
+        return MoonShineJsonResponse::make()->html((string)
+        Div::make([
+            Box::make([
+                Flex::make([
+                    Image::make('Фото', $data['key'])
+                        ->allowedExtensions(['png', 'jpg', 'jpeg']),
+                    ActionButton::make('')
+                        ->icon('trash')
+                        ->error()
+                        ->onClick(fn() => 'deleteElement()')
+                ])->itemsAlign('end'),
+            ]),
+            LineBreak::make()
+        ])
+        );
+    }
+
+    public function addVideo(MoonShineRequest $request): MoonShineJsonResponse
+    {
+        $data = $request->validate([
+            'key' => ['string', 'required']
+        ]);
+        return MoonShineJsonResponse::make()->html((string)
+        Div::make([
+            Box::make([
+                Flex::make([
+                    File::make('Видео', 'video[]')
+                        ->allowedExtensions(['mp4']),
+                    Url::make('Ссылка на видео','link[]')->blank(),
+                    ActionButton::make('')
+                        ->icon('trash')
+                        ->error()
+                        ->onClick(fn() => 'deleteElement()')
                 ])
-            ])
-        ];
+                    ->justifyAlign('between')
+                    ->itemsAlign('end')
+            ]),
+            LineBreak::make()
+        ])
+        );
     }
 
-    /**
-     * @return iterable
-     */
-    protected function detailFields(): iterable
+    protected function afterUpdated(mixed $item): mixed
     {
-        return [
-            ID::make(),
-            Text::make('Название', 'title'),
-            TinyMce::make('Текст новости', 'content'),
-            Image::make('Фотографии', 'images')
-                ->dir('news/images')
-                ->multiple(),
-            File::make('Видео', 'video')
-                ->dir('news/videos'),
-            Url::make('Ссылка на видео','link_to_video'),
-            Date::make('Дата публикации', 'date'),
-            Switcher::make('Новость активна', 'active')->updateOnPreview(),
-            BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                ->inLine('', true)
-        ];
+        $this->createTextContent();
+        $this->createImageContent();
+        $this->createVideoContent();
+        $this->createLinkContent();
+
+        return $item;
     }
 
-    /**
-     * @param News $item
-     *
-     * @return array<string, string[]|string>
-     * @see https://laravel.com/docs/validation#available-validation-rules
-     */
-    protected function rules(mixed $item): array
+    public function createContent(string $itemId, string $field, string $value): void
     {
-        return [];
+        $position = NewsContent::where('news_id', $itemId)->max('position');
+
+        NewsContent::create([
+            'news_id' => $this->getItemID(),
+            'position' => $position ? $position + 1 : 1,
+            $field => $value
+        ]);
+    }
+
+    public function createTextContent(): void
+    {
+        if (!empty(request()->input('text'))) {
+            $texts = request()->input('text');
+
+            foreach ($texts as $text) {
+                $this->createContent($this->getItemID(), 'text', $text);
+            }
+        }
+    }
+
+    public function createImageContent(): void
+    {
+        if (!empty($_FILES['name']['tmp_name'])) {
+            foreach ($_FILES['name']['tmp_name'] as $key => $tmp_name) {
+                if ($_FILES['name']['error'][$key] === UPLOAD_ERR_OK) {
+                    $originalName = $_FILES['name']['name'][$key];
+
+                    // Создаем новое имя для сохранения
+                    $filename = time() . '_' . $originalName;
+
+                    Storage::putFileAs('public/news/images', new Load($tmp_name), $filename);
+
+                    $this->createContent($this->getItemID(), 'image', 'news/images/' . $filename);
+                }
+            }
+        }
+    }
+
+    public function createVideoContent(): void
+    {
+        if (!empty($_FILES['video']['tmp_name'])) {
+            foreach ($_FILES['video']['tmp_name'] as $key => $tmp_name) {
+                if ($_FILES['video']['error'][$key] === UPLOAD_ERR_OK) {
+                    $originalName = $_FILES['video']['name'][$key];
+
+                    // Создаем новое имя для сохранения
+                    $filename = time() . '_' . $originalName;
+
+                    Storage::putFileAs('public/news/videos', new Load($tmp_name), $filename);
+
+                    $this->createContent($this->getItemID(), 'video', 'news/videos/' . $filename);
+                }
+            }
+        }
+    }
+
+    public function createLinkContent(): void
+    {
+        if (!empty(request()->input('link'))) {
+            $links = request()->input('link');
+
+            foreach ($links as $link) {
+                if ($link != null) {
+                    $this->createContent($this->getItemID(), 'link', $link);
+                }
+            }
+        }
     }
 
     public function modifyQueryBuilder(Builder $builder): Builder

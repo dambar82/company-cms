@@ -46,11 +46,8 @@ class News extends Model
 
     protected $fillable = [
         'title',
-        'content',
+        'meta_description',
         'slug',
-        'images',
-        'video',
-        'link_to_video',
         'date',
         'active',
         'project'

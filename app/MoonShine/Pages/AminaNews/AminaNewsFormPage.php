@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Pages\News;
+namespace App\MoonShine\Pages\AminaNews;
 
 use App\MoonShine\Resources\News\NewsContentResource;
 use App\MoonShine\Resources\ProjectResource;
@@ -25,6 +25,7 @@ use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\File;
+use MoonShine\UI\Fields\Hidden;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Preview;
 use MoonShine\UI\Fields\Switcher;
@@ -34,7 +35,7 @@ use MoonShine\UI\Fields\Url;
 use Throwable;
 
 
-class NewsFormPage extends FormPage
+class AminaNewsFormPage extends FormPage
 {
     /**
      * @return list<ComponentContract|FieldContract>
@@ -58,8 +59,7 @@ class NewsFormPage extends FormPage
                     Box::make([
                         Date::make('Дата публикации', 'date')->required(),
                         Switcher::make('Новость активна', 'active')->updateOnPreview(),
-                        BelongsToMany::make('Проект', 'projects', resource: ProjectResource::class)
-                            ->required(),
+                        Hidden::make('project')->setValue(1),
                     ])
                 ])->columnSpan(4)
             ]),
@@ -71,7 +71,7 @@ class NewsFormPage extends FormPage
                 HasMany::make(
                     'Контент',
                     'contents',
-                     resource: NewsContentResource::class
+                    resource: NewsContentResource::class
                 )
                     ->fields([
                         Preview::make(formatted: static fn() => Icon::make('bars-4')),

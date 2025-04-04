@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\NewsContent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,11 +15,22 @@ class NewsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $images = [];
+        $content = NewsContent::where('news_id', $this->id)
+            ->select('position', 'text', 'image', 'video', 'link')
+            ->orderBy('position')
+            ->get()
+            ->values()
+            ->toArray();
 
-        if (!empty($this->images)) {
-            foreach ($this->images as $image) {
-                $images[] = asset('storage/') . '/' . $image;
+        if ($content) {
+            foreach ($content as $key => $item) {
+                if (!empty($item['image'])) {
+                    $content[$key]['image'] = asset('storage/' . $item['image']);
+                }
+
+                if (!empty($item['video'])) {
+                    $content[$key]['video'] = asset('storage/' . $item['video']);
+                }
             }
         }
 
@@ -27,9 +39,9 @@ class NewsResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'content' => $this->content,
-            'images' => $images,
-            'date' => $date
+            'slug' => $this->slug,
+            'date' => $date,
+            'content' => $content
         ];
     }
 }
