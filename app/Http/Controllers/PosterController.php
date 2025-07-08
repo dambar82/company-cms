@@ -9,10 +9,11 @@ class PosterController extends Controller
 {
     public function getAllPosters()
     {
-        return Poster::select('id', 'poster')
+        return Poster::select('id', 'poster_rus', 'poster_tat')
             ->get()
             ->map(function ($poster) {
-                $poster->poster = asset('storage/' . $poster->poster);
+                $poster->poster_rus = asset('storage/' . $poster->poster_rus);
+                $poster->poster_tat = asset('storage/' . $poster->poster_tat);
                 return $poster;
             });
     }
@@ -20,10 +21,11 @@ class PosterController extends Controller
     public function getPoster(Poster $poster)
     {
         return Poster::where('id', $poster->id)
-            ->select('id', 'poster')
+            ->select('id', 'poster_rus', 'poster_tat')
             ->get()
             ->map(function ($poster) {
-                $poster->poster = asset('storage/' . $poster->poster);
+                $poster->poster_rus = asset('storage/' . $poster->poster_rus);
+                $poster->poster_tat = asset('storage/' . $poster->poster_tat);
                 return $poster;
             });
     }

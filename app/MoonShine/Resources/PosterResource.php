@@ -10,6 +10,8 @@ use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\Support\Enums\SortDirection;
 use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Fields\ID;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\UI\ComponentContract;
@@ -37,7 +39,7 @@ class PosterResource extends ModelResource
     {
         return [
             ID::make()->sortable(),
-            Image::make('Плакат', 'poster')
+            Image::make('Плакат', 'poster_rus')
                 ->dir('posters')
                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
                 ->removable()
@@ -52,11 +54,22 @@ class PosterResource extends ModelResource
         return [
             Box::make([
                 ID::make(),
-                Image::make('Плакат', 'poster')
-                    ->dir('posters')
-                    ->allowedExtensions(['png', 'jpg', 'jpeg'])
-                    ->removable()
+                Grid::make([
+                    Column::make([
+                        Image::make('Плакат на русском', 'poster_rus')
+                            ->dir('posters')
+                            ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                            ->removable()
+                    ])->columnSpan(6)
+                ,
+                Column::make([
+                    Image::make('Плакат на татарском', 'poster_tat')
+                        ->dir('posters')
+                        ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                        ->removable()
+                ])->columnSpan(6)
             ])
+        ])
         ];
     }
 
@@ -67,7 +80,11 @@ class PosterResource extends ModelResource
     {
         return [
             ID::make(),
-            Image::make('Плакат', 'poster')
+            Image::make('Плакат на русском', 'poster_rus')
+                ->dir('posters')
+                ->allowedExtensions(['png', 'jpg', 'jpeg'])
+                ->removable(),
+            Image::make('Плакат на татарском', 'poster_tat')
                 ->dir('posters')
                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
                 ->removable()

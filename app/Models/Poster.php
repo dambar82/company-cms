@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Poster extends Model
 {
     protected $fillable = [
-        'poster'
+        'poster_rus',
+        'poster_tat'
     ];
 }
