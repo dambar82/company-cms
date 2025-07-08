@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbubakirovController;
 use App\Http\Controllers\AminaController;
 use App\Http\Controllers\MDTController;
+use App\Http\Controllers\PosterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,3 +48,6 @@ Route::prefix('master_dig_tech')->group( function () {
     Route::get('categories/{service_slug}', [MDTController::class, 'getCategoriesByServiceSlug']);
     Route::post('send_request', [MDTController::class, 'sendRequest']);
 });
+
+Route::get('posters',[PosterController::class, 'getAllPosters']);
+Route::get('posters/{poster}',[PosterController::class, 'getPoster']);

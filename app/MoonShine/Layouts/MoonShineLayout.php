@@ -29,6 +29,7 @@ use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
 use MoonShine\UI\Components\{Layout\Layout};
 use App\MoonShine\Resources\Amina\AminaSongResource;
+use App\MoonShine\Resources\PosterResource;
 
 final class MoonShineLayout extends CompactLayout
 {
@@ -74,7 +75,7 @@ final class MoonShineLayout extends CompactLayout
             MenuItem::make('Страницы', PageResource::class)->icon('book-open'),
             MenuDivider::make(),
             MenuItem::make('Посты', PostResource::class)->icon('arrow-up-on-square-stack'),
-            MenuItem::make('AminaFeedbacks', AminaFeedbackResource::class),
+            MenuItem::make('Плакаты - Татарстан - великой победе!', PosterResource::class)->icon('identification'),
         ];
     }
 
