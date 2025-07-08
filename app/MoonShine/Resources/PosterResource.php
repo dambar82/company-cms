@@ -16,6 +16,7 @@ use MoonShine\UI\Fields\ID;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Text;
 
 /**
  * @extends ModelResource<Poster>
@@ -56,6 +57,7 @@ class PosterResource extends ModelResource
                 ID::make(),
                 Grid::make([
                     Column::make([
+                        Text::make('Название на русском', 'title_rus'),
                         Image::make('Плакат на русском', 'poster_rus')
                             ->dir('posters')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
@@ -63,6 +65,7 @@ class PosterResource extends ModelResource
                     ])->columnSpan(6)
                 ,
                 Column::make([
+                    Text::make('Название на татарском', 'title_tat'),
                     Image::make('Плакат на татарском', 'poster_tat')
                         ->dir('posters')
                         ->allowedExtensions(['png', 'jpg', 'jpeg'])
@@ -80,10 +83,12 @@ class PosterResource extends ModelResource
     {
         return [
             ID::make(),
+            Text::make('Название на русском', 'title_rus'),
             Image::make('Плакат на русском', 'poster_rus')
                 ->dir('posters')
                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
                 ->removable(),
+            Text::make('Название на татарском', 'title_tat'),
             Image::make('Плакат на татарском', 'poster_tat')
                 ->dir('posters')
                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
