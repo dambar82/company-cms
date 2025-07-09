@@ -40,6 +40,7 @@ class PosterResource extends ModelResource
     {
         return [
             ID::make()->sortable(),
+            Text::make('Название', 'title_rus'),
             Image::make('Плакат', 'poster_rus')
                 ->dir('posters')
                 ->allowedExtensions(['png', 'jpg', 'jpeg'])
@@ -57,7 +58,8 @@ class PosterResource extends ModelResource
                 ID::make(),
                 Grid::make([
                     Column::make([
-                        Text::make('Название на русском', 'title_rus'),
+                        Text::make('Название на русском', 'title_rus')
+                            ->required(),
                         Image::make('Плакат на русском', 'poster_rus')
                             ->dir('posters')
                             ->allowedExtensions(['png', 'jpg', 'jpeg'])
@@ -65,7 +67,8 @@ class PosterResource extends ModelResource
                     ])->columnSpan(6)
                 ,
                 Column::make([
-                    Text::make('Название на татарском', 'title_tat'),
+                    Text::make('Название на татарском', 'title_tat')
+                        ->required(),
                     Image::make('Плакат на татарском', 'poster_tat')
                         ->dir('posters')
                         ->allowedExtensions(['png', 'jpg', 'jpeg'])
