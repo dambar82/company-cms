@@ -44,12 +44,6 @@ class CheckSiteAvailability extends Command
                 $response = Http::timeout(10)->get($site);
                 $status = $response->status();
 
-                $subject = "Site $site is up";
-                $message = "Site: $site" .now();
-
-                Mail::to($this->notificationEmail)
-                    ->send(new SiteDownNotification($subject, $message));
-
                 if ($status !== 200) {
                     $this->sendNotification($site, $status);
                 }
