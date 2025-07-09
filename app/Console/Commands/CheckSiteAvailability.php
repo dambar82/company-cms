@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SiteDownNotification;
 
@@ -51,7 +52,7 @@ class CheckSiteAvailability extends Command
             }
         }
 
-        $this->info('Site availability check completed.');
+        Log::info('Site availability check completed.');
         return 0;
     }
 
