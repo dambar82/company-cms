@@ -13,7 +13,8 @@ class CheckSiteAvailability extends Command
 {
     protected array $sites = [
         'https://dnevnik.rubin-kazan.ru',
-        'https://tatarcartoon.ru/'
+        'https://tatarcartoon.ru/',
+        'https://sakla.ru/'
     ];
 
     protected string $notificationEmail = 'dmitrij.m.183@yandex.ru';
