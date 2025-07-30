@@ -19,3 +19,10 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+<FilesMatch "\.(mp3|jpg|jpeg|png|gif)$">
+    <IfModule mod_headers.c>
+        Header always set Access-Control-Allow-Origin "https://www.amina.tatar/"
+        Header always set Access-Control-Allow-Methods "GET, OPTIONS"
+        Header always set Access-Control-Allow-Headers "*"
+    </IfModule>
+</FilesMatch>
