@@ -6,9 +6,11 @@ namespace App\MoonShine\Layouts;
 
 use App\MoonShine\Resources\Abubakirov\AbubakirovImageGalleryResource;
 use App\MoonShine\Resources\Abubakirov\AbubakirovVideoGalleryResource;
+use App\MoonShine\Resources\Amina\AminaAudioMinusesResource;
 use App\MoonShine\Resources\Amina\AminaAudioResource;
 use App\MoonShine\Resources\Amina\AminaFeedbackResource;
 use App\MoonShine\Resources\Amina\AminaNewsResource;
+use App\MoonShine\Resources\Amina\AminaSongResource;
 use App\MoonShine\Resources\Amina\AminaVideoResource;
 use App\MoonShine\Resources\BannerResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\RequestResource;
@@ -16,6 +18,7 @@ use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceContentResource;
 use App\MoonShine\Resources\MasterDigitalTechnologies\ServiceResource;
 use App\MoonShine\Resources\News\NewsResource;
 use App\MoonShine\Resources\PageResource;
+use App\MoonShine\Resources\PosterResource;
 use App\MoonShine\Resources\PostResource;
 use App\MoonShine\Resources\ProjectResource;
 use App\MoonShine\Resources\Quiz\QuestionResource;
@@ -28,8 +31,6 @@ use MoonShine\MenuManager\MenuDivider;
 use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
 use MoonShine\UI\Components\{Layout\Layout};
-use App\MoonShine\Resources\Amina\AminaSongResource;
-use App\MoonShine\Resources\PosterResource;
 
 final class MoonShineLayout extends CompactLayout
 {
@@ -52,6 +53,7 @@ final class MoonShineLayout extends CompactLayout
             MenuGroup::make('Амина', [
                 MenuItem::make('Песни', AminaSongResource::class)->icon('musical-note'),
                 MenuItem::make('Аудио', AminaAudioResource::class)->icon('speaker-wave'),
+                MenuItem::make('Аудио-минусовки', AminaAudioMinusesResource::class)->icon('speaker-x-mark'),
                 MenuItem::make('Видео', AminaVideoResource::class)->icon('videcamera'),
                 MenuItem::make('Новости', AminaNewsResource::class)->icon('newspaper'),
                 MenuItem::make('Отзывы', AminaFeedbackResource::class)->icon('pencil-square')

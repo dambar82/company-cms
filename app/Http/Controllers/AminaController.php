@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AminaAudioMinusesResource;
 use App\Http\Resources\AminaFeedbackResource;
 use App\Http\Resources\AudioResource;
 use App\Http\Resources\AminaSongResource;
@@ -10,6 +11,7 @@ use App\Http\Resources\VideoGalleryResources;
 use App\Http\Traits\CheckForbiddenWordTrait;
 use App\Models\AminaFeedback;
 use App\Models\Audio;
+use App\Models\AudioMinus;
 use App\Models\District;
 use App\Models\AminaSong;
 use App\Models\News;
@@ -427,7 +429,9 @@ class AminaController extends Controller
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
-    @@ -157,19 +135,14 @@ public function getAllNews(): AnonymousResourceCollection
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -444,5 +448,60 @@ class AminaController extends Controller
             })->findOrFail($id);
 
         return new NewsResource($news);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/amina/audio_minuses",
+     *     tags={"Amina"},
+     *     summary="Все аудио минусы",
+     *     description="Returns a collection of audio minuses.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="No audios minuses found.",
+     *         @OA\JsonContent()
+     *     ),
+     * )
+     */
+    public function getAudioMinuses(): AnonymousResourceCollection
+    {
+        return AminaAudioMinusesResource::collection(AudioMinus::all());
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/amina/audio_minuses/{id}",
+     *     tags={"Amina"},
+     *     summary="Аудио минус по ID",
+     *     description="Returns an audio minus for the specified ID.",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the audio minus record",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Audio record not found",
+     *         @OA\JsonContent()
+     *     ),
+     * )
+     */
+    public function getAudioMinus(int $id): AminaAudioMinusesResource
+    {
+        $audioMinus = AudioMinus::query()->findOrFail($id);
+
+        return new AminaAudioMinusesResource($audioMinus);
     }
 }

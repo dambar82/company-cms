@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('amina')->group( function () {
     Route::get('audio', [AminaController::class, 'getAudios']);
     Route::get('audio/{id}', [AminaController::class, 'getAudio']);
+    Route::get('audio_minuses', [AminaController::class, 'getAudioMinuses']);
+    Route::get('audio_minuses/{id}', [AminaController::class, 'getAudioMinus']);
     Route::get('songs', [AminaController::class, 'getAllSongs']);
     Route::get('songs/{id}', [AminaController::class, 'getSong']);
     Route::get('news', [AminaController::class, 'getAllNews']);
